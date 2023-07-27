@@ -1,1 +1,2 @@
-worker: node writeGetOrderMetrics.js
+# worker: node writeGetOrderMetrics.js
+web: npm start
