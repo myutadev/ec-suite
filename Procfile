@@ -1,1 +1,1 @@
-web: node writeGetOrderMetrics.js
+worker: node writeGetOrderMetrics.js
