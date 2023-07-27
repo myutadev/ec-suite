@@ -59,11 +59,13 @@ const range = 'getOrderMetrics!A2:L'; // 更新する範囲を指定
     }, (err, result) => {
         if (err) {
             // エラーハンドリング
-            console.log(err);
+            console.log('Error during data write: ', err); // 書き込みエラーのログ
         } else {
             console.log('%d cells updated.', result.updatedCells);
         }
     });
 
   })();
+
+console.log('Data write finished.'); // データ書き込み終了のログ
 

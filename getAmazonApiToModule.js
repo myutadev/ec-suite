@@ -62,7 +62,7 @@ const getShipmentItems = (async(params) => {//const getShipments =
           MarketplaceIds: ['A2EUQ1WTGCTBG2'] // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
         }
     });
-    console.log(res);
+    // console.log(res);
   } catch(e){
     console.log(e);
   };
