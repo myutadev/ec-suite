@@ -47,9 +47,9 @@ const getOderMetrics =  async (getOrderMetricsCountry,rangesKey) => {
     ])
 
     //カラム名を追加
-    values.unshift([
-        'date','unitCount','orderItemCount','orderCount','averageUnitPrice','totaleSales','currency'
-    ])
+    // values.unshift([
+    //     'date','unitCount','orderItemCount','orderCount','averageUnitPrice','totaleSales','currency'
+    // ])
 
     const range = ranges[rangesKey]; // 更新する範囲を指定 要変更
 
