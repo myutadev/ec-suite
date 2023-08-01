@@ -1,9 +1,18 @@
 const SellingPartnerAPI = require('amazon-sp-api');
 require('dotenv').config();
 
-// comment for githubtest
-const getOrderMetrics = (async(params) => {//const getShipments = 
+//marketplaceIDを配列に保存し、パラメーターで取得先を管理
+const marketPlaceId = {
+    'US':'ATVPDKIKX0DER',
+    'CA':'A2EUQ1WTGCTBG2',
+    'MX':'A1AM78C64UM0Y8'
+}
+
+// 
+const getOrderMetrics = async(marketPlaceId) => {//const getShipments = 
   let res;
+  let yesterday = getInterval()
+  console.log(yesterday);
   try {
     let sellingPartner = new SellingPartnerAPI({
       region:'na', // The region to use for the SP-API endpoints ("eu", "na" or "fe")
@@ -18,11 +27,11 @@ const getOrderMetrics = (async(params) => {//const getShipments =
     });
       res = await sellingPartner.callAPI({
         operation:'getOrderMetrics', // ここ変更！
-        // endpoint: 'https://sellingpartnerapi-na.amazon.com', // ここも変更　無くても行ける
+        // endpoint: '', // ここも変更　無くても行ける
         path:'/sales/v1/orderMetrics',// ここ変更！
         query: {
-          marketplaceIds: ['A2EUQ1WTGCTBG2'], // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
-          interval:'2023-07-01T00:00:00-07:00--2023-07-23T00:00:00-07:00',
+          marketplaceIds: [marketPlaceId], // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
+          interval: yesterday, //'2022-07-01T00:00:00-07:00--2023-07-31T23:59:59-07:00',
           granularity:'Day'
         }
     });
@@ -31,9 +40,11 @@ const getOrderMetrics = (async(params) => {//const getShipments =
   };
   return res;
   
-})(); 
+}; 
 
-module.exports = getOrderMetrics;
+const getOrderMetricsUS = getOrderMetrics(marketPlaceId['US']);
+const getOrderMetricsCA = getOrderMetrics(marketPlaceId['CA']);
+const getOrderMetricsMX = getOrderMetrics(marketPlaceId['MX']);
 
 
 //＊FBAに納品されてた商品情報を取得
@@ -57,7 +68,7 @@ const getShipmentItems = (async(params) => {//const getShipments =
         path:'/fba/inbound/v0/shipmentItems',// ここ変更！
         query: {
           LastUpdatedAfter:'2023-07-01T00:00:00Z',
-          LastUpdatedBefore:'2023-07-31T00:00:00Z',
+          LastUpdatedBefore:'2023-07-31T23:59:59Z',
           QueryType:'DATE_RANGE',
           MarketplaceIds: ['A2EUQ1WTGCTBG2'] // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
         }
@@ -70,8 +81,25 @@ const getShipmentItems = (async(params) => {//const getShipments =
   
 })(); 
 
+
+// 前日の日付を動的に取得する関数
+
+function getInterval(){
+  let now = new Date();
+  let yesterday = new Date(now);
+  yesterday.setDate(now.getDate()-2);
+
+  let startOfYesterday = yesterday.toISOString().split('T')[0] + "T00:00:00-07:00";
+  let endOfYesterday = yesterday.toISOString().split('T')[0] + "T23:59:59-07:00";
+
+  return `${startOfYesterday}--${endOfYesterday}`
+}
+
+
 module.exports = {
-  getOrderMetrics,
+  getOrderMetricsUS,
+  getOrderMetricsCA,
+  getOrderMetricsMX,
   getShipmentItems
 };
 

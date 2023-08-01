@@ -1,10 +1,12 @@
 const {google} = require('googleapis');
-const {getOrderMetrics} = require('./getAmazonApiToModule');
+const {getOrderMetricsCA,getOrderMetricsUS,getOrderMetricsMX} = require('./getAmazonApiToModule');
 require('dotenv').config();
 
- // ここも変更
-
-
+const ranges = {
+    'CA' :'getOrderMetricsCA!A2:G',
+    'US' :'getOrderMetricsUS!A2:G',
+    'MX' :'getOrderMetricsMX!A2:G'
+}
 
 // Google OAuth2 clientをセットアップ
 const auth = new google.auth.GoogleAuth({
@@ -29,12 +31,10 @@ const sheets = google.sheets({version: 'v4', auth});
 
 // 更新するスプレッドシートと範囲を指定
 const spreadsheetId = process.env.SPREADSHEET_ID; 
-const range = 'getOrderMetrics!A2:L'; // 更新する範囲を指定
 
 // 売上情報を取得`
-(async () => {
-    const amazonData = await getOrderMetrics;
-    // console.log(amazonData);
+const getOderMetrics =  async (getOrderMetricsCountry,rangesKey) => {
+    const amazonData = await getOrderMetricsCountry;// 更新する範囲を指定 要変更
     
     const values = amazonData.map(item => [
         item.interval,
@@ -42,10 +42,16 @@ const range = 'getOrderMetrics!A2:L'; // 更新する範囲を指定
         item.orderItemCount,
         item.orderCount,
         item.averageUnitPrice.amount,
-        item.averageUnitPrice.currencyCode,
         item.totalSales.amount,
         item.totalSales.currencyCode
     ])
+
+    //カラム名を追加
+    values.unshift([
+        'date','unitCount','orderItemCount','orderCount','averageUnitPrice','totaleSales','currency'
+    ])
+
+    const range = ranges[rangesKey]; // 更新する範囲を指定 要変更
 
     // スプレッドシートを更新
     sheets.spreadsheets.values.append({
@@ -65,7 +71,11 @@ const range = 'getOrderMetrics!A2:L'; // 更新する範囲を指定
         }
     });
 
-  })();
+  };
 
-console.log('Data write finished.'); // データ書き込み終了のログ
+  getOderMetrics(getOrderMetricsCA,"CA")
+  getOderMetrics(getOrderMetricsUS,"US")
+  getOderMetrics(getOrderMetricsMX,"MX")
+
+// console.log('Data write finished.'); // データ書き込み終了のログ
 
