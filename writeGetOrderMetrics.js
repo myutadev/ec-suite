@@ -5,14 +5,14 @@ require('dotenv').config();
 const cron = require('node-cron');
 
 // 
-cron.schedule('35 16 * * *',()=>{
+cron.schedule('43 17 * * *',()=>{
   getOderMetrics(getOrderMetricsCA,"CA")
   getOderMetrics(getOrderMetricsUS,"US")
   getOderMetrics(getOrderMetricsMX,"MX")
   console.log("updated by local");
 },{
     scheduled: true,
-    timezone: "Asia/Shanghai"
+    timezone: "Asia/Tokyo"
   })
 
 const ranges = {
