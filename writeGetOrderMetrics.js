@@ -5,15 +5,11 @@ require('dotenv').config();
 const cron = require('node-cron');
 
 // 
-cron.schedule('43 17 * * *',()=>{
+cron.schedule('*/1 * * * *',()=>{
   getOderMetrics(getOrderMetricsCA,"CA")
   getOderMetrics(getOrderMetricsUS,"US")
   getOderMetrics(getOrderMetricsMX,"MX")
-  console.log("updated by local");
-},{
-    scheduled: true,
-    timezone: "Asia/Tokyo"
-  })
+})
 
 const ranges = {
     'CA' :'getOrderMetricsCA!A2:G',
