@@ -2,6 +2,14 @@ const {google} = require('googleapis');
 const {getOrderMetricsCA,getOrderMetricsUS,getOrderMetricsMX} = require('./getAmazonApiToModule');
 require('dotenv').config();
 
+const cron = require('node-cron');
+
+cron.schedule('*/1 * * * *',()=>{
+  getOderMetrics(getOrderMetricsCA,"CA")
+  getOderMetrics(getOrderMetricsUS,"US")
+  getOderMetrics(getOrderMetricsMX,"MX");
+})
+
 const ranges = {
     'CA' :'getOrderMetricsCA!A2:G',
     'US' :'getOrderMetricsUS!A2:G',
