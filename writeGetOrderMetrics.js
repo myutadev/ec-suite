@@ -4,11 +4,16 @@ require('dotenv').config();
 
 const cron = require('node-cron');
 
-cron.schedule('*/1 * * * *',()=>{
+// 
+cron.schedule('27 16 * * *',()=>{
   getOderMetrics(getOrderMetricsCA,"CA")
   getOderMetrics(getOrderMetricsUS,"US")
-  getOderMetrics(getOrderMetricsMX,"MX");
-})
+  getOderMetrics(getOrderMetricsMX,"MX")
+  console.log("updated by local");
+},{
+    scheduled: true,
+    timezone: "Asia/Shanghai"
+  })
 
 const ranges = {
     'CA' :'getOrderMetricsCA!A2:G',
@@ -41,7 +46,7 @@ const sheets = google.sheets({version: 'v4', auth});
 const spreadsheetId = process.env.SPREADSHEET_ID; 
 
 // 売上情報を取得`
-const getOderMetrics =  async (getOrderMetricsCountry,rangesKey) => {
+const getOrderMetrics =  async (getOrderMetricsCountry,rangesKey) => {
     const amazonData = await getOrderMetricsCountry;// 更新する範囲を指定 要変更
     
     const values = amazonData.map(item => [
@@ -81,9 +86,9 @@ const getOderMetrics =  async (getOrderMetricsCountry,rangesKey) => {
 
   };
 
-  getOderMetrics(getOrderMetricsCA,"CA")
-  getOderMetrics(getOrderMetricsUS,"US")
-  getOderMetrics(getOrderMetricsMX,"MX")
+  getOrderMetrics(getOrderMetricsCA,"CA")
+  getOrderMetrics(getOrderMetricsUS,"US")
+  getOrderMetrics(getOrderMetricsMX,"MX")
 
 // console.log('Data write finished.'); // データ書き込み終了のログ
 
