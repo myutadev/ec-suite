@@ -56,36 +56,51 @@ const getOrderMetrics =  async (getOrderMetricsCountry,rangesKey) => {
         item.totalSales.currencyCode
     ])
 
-    //カラム名を追加
-    // values.unshift([
-    //     'date','unitCount','orderItemCount','orderCount','averageUnitPrice','totaleSales','currency'
-    // ])
-
+    const dataDate = values[0][0]; // 更新データのA列に入る予定の部分
     const range = ranges[rangesKey]; // 更新する範囲を指定 要変更
+    let dataDateCheck = (dataDate,lastUpdatedData) => dataDate == lastUpdatedData // 最後に更新したデータと新規取得データの値を比較  true =>更新済み
 
-    // スプレッドシートを更新
-    sheets.spreadsheets.values.append({
-        spreadsheetId,
-        range,
-        valueInputOption: 'USER_ENTERED',
-        insertDataOption: 'INSERT_ROWS',
-        resource: {
-            values,
-        },
-    }, (err, result) => {
-        if (err) {
-            // エラーハンドリング
-            console.log('Error during data write: ', err); // 書き込みエラーのログ
-        } else {
-            console.log('%d cells updated.', result.updatedCells);
-        }
-    });
+    //ここからA列の最後の行のデータを取得する関数を入れたい。
+    
+    const checkAlreadyUpdated = async () =>{
+        let lastUpdatedData = ''
+        let sheetData =''
+        try{
+            sheetData = await sheets.spreadsheets.values.get({
+                spreadsheetId,
+                range
+            });
 
+            let sheetDataArr = sheetData.data.values;
+            lastUpdatedData = sheetDataArr[sheetDataArr.length-1][0];
+
+            if(!dataDateCheck(dataDate,lastUpdatedData)) {
+                // スプレッドシートを更新
+                sheets.spreadsheets.values.append({
+                    spreadsheetId,
+                    range,
+                    valueInputOption: 'USER_ENTERED',
+                    insertDataOption: 'INSERT_ROWS',
+                    resource: {
+                        values,
+                    },
+                }, (err, result) => {
+                    if (err) {
+                        // エラーハンドリング
+                        console.log('Error during data write: ', err); // 書き込みエラーのログ
+                    } else {
+                        console.log('%d cells updated.', result.updatedCells);
+                    }
+                });
+            }else{ console.log('data had been updated before')} // すでに更新済みの場合のメッセージ
+        }catch(err){
+            console.error('Error fetching sheet data',err);
+        };
+    };
+    checkAlreadyUpdated(); 
   };
 
   getOrderMetrics(getOrderMetricsCA,"CA")
   getOrderMetrics(getOrderMetricsUS,"US")
   getOrderMetrics(getOrderMetricsMX,"MX")
-
-// console.log('Data write finished.'); // データ書き込み終了のログ
 
