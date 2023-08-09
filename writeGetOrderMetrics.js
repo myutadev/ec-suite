@@ -5,7 +5,7 @@ require('dotenv').config();
 const cron = require('node-cron');
 
 
-cron.schedule('0 6 * * *',()=>{ 
+cron.schedule('0 9 * * *',()=>{ 
     getOrderMetrics(getOrderMetricsCA,"CA")
     getOrderMetrics(getOrderMetricsUS,"US")
     getOrderMetrics(getOrderMetricsMX,"MX")
