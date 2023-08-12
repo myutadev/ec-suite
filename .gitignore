@@ -2,3 +2,7 @@
 node_modules/
 .DS_Store
 getAmazonApiTest.js
+writeGetFinances.js
+report.json
+practiceSheets.js
+serverForJsonDl.js

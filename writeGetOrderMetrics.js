@@ -1,5 +1,5 @@
 const {google} = require('googleapis');
-const {getOrderMetricsCA,getOrderMetricsUS,getOrderMetricsMX} = require('./getAmazonApiToModule');
+const {getOrderMetricsCA,getOrderMetricsUS,getOrderMetricsMX,getFinances} = require('./getAmazonApiToModule');
 require('dotenv').config();
 
 const cron = require('node-cron');
