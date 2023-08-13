@@ -13,26 +13,30 @@ const marketPlaceId = {
 
 // 前日の日付を動的に取得する関数 
 
-const getStartOfYesterday = ()=>{
+const getStartOfYesterday = () => {
   let now = new Date();
   let yesterday = new Date(now);
-  yesterday.setDate(now.getDate()-2);
+  yesterday.setDate(now.getDate() - 2);
 
   let startOfYesterday = yesterday.toISOString().split('T')[0] + "T00:00:00-07:00";
-  return `${startOfYesterday}` //  2022-01-01T00:00:00-07:00
+  return `${startOfYesterday}`; //  2022-01-01T00:00:00-07:00
+};
 
-}
+const getEndOfYesterday = (startOfYesterday) => {
+  return startOfYesterday.split('T')[0] + "T23:59:59-07:00";
+};
 
-const getInterval = (getStartOfYesterday) => ()=>{
-  let start = getStartOfYesterday();
-  let end = start.split('T')[0] + "T23:59:59-07:00";
-  return `${start}--${end}` // 2022-01-01T00:00:00-07:00--2023-07-31T23:59:59-07:00
-}
+const getInterval = (startOfYesterday) => {
+  let end = getEndOfYesterday(startOfYesterday);
+  return `${startOfYesterday}--${end}`;
+};
+
+const startOfYesterday = getStartOfYesterday(); 
 
 // 
 const getOrderMetrics = async(marketPlaceId) => {//const getShipments = 
   let res;
-  let yesterday = getInterval(getStartOfYesterday)();
+  let yesterday = getInterval(startOfYesterday);
   // console.log(yesterday);
   try {
     let sellingPartner = new SellingPartnerAPI({
@@ -108,7 +112,6 @@ const getShipmentItems = (async(params) => {//const getShipments =
 
 const getFinances = async(params) => { 
   let res;
-  let yesterday = getStartOfYesterday();
   try {
       let sellingPartner = new SellingPartnerAPI({
           region: 'na',
@@ -126,7 +129,8 @@ const getFinances = async(params) => {
           endpoint: 'finances', // ここも変更　無くても行ける
           // path:'/fba/inbound/v0/shipmentItems',// ここ変更！
           query: {
-              PostedAfter:yesterday,
+              PostedAfter:startOfYesterday,
+              PostedBefore:getEndOfYesterday(startOfYesterday),
           //   LastUpdatedBefore:'2023-07-31T23:59:59Z',
             // QueryType:'DATE_RANGE'
           //   MarketplaceIds: ['A2EUQ1WTGCTBG2'] // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
