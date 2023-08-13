@@ -38,11 +38,46 @@ const auth = new google.auth.GoogleAuth({
 
 // Google Sheets APIのインスタンスを生成
 const sheets = google.sheets({version: 'v4', auth});
-
 // 更新するスプレッドシートと範囲を指定
 const spreadsheetId = process.env.SPREADSHEET_ID; 
 
-// 売上情報を取得`
+// 最終行のデータを取得して比較する関数
+const checkIfUpdateNeeded = async(newLastRowData,range) =>{
+    let lastUpdatedData = ''
+    try{
+        sheetData = await sheets.spreadsheets.values.get({
+            spreadsheetId,
+            range
+        });
+
+        let sheetDataArr = sheetData.data.values;
+        lastUpdatedData = sheetDataArr[sheetDataArr.length-1][0];
+
+        return newLastRowData !== lastUpdatedData;
+    }catch(err){
+        console.error('Error fetching sheet data',err);
+        return false;
+    };
+}
+
+const updateData = (range,values) =>{
+    sheets.spreadsheets.values.append({
+        spreadsheetId,
+        range,
+        valueInputOption: 'USER_ENTERED',
+        insertDataOption: 'INSERT_ROWS',
+        resource: {
+            values,
+        },
+    }, (err, result) => {
+        if (err) {
+            console.log('Error during data write: ', err); 
+        } else {
+            console.log('%d cells updated.', result.updatedCells);
+        }
+    });
+} 
+
 const getOrderMetrics =  async (getOrderMetricsCountry,rangesKey) => {
     const amazonData = await getOrderMetricsCountry;// 更新する範囲を指定 要変更
     
@@ -56,49 +91,15 @@ const getOrderMetrics =  async (getOrderMetricsCountry,rangesKey) => {
         item.totalSales.currencyCode
     ])
 
-    const dataDate = values[0][0]; // 更新データのA列に入る予定の部分
-    const range = ranges[rangesKey]; // 更新する範囲を指定 要変更
-    let dataDateCheck = (dataDate,lastUpdatedData) => dataDate == lastUpdatedData // 最後に更新したデータと新規取得データの値を比較  true =>更新済み
+    const newLastRowData = values[values.length-1][0]; // 更新データのA列に入る最終行のデータ
+    const range = ranges[rangesKey]; // 更新する範囲を指定 
 
-    //ここからA列の最後の行のデータを取得する関数を入れたい。
-    
-    const checkAlreadyUpdated = async () =>{
-        let lastUpdatedData = ''
-        let sheetData =''
-        try{
-            sheetData = await sheets.spreadsheets.values.get({
-                spreadsheetId,
-                range
-            });
-
-            let sheetDataArr = sheetData.data.values;
-            lastUpdatedData = sheetDataArr[sheetDataArr.length-1][0];
-
-            if(!dataDateCheck(dataDate,lastUpdatedData)) {
-                // スプレッドシートを更新
-                sheets.spreadsheets.values.append({
-                    spreadsheetId,
-                    range,
-                    valueInputOption: 'USER_ENTERED',
-                    insertDataOption: 'INSERT_ROWS',
-                    resource: {
-                        values,
-                    },
-                }, (err, result) => {
-                    if (err) {
-                        // エラーハンドリング
-                        console.log('Error during data write: ', err); // 書き込みエラーのログ
-                    } else {
-                        console.log('%d cells updated.', result.updatedCells);
-                    }
-                });
-            }else{ console.log('data had been updated before')} // すでに更新済みの場合のメッセージ
-        }catch(err){
-            console.error('Error fetching sheet data',err);
-        };
+    if(await checkIfUpdateNeeded(newLastRowData,range)){
+        updateData(range,values);
+    }else{
+        console.log('data had been updated before')
     };
-    checkAlreadyUpdated(); 
-  };
+}
 
   getOrderMetrics(getOrderMetricsCA,"CA")
   getOrderMetrics(getOrderMetricsUS,"US")
