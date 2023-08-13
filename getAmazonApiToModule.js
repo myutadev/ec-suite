@@ -48,7 +48,7 @@ const getOrderMetrics = async(marketPlaceId) => {//const getShipments =
     });
       res = await sellingPartner.callAPI({
         operation:'getOrderMetrics', // ここ変更！
-        // endpoint: '', // ここも変更　無くても行ける
+        endpoint: 'sales', // ここも変更　無くても行ける
         path:'/sales/v1/orderMetrics',// ここ変更！
         query: {
           marketplaceIds: [marketPlaceId], // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
