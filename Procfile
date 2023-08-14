@@ -1,4 +1,2 @@
-worker: node writeGetOrderMetrics.js
-worker2: node writeGetShipmentItemsToSpreadsheet.js
-
+worker: node worker.js
 # web: npm start
