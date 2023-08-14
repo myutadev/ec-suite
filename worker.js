@@ -2,14 +2,21 @@ const {writeOrderMetricsCA,writeOrderMetricsUS,writeOrderMetricsMX} = require('.
 const {writeGetFinances} = require('./writeGetFinances');
 const cron = require('node-cron');
 
-cron.schedule('0 9 * * *',()=>{ 
+// cron.schedule('0 9 * * *',()=>{ 
+//     writeOrderMetricsCA();
+//     writeOrderMetricsUS();
+//     writeOrderMetricsMX();
+//     writeGetFinances();
+// })
+
+
+// test
+cron.schedule('*/1 * * * *',()=>{ 
     writeOrderMetricsCA();
     writeOrderMetricsUS();
     writeOrderMetricsMX();
     writeGetFinances();
 })
-
-
 
 // writeOrderMetricsCA();
 // writeOrderMetricsUS();
