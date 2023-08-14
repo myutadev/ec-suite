@@ -1,22 +1,6 @@
 const {google} = require('googleapis');
-const {getOrderMetricsCA,getOrderMetricsUS,getOrderMetricsMX,getFinances} = require('./getAmazonApiToModule');
+const {getFinances} = require('./getAmazonApiToModule'); // ここも変更
 require('dotenv').config();
-
-// const cron = require('node-cron');
-
-
-// cron.schedule('0 9 * * *',()=>{ 
-//     getOrderMetrics(getOrderMetricsCA,"CA")
-//     getOrderMetrics(getOrderMetricsUS,"US")
-//     getOrderMetrics(getOrderMetricsMX,"MX")
-// })
-
-
-const ranges = {
-    'CA' :'getOrderMetricsCA!A2:G',
-    'US' :'getOrderMetricsUS!A2:G',
-    'MX' :'getOrderMetricsMX!A2:G'
-}
 
 // Google OAuth2 clientをセットアップ
 const auth = new google.auth.GoogleAuth({
@@ -32,14 +16,16 @@ const auth = new google.auth.GoogleAuth({
         auth_provider_x509_cert_url: process.env.AUTH_PROVIDER_X509_CERT_URL,
         client_x509_cert_url: process.env.CLIENT_X509_CERT_URL,
         universe_domain:process.env.UNIVERSE_DOMAIN
-    },  // サービスアカウントキーへのパス
+    }, 
     scopes: ['https://www.googleapis.com/auth/spreadsheets'],
 });
 
 // Google Sheets APIのインスタンスを生成
 const sheets = google.sheets({version: 'v4', auth});
+
 // 更新するスプレッドシートと範囲を指定
 const spreadsheetId = process.env.SPREADSHEET_ID; 
+const range = 'getFinances!A3:L'; // 更新する範囲を指定
 
 // 最終行のデータを取得して比較する関数
 const checkIfUpdateNeeded = async(newLastRowData,range) =>{
@@ -60,6 +46,7 @@ const checkIfUpdateNeeded = async(newLastRowData,range) =>{
     };
 }
 
+
 const updateData = (range,values) =>{
     sheets.spreadsheets.values.append({
         spreadsheetId,
@@ -71,41 +58,51 @@ const updateData = (range,values) =>{
         },
     }, (err, result) => {
         if (err) {
-            console.log('Error during data write: ', err); 
+            // エラーハンドリング
+            console.log(err);
         } else {
             console.log('%d cells updated.', result.updatedCells);
         }
     });
-} 
+}
 
-const getOrderMetrics =  async (getOrderMetricsCountry,rangesKey) => {
-    const amazonData = await getOrderMetricsCountry;// 更新する範囲を指定 要変更
+
+const writeGetFinances = async () => {
+    const amazonData = await getFinances();
     
-    const values = amazonData.map(item => [
-        item.interval,
-        item.unitCount,
-        item.orderItemCount,
-        item.orderCount,
-        item.averageUnitPrice.amount,
-        item.totalSales.amount,
-        item.totalSales.currencyCode
+    const values = amazonData.FinancialEvents.ShipmentEventList.map(item => [
+        item.AmazonOrderId,
+        item.MarketplaceName,
+        item.PostedDate,
+        item.ShipmentItemList[0].SellerSKU,
+        item.ShipmentItemList[0].QuantityShipped,
+        item.ShipmentItemList[0].ItemChargeList[0].ChargeAmount.CurrencyCode,
+        item.ShipmentItemList[0].ItemChargeList[0].ChargeAmount.CurrencyAmount,
+        item.ShipmentItemList[0].ItemChargeList[1].ChargeAmount.CurrencyAmount,
+        item.ShipmentItemList[0].ItemChargeList[2].ChargeAmount.CurrencyAmount,
+        item.ShipmentItemList[0].ItemChargeList[3].ChargeAmount.CurrencyAmount,
+        item.ShipmentItemList[0].ItemChargeList[4].ChargeAmount.CurrencyAmount,
+        item.ShipmentItemList[0].ItemChargeList[5].ChargeAmount.CurrencyAmount,
+        item.ShipmentItemList[0].ItemFeeList[0].FeeAmount.CurrencyAmount,
+        item.ShipmentItemList[0].ItemFeeList[1].FeeAmount.CurrencyAmount,
+        item.ShipmentItemList[0].ItemFeeList[2].FeeAmount.CurrencyAmount,
+        item.ShipmentItemList[0].ItemFeeList[3].FeeAmount.CurrencyAmount,
+        // item.ShipmentItemList[0].ItemFeeList[4].FeeAmount.CurrencyAmount, // ここまで入れるとメキシコのデータでエラーになる
+        // item.ShipmentItemList[0].ItemFeeList[5].FeeAmount.CurrencyAmount,
     ])
 
     const newLastRowData = values[values.length-1][0]; // 更新データのA列に入る最終行のデータ
-    const range = ranges[rangesKey]; // 更新する範囲を指定 
 
     if(await checkIfUpdateNeeded(newLastRowData,range)){
         updateData(range,values);
     }else{
         console.log('data had been updated before')
     };
-}
-const writeOrderMetricsCA = () => getOrderMetrics(getOrderMetricsCA,"CA")
-const writeOrderMetricsUS = () =>  getOrderMetrics(getOrderMetricsUS,"US")
-const writeOrderMetricsMX = () =>  getOrderMetrics(getOrderMetricsMX,"MX")
 
-module.exports ={
-    writeOrderMetricsCA,
-    writeOrderMetricsUS,
-    writeOrderMetricsMX,
-};
+  };
+
+//   writeGetFinances();
+
+  module.exports = {
+    writeGetFinances
+  };
