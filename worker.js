@@ -7,6 +7,7 @@ cron.schedule('0 9 * * *',()=>{
     writeOrderMetricsUS();
     writeOrderMetricsMX();
     writeGetFinances();
+    writeInventoryhLedgerReport();
 })
 
 

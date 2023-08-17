@@ -1,6 +1,5 @@
 const SellingPartnerAPI = require('amazon-sp-api');
 const fs = require('fs');
-
 require('dotenv').config();
 
 
@@ -73,39 +72,48 @@ const getOrderMetricsCA = getOrderMetrics(marketPlaceId['CA']);
 const getOrderMetricsMX = getOrderMetrics(marketPlaceId['MX']);
 
 
-//＊FBAに納品されてた商品情報を取得
-const getShipmentItems = (async(params) => {//const getShipments = 
-  let res;
+//＊FBAに納品された商品情報を取得
+const getInventoryhLedgerReport = async(params) => { 
+  console.log('Function started!');
+  let res
   try {
-    let sellingPartner = new SellingPartnerAPI({
-      region:'na', // The region to use for the SP-API endpoints ("eu", "na" or "fe")
-      refresh_token:process.env.refresh_token, // The refresh token of your app user
-      credentials:{
-          SELLING_PARTNER_APP_CLIENT_ID: process.env.SELLING_PARTNER_APP_CLIENT_ID,
-          SELLING_PARTNER_APP_CLIENT_SECRET: process.env.SELLING_PARTNER_APP_CLIENT_SECRET,
-          AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
-          AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
-          AWS_SELLING_PARTNER_ROLE:process.env.AWS_SELLING_PARTNER_ROLE
-        }
-    });
-      res = await sellingPartner.callAPI({
-        operation:'getShipmentItems', // ここ変更！
-        // endpoint: 'https://sellingpartnerapi-na.amazon.com', // ここも変更　無くても行ける
-        path:'/fba/inbound/v0/shipmentItems',// ここ変更！
-        query: {
-          LastUpdatedAfter:'2023-07-01T00:00:00Z',
-          LastUpdatedBefore:'2023-07-31T23:59:59Z',
-          QueryType:'DATE_RANGE',
-          MarketplaceIds: ['A2EUQ1WTGCTBG2'] // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
-        }
-    });
-    // console.log(res);
-  } catch(e){
-    console.log(e);
+      let sellingPartner = new SellingPartnerAPI({
+          region: 'na',
+          refresh_token: process.env.refresh_token,
+          credentials:{
+              SELLING_PARTNER_APP_CLIENT_ID: process.env.SELLING_PARTNER_APP_CLIENT_ID,
+              SELLING_PARTNER_APP_CLIENT_SECRET: process.env.SELLING_PARTNER_APP_CLIENT_SECRET,
+              AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+              AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+              AWS_SELLING_PARTNER_ROLE:process.env.AWS_SELLING_PARTNER_ROLE
+          }
+      });
+      res = await sellingPartner.downloadReport({
+          body:{
+              reportType: 'GET_LEDGER_SUMMARY_VIEW_DATA',
+              marketplaceIds: ['ATVPDKIKX0DER'],
+              dataStartTime : startOfYesterday,
+              dataEndTime : getEndOfYesterday(startOfYesterday),
+              reportOptions:{
+                  aggregateByLocation:'COUNTRY',
+                  aggregatedByTimePeriod:'DAILY'
+              }
+          },
+          version:'2021-06-30',
+          interval:8000,
+          download:{
+            json:true,
+            file:'/Users/ssdef/AmazonApi/report.json'
+          }
+      });
+      // fs.writeFileSync('output.json', JSON.stringify(res, null, 2));
+      // console.log(res);
+  } catch(e) {     
+      console.log(e);
   };
+  console.log('Function end!');
   return res;
-  
-})(); 
+}; 
 
 
 
@@ -132,7 +140,7 @@ const getFinances = async(params) => {
               PostedAfter:startOfYesterday,
               PostedBefore:getEndOfYesterday(startOfYesterday),
           //   LastUpdatedBefore:'2023-07-31T23:59:59Z',
-            // QueryType:'DATE_RANGE'
+          // QueryType:'DATE_RANGE'
           //   MarketplaceIds: ['A2EUQ1WTGCTBG2'] // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
           }
       });
@@ -148,7 +156,7 @@ module.exports = {
   getOrderMetricsUS,
   getOrderMetricsCA,
   getOrderMetricsMX,
-  getShipmentItems,
-  getFinances
+  getInventoryhLedgerReport,
+  getFinances,
 };
 
