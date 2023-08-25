@@ -138,6 +138,7 @@ const getFinances = async(params) => {
           // path:'/fba/inbound/v0/shipmentItems',// ここ変更！
           query: {
               PostedAfter:startOfYesterday,
+              // PostedAfter:'2023-08-01T23:59:59Z',              
               PostedBefore:getEndOfYesterday(startOfYesterday),
           //   LastUpdatedBefore:'2023-07-31T23:59:59Z',
           // QueryType:'DATE_RANGE'
