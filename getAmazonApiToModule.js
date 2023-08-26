@@ -145,7 +145,7 @@ const getFinances = async(params) => {
           //   MarketplaceIds: ['A2EUQ1WTGCTBG2'] // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
           }
       });
-      fs.writeFileSync('output.json', JSON.stringify(res, null, 2));
+      // fs.writeFileSync('output.json', JSON.stringify(res, null, 2));
     } catch(e) {
       console.log(e);
   };
