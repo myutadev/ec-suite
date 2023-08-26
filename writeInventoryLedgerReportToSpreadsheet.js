@@ -96,7 +96,7 @@ const writeInventoryhLedgerReport = async () => {
         item.Location
     ])
 
-    const newLastRowData = values[values.length-1][0]; // 更新データのA列に入る最終行のデータ
+    const newLastRowData = values.length > 0 ? values[values.length-1][0] : null; // 更新データのA列に入る最終行のデータ
 
     if(await checkIfUpdateNeeded(newLastRowData,range)){
         updateData(range,values);
