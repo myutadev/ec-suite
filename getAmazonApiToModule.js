@@ -101,10 +101,10 @@ const getInventoryhLedgerReport = async(params) => {
           },
           version:'2021-06-30',
           interval:8000,
-          download:{
-            json:true,
-            file:'/Users/ssdef/AmazonApi/report.json'
-          }
+          // download:{
+          //   json:true,
+          //   file:'/Users/ssdef/AmazonApi/report.json'
+          // }
       });
       // fs.writeFileSync('output.json', JSON.stringify(res, null, 2));
       // console.log(res);
