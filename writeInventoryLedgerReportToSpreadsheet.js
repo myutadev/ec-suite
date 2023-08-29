@@ -126,7 +126,7 @@ const writeInventoryhLedgerReport = async () => {
 
   };
 
-writeInventoryhLedgerReport()
+// writeInventoryhLedgerReport()
 
   module.exports = {
     writeInventoryhLedgerReport
