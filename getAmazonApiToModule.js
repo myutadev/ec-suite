@@ -92,7 +92,7 @@ const getInventoryhLedgerReport = async(params) => {
           body:{
               reportType: 'GET_LEDGER_SUMMARY_VIEW_DATA',
               marketplaceIds: ['ATVPDKIKX0DER'],
-              dataStartTime : startOfYesterday,
+              dataStartTime : startOfYesterday, // 2022-01-01T00:00:00-07:00
               dataEndTime : getEndOfYesterday(startOfYesterday),
               reportOptions:{
                   aggregateByLocation:'COUNTRY',

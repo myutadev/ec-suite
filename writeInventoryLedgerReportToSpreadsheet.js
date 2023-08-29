@@ -73,14 +73,33 @@ const updateData = (range,values) =>{
 const writeInventoryhLedgerReport = async () => {
     console.log("writeInventoryhLedgerReport starts");
     const amazonData = await getInventoryhLedgerReport();
+    if (amazonData == null) {
+        console.log('No data for today');
+        return; 
+    }
+
+    const tsvData = amazonData/* ここにTSV形式のデータを入れます */;
+    const lines = tsvData.split('\n');
+    const headers = lines[0].split('\t');
+
+    const arrayData = lines.slice(1).map(line => {
+        const values = line.split('\t');
+        return headers.reduce((obj, header, index) => {
+          obj[header] = values[index];
+          return obj;
+        }, {});
+      });
+
     //レポート系はデータを整形する必要あり。
-    const cleanData = amazonData.map(item => {
+    const cleanData = arrayData.map(item => {
         const cleanedItem = {};
         for (const key in item) {
           cleanedItem[key.replace(/"/g, '')] = item[key].replace(/"/g, '');
         }
         return cleanedItem;
       });
+    
+    console.log(cleanData);
 
     const filteredData = cleanData.filter(item =>item.Receipts != "0")  // これがないとデータが大きくなりすぎる
     const values = filteredData.map(item => [
@@ -95,7 +114,7 @@ const writeInventoryhLedgerReport = async () => {
         item['Ending Warehouse Balance'],
         item.Location
     ])
-
+    console.log(values);
     const newLastRowData = values.length > 0 ? values[values.length-1][0] : null; // 更新データのA列に入る最終行のデータ
 
     if(await checkIfUpdateNeeded(newLastRowData,range)){
@@ -107,7 +126,7 @@ const writeInventoryhLedgerReport = async () => {
 
   };
 
-//   writeInventoryhLedgerReport()
+writeInventoryhLedgerReport()
 
   module.exports = {
     writeInventoryhLedgerReport
