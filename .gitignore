@@ -8,3 +8,4 @@ serverForJsonDl.js
 output.json
 practice.js
 workerForLocal.js
+fetchProdData.js

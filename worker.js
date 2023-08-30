@@ -15,16 +15,11 @@ cron.schedule('0 9 * * *',()=>{
 })
 
 
-// // test
-// cron.schedule('*/1 * * * *',()=>{ 
-//     writeOrderMetricsCA();
-//     writeOrderMetricsUS();
-//     writeOrderMetricsMX();
-//     writeGetFinances();
-// })
 
 // writeOrderMetricsCA();
 // writeOrderMetricsUS();
 // writeOrderMetricsMX();
 // writeGetFinances();
+// writeRefundsGetFinances();
+// writeInventoryhLedgerReport();
 

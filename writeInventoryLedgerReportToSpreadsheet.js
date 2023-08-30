@@ -99,7 +99,7 @@ const writeInventoryhLedgerReport = async () => {
         return cleanedItem;
       });
     
-    console.log(cleanData);
+    // console.log(cleanData);
 
     const filteredData = cleanData.filter(item =>item.Receipts != "0")  // これがないとデータが大きくなりすぎる
     const values = filteredData.map(item => [
@@ -114,7 +114,7 @@ const writeInventoryhLedgerReport = async () => {
         item['Ending Warehouse Balance'],
         item.Location
     ])
-    console.log(values);
+    // console.log(values);
     const newLastRowData = values.length > 0 ? values[values.length-1][0] : null; // 更新データのA列に入る最終行のデータ
 
     if(await checkIfUpdateNeeded(newLastRowData,range)){
