@@ -59,9 +59,9 @@ const updateData = (range,values) =>{
     }, (err, result) => {
         if (err) {
             // エラーハンドリング
-            console.log(err);
+            console.log(`REFUND`,err);
         } else {
-            console.log('%d cells updated.', result.updatedCells);
+            console.log('REFUND / cells updated.', result.updatedCells);
         }
     });
 }
@@ -97,7 +97,7 @@ const writeRefundsGetFinances = async () => {
     if(await checkIfUpdateNeeded(newLastRowData,range)){
         updateData(range,values);
     }else{
-        console.log('data had been updated before')
+        console.log('REFUND / data had been updated before')
     };
 
   };

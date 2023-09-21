@@ -44,7 +44,7 @@ const checkIfUpdateNeeded = async(newLastRowData,range) =>{
 
         return newLastRowData !== lastUpdatedData;
     }catch(err){
-        console.error('Error fetching sheet data',err);
+        console.error('WRITE LEDGER REPORT Error fetching sheet data',err);
         return false;
     };
 }
@@ -62,9 +62,9 @@ const updateData = (range,values) =>{
     }, (err, result) => {
         if (err) {
             // エラーハンドリング
-            console.log(err);
+            console.log(`WRITE LEDGER REPORT`,err);
         } else {
-            console.log('%d cells updated.', result.updatedCells);
+            console.log('WRITE LEDGER REPORT cells updated.', result.updatedCells);
         }
     });
 }
@@ -74,7 +74,7 @@ const writeInventoryhLedgerReport = async () => {
     console.log("writeInventoryhLedgerReport starts");
     const amazonData = await getInventoryhLedgerReport();
     if (amazonData == null) {
-        console.log('No data for today');
+        console.log('WRITE LEDGER REPORT No data for today');
         return; 
     }
 
@@ -120,7 +120,7 @@ const writeInventoryhLedgerReport = async () => {
     if(await checkIfUpdateNeeded(newLastRowData,range)){
         updateData(range,values);
     }else{
-        console.log('data had been updated before')
+        console.log('WRITE LEDGER REPORT / data had been updated before')
     };
     console.log("writeInventoryhLedgerReport ends");
 

@@ -59,9 +59,9 @@ const updateData = (range,values) =>{
     }, (err, result) => {
         if (err) {
             // エラーハンドリング
-            console.log(err);
+            console.log(`GET FINANCE  / `,err);
         } else {
-            console.log('%d cells updated.', result.updatedCells);
+            console.log('GET FINANCE  / cells updated.', result.updatedCells);
         }
     });
 }
@@ -96,7 +96,7 @@ const writeGetFinances = async () => {
     if(await checkIfUpdateNeeded(newLastRowData,range)){
         updateData(range,values);
     }else{
-        console.log('data had been updated before')
+        console.log('GET FINANCE  / data had been updated before')
     };
 
   };

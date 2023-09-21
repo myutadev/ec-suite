@@ -9,3 +9,4 @@ output.json
 practice.js
 workerForLocal.js
 fetchProdData.js
+getAmazonSgData.js

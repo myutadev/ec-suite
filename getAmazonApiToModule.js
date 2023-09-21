@@ -21,8 +21,13 @@ const getStartOfYesterday = () => {
   return `${startOfYesterday}`; //  2022-01-01T00:00:00-07:00
 };
 
-const getEndOfYesterday = (startOfYesterday) => {
-  return startOfYesterday.split('T')[0] + "T23:59:59-07:00";
+const getEndOfYesterday =() => {
+  let now = new Date();
+  let yesterday = new Date(now);
+  yesterday.setDate(now.getDate() - 2);
+
+  let startOfYesterday = yesterday.toISOString().split('T')[0] + "T23:59:59-07:00";
+  return `${startOfYesterday}`; //  2022-01-01T00:00:00-07:00
 };
 
 const getInterval = (startOfYesterday) => {
@@ -31,8 +36,9 @@ const getInterval = (startOfYesterday) => {
 };
 
 const startOfYesterday = getStartOfYesterday(); 
-
-// 
+console.log(getStartOfYesterday())
+console.log(getEndOfYesterday(startOfYesterday))
+ 
 const getOrderMetrics = async(marketPlaceId) => {//const getShipments = 
   let res;
   let yesterday = getInterval(startOfYesterday);
@@ -92,8 +98,8 @@ const getInventoryhLedgerReport = async(params) => {
           body:{
               reportType: 'GET_LEDGER_SUMMARY_VIEW_DATA',
               marketplaceIds: ['ATVPDKIKX0DER'],
-              dataStartTime : startOfYesterday, // 2022-01-01T00:00:00-07:00
-              dataEndTime : getEndOfYesterday(startOfYesterday),
+              dataStartTime : startOfYesterday, // 2023-09-10T00:00:00-07:00
+              dataEndTime : getEndOfYesterday(startOfYesterday),//2023-09-10T23:59:59-07:00
               reportOptions:{
                   aggregateByLocation:'COUNTRY',
                   aggregatedByTimePeriod:'DAILY'
@@ -152,7 +158,7 @@ const getFinances = async(params) => {
   return res;
 }; 
 
-getFinances()
+// getFinances()
 module.exports = {
   getOrderMetricsUS,
   getOrderMetricsCA,
