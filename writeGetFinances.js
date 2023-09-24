@@ -83,12 +83,12 @@ const writeGetFinances = async () => {
         item.ShipmentItemList[0].ItemChargeList[3].ChargeAmount.CurrencyAmount,
         item.ShipmentItemList[0].ItemChargeList[4].ChargeAmount.CurrencyAmount,
         item.ShipmentItemList[0].ItemChargeList[5].ChargeAmount.CurrencyAmount,
-        item.ShipmentItemList[0].ItemFeeList[0].FeeAmount.CurrencyAmount,
-        item.ShipmentItemList[0].ItemFeeList[1].FeeAmount.CurrencyAmount,
-        item.ShipmentItemList[0].ItemFeeList[2].FeeAmount.CurrencyAmount,
-        item.ShipmentItemList[0].ItemFeeList[3].FeeAmount.CurrencyAmount,
-        // item.ShipmentItemList[0].ItemFeeList[4].FeeAmount.CurrencyAmount, // ここまで入れるとメキシコのデータでエラーになる
-        // item.ShipmentItemList[0].ItemFeeList[5].FeeAmount.CurrencyAmount,
+        item.ShipmentItemList[0]?.ItemFeeList ? item.ShipmentItemList[0]?.ItemFeeList[0].FeeAmount?.CurrencyAmount : "",
+        item.ShipmentItemList[0]?.ItemFeeList ? item.ShipmentItemList[0]?.ItemFeeList[1].FeeAmount?.CurrencyAmount : "",
+        item.ShipmentItemList[0]?.ItemFeeList ? item.ShipmentItemList[0]?.ItemFeeList[2].FeeAmount?.CurrencyAmount : "",
+        item.ShipmentItemList[0]?.ItemFeeList ? item.ShipmentItemList[0]?.ItemFeeList[3].FeeAmount?.CurrencyAmount : "",
+        // item.ShipmentItemList[0]?.ItemFeeList[4]?.FeeAmount?.CurrencyAmount ?? "", // ここまで入れるとメキシコのデータでエラーになる
+        // item.ShipmentItemList[0]?.ItemFeeList[5]?.FeeAmount?.CurrencyAmount ?? "",
     ])
 
     const newLastRowData = values.length > 0 ? values[values.length-1][0] : null;// 更新データのA列に入る最終行のデータ
@@ -101,7 +101,7 @@ const writeGetFinances = async () => {
 
   };
 
-//   writeGetFinances();
+  writeGetFinances();
 
   module.exports = {
     writeGetFinances
