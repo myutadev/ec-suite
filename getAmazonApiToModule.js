@@ -158,12 +158,51 @@ const getFinances = async(params) => {
   return res;
 }; 
 
-// getFinances()
+const getInventorySummaries = async(marketPlaceID,skuArray) => { 
+  let res;
+  try {
+      let sellingPartner = new SellingPartnerAPI({
+          region: 'na',
+          refresh_token: process.env.refresh_token,
+          credentials:{
+              SELLING_PARTNER_APP_CLIENT_ID: process.env.SELLING_PARTNER_APP_CLIENT_ID,
+              SELLING_PARTNER_APP_CLIENT_SECRET: process.env.SELLING_PARTNER_APP_CLIENT_SECRET,
+              AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+              AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+              AWS_SELLING_PARTNER_ROLE: process.env.AWS_SELLING_PARTNER_ROLE
+          }
+      });
+      res = await sellingPartner.callAPI({
+          operation:'getInventorySummaries', // ここ変更！
+          endpoint: 'fbaInventory', // ここも変更　無くても行ける
+          // path:'/fba/inbound/v0/shipmentItems',// ここ変更！
+          query: {
+              granularityType:"Marketplace",
+              granularityId:marketPlaceID,              
+              sellerSkus:skuArray,
+              marketplaceIds:[marketPlaceID],
+          // QueryType:'DATE_RANGE'
+          //   MarketplaceIds: ['A2EUQ1WTGCTBG2'] // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
+          }
+      });
+      console.log(res);
+      console.log(res.inventorySummaries[0].fnSku);
+
+      // fs.writeFileSync('output.json', JSON.stringify(res, null, 2));
+    } catch(e) {
+      console.log(e);
+  };
+  return res;
+}; 
+
+
+// getInventorySummaries("A2EUQ1WTGCTBG2",["CA51003-231002-B01BZKPWTM-34.9","CA51003-231002-B01BZKPWTM-34.9"])
 module.exports = {
   getOrderMetricsUS,
   getOrderMetricsCA,
   getOrderMetricsMX,
   getInventoryhLedgerReport,
   getFinances,
+  getInventorySummaries
 };
 
