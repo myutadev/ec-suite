@@ -101,7 +101,7 @@ const writeGetFinances = async () => {
 
   };
 
-  writeGetFinances();
+//   writeGetFinances();
 
   module.exports = {
     writeGetFinances

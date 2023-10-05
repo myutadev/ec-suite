@@ -4,7 +4,7 @@ const {writeInventoryhLedgerReport} = require('./writeInventoryLedgerReportToSpr
 const {writeRefundsGetFinances} = require('./writeRefundGetFinances');
 const cron = require('node-cron');
 
-cron.schedule('0 9 * * *',()=>{ ````````
+cron.schedule('*/1 * * * *', () => {
     writeOrderMetricsCA();
     writeOrderMetricsUS();
     writeOrderMetricsMX();
@@ -13,6 +13,11 @@ cron.schedule('0 9 * * *',()=>{ ````````
     writeInventoryhLedgerReport();
 
 })
+
+//テスト用 1分ごとに実行
+// cron.schedule('*/1 * * * *', () => {
+// cron.schedule('0 9 * * *',()=>{ ````````
+
 
 
 
@@ -23,5 +28,3 @@ cron.schedule('0 9 * * *',()=>{ ````````
 // writeRefundsGetFinances();
 // writeInventoryhLedgerReport();
 
-
- 

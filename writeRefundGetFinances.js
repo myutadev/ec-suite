@@ -52,7 +52,7 @@ const updateData = (range,values) =>{
         spreadsheetId,
         range,
         valueInputOption: 'USER_ENTERED',
-        insertDataOption: 'INSERT_ROWS',
+        insertDataOption: 'OVERWRITE',
         resource: {
             values,
         },
@@ -102,7 +102,7 @@ const writeRefundsGetFinances = async () => {
 
   };
 
-//   writeRefundsGetFinances();
+  writeRefundsGetFinances();
 
   module.exports = {
     writeRefundsGetFinances
