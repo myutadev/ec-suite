@@ -4,7 +4,7 @@ const {writeInventoryhLedgerReport} = require('./writeInventoryLedgerReportToSpr
 const {writeRefundsGetFinances} = require('./writeRefundGetFinances');
 const cron = require('node-cron');
 
-cron.schedule('*/1 * * * *', () => {
+cron.schedule('0 9 * * *',()=>{
     writeOrderMetricsCA();
     writeOrderMetricsUS();
     writeOrderMetricsMX();
