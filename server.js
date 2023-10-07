@@ -1,5 +1,5 @@
 const express = require('express');
-const {writeValue} = require('./writeFetchedData');
+const {writeValueCa,writeValueUs} = require('./writeFetchedData');
 const {writeFetchedValues} = require('./writeGetInventorySummaries')
 
 
@@ -8,12 +8,23 @@ const port = process.env.PORT || 3000;
 
 app.get('/write/ca', async (req, res) => {
     try {
-        await writeValue();
-        console.log(`writevaluestarted`);
-        res.send('Write value completed.');
+        await writeValueCa();
+        console.log(`writevalueCA started`);
+        res.send('writevalueCA completed.');
     } catch (error) {
         console.log(error);
-        res.status(500).send('An error occurred.');
+        res.status(500).send('An error occurred in writevalueCA.');
+    }
+});
+
+app.get('/write/us', async (req, res) => {
+    try {
+        await writeValueUs();
+        console.log(`writevalueUS started`);
+        res.send('writevalueUS completed.');
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('An error occurred in writevalueUS');
     }
 });
 

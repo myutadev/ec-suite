@@ -3,6 +3,17 @@ const {getCatalogItemFromSheet} = require('./getAmazonApiToModuleForFetch');
 const fs = require('fs');
 require('dotenv').config();
 
+const readRanges ={
+    CA:'CAfetchProdInfo!A2:A',
+    US:'USfetchProdInfo!A2:A'
+}
+
+
+const ranges ={
+    CA:'CAfetchProdInfo!B2:AH',
+    US:'USfetchProdInfo!B2:AH'
+}
+
 const auth = new google.auth.GoogleAuth({
     credentials:{
         type: process.env.TYPE,
@@ -27,16 +38,16 @@ const sheets = google.sheets({
 
 
 
-const writeValue =async () =>{
+const writeValue =async (country) =>{
     //読み込み元
     const readSpreadsheetId = process.env.SPREADSHEET_ID; 
-    const readRange = 'CAfetchProdInfo!A2:A'; // データ取得の範囲を設定
+    const readRange = readRanges[country]; // データ取得の範囲を設定
     //書き込み先
     const spreadsheetId = process.env.SPREADSHEET_ID;
-    const range = 'CAfetchProdInfo!B2:AH'
+    const range = ranges[country];
     
     let values =[];
-    values = await getCatalogItemFromSheet(readSpreadsheetId,readRange);
+    values = await getCatalogItemFromSheet(readSpreadsheetId,readRange,country);
     console.log("Fetched values: ", values);
     
 
@@ -86,12 +97,15 @@ const writeValue =async () =>{
 //     }
 // }
 
-
+const writeValueCa = () => writeValue('CA')
+const writeValueUs = () => writeValue('US')
 
 module.exports ={
-    writeValue,
-  }
+    writeValueCa,
+    writeValueUs,
+}
 
 
-// writeValue();
-// writeValueK()
+// writeValue('CA');
+
+

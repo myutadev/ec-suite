@@ -2,6 +2,11 @@ const SellingPartnerAPI = require('amazon-sp-api');
 const {google} = require('googleapis');
 const fs = require('fs');
 require('dotenv').config();
+const marketPlaceIds ={
+  CA:'A2EUQ1WTGCTBG2',
+  US:'ATVPDKIKX0DER',
+  MX:'A1AM78C64UM0Y8'
+}
 
 const auth = new google.auth.GoogleAuth({
     credentials:{
@@ -45,8 +50,10 @@ const readValue = async (spreadsheetId,range) =>{
 }
 
 
-const getCatalogItem = async(asin) => {//const getShipments = 
+const getCatalogItem = async(asin,country) => {//const getShipments = 
     // const apiDataArray = [];
+    const marketPlaceID = marketPlaceIds[country]
+    console.log('checkkk',marketPlaceID);
     let resCatalog;
     let resPrice;
     let resultArray = []
@@ -68,7 +75,7 @@ const getCatalogItem = async(asin) => {//const getShipments =
         operation:'getCompetitivePricing',
         endpoint:'productPricing',
         query: {
-            MarketplaceId: 'A2EUQ1WTGCTBG2', // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
+            MarketplaceId: marketPlaceID, // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
             Asins:[asin],
             ItemType:'Asin',
         }
@@ -81,7 +88,7 @@ const getCatalogItem = async(asin) => {//const getShipments =
             asin:asin
         },
         query: {
-            marketplaceIds: ['A2EUQ1WTGCTBG2'], // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
+            marketplaceIds: [marketPlaceID], // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
             includedData:['attributes','images','identifiers','summaries','salesRanks']
         },
         options:{
@@ -146,7 +153,7 @@ const getCatalogItem = async(asin) => {//const getShipments =
     
   }; 
 // スクレイピングツール用
-  const getCatalogItemFromSheet = async (spreadsheetId,range) => {
+  const getCatalogItemFromSheet = async (spreadsheetId,range,country) => {
     const apiDataArray = [];
     const sheetValues = await readValue(spreadsheetId,range);
     console.log(`sheetvalue is`,sheetValues)
@@ -155,7 +162,7 @@ const getCatalogItem = async(asin) => {//const getShipments =
 
 
     for(const asin of asins){
-        let fetchedData = await getCatalogItem(asin);
+        let fetchedData = await getCatalogItem(asin,country);
         apiDataArray.push(fetchedData);
 
     }
@@ -164,134 +171,137 @@ const getCatalogItem = async(asin) => {//const getShipments =
     return apiDataArray;
   };
 
-  // 特定キーワードのトップ20を取得
 
-  const getSearchCatalogItems = async(keywordArray) => {//const getShipments = 
+    const checkStringIncludes = (targetStr,str1,str2) =>{
+   return !targetStr.includes(str1) && !targetStr.includes(str2)
+  }
 
-    try {
-      let sellingPartner = new SellingPartnerAPI({
-        region:'na', // The region to use for the SP-API endpoints ("eu", "na" or "fe")
-        refresh_token: process.env.refresh_token, // The refresh token of your app user
-        credentials:{
-            SELLING_PARTNER_APP_CLIENT_ID: process.env.SELLING_PARTNER_APP_CLIENT_ID,
-            SELLING_PARTNER_APP_CLIENT_SECRET: process.env.SELLING_PARTNER_APP_CLIENT_SECRET,
-            AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
-            AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
-            AWS_SELLING_PARTNER_ROLE:process.env.AWS_SELLING_PARTNER_ROLE
-          }
-      });
+  // // 特定キーワードのトップ20を取得
 
-      resSearch = await sellingPartner.callAPI({
-        operation:'searchCatalogItems',
-        endpoint:'catalogItems',
-        query: {
-            keywords:keywordArray,
-            marketplaceIds: ['A2EUQ1WTGCTBG2'], // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
-            pageSize:20
-        },                
-        options:{
-            version:'2022-04-01'
-            }
-        });
+  // const getSearchCatalogItems = async(keywordArray) => {//const getShipments = 
+
+  //   try {
+  //     let sellingPartner = new SellingPartnerAPI({
+  //       region:'na', // The region to use for the SP-API endpoints ("eu", "na" or "fe")
+  //       refresh_token: process.env.refresh_token, // The refresh token of your app user
+  //       credentials:{
+  //           SELLING_PARTNER_APP_CLIENT_ID: process.env.SELLING_PARTNER_APP_CLIENT_ID,
+  //           SELLING_PARTNER_APP_CLIENT_SECRET: process.env.SELLING_PARTNER_APP_CLIENT_SECRET,
+  //           AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+  //           AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+  //           AWS_SELLING_PARTNER_ROLE:process.env.AWS_SELLING_PARTNER_ROLE
+  //         }
+  //     });
+
+  //     resSearch = await sellingPartner.callAPI({
+  //       operation:'searchCatalogItems',
+  //       endpoint:'catalogItems',
+  //       query: {
+  //           keywords:keywordArray,
+  //           marketplaceIds: ['A2EUQ1WTGCTBG2'], // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
+  //           pageSize:20
+  //       },                
+  //       options:{
+  //           version:'2022-04-01'
+  //           }
+  //       });
 
 
-    return resSearch
-    } catch(e){
-      console.log(e)
-    };    
-  }; 
+  //   return resSearch
+  //   } catch(e){
+  //     console.log(e)
+  //   };    
+  // }; 
 
 
   // dev for ranktraker
 
-  const getAsinRank = async(asin) => {//const getShipments = 
-    // const apiDataArray = [];
-    let resCatalog;
-    let resultArray = []
-    let resultObject = {
-      infos:[],
-      categories : [],
-      ranks:[],
-    }
+  // const getAsinRank = async(asin) => {//const getShipments = 
+  //   // const apiDataArray = [];
+  //   let resCatalog;
+  //   let resultArray = []
+  //   let resultObject = {
+  //     infos:[],
+  //     categories : [],
+  //     ranks:[],
+  //   }
     
 
-    try {
-      let sellingPartner = new SellingPartnerAPI({
-        region:'na', // The region to use for the SP-API endpoints ("eu", "na" or "fe")
-        refresh_token: process.env.refresh_token, // The refresh token of your app user
-        credentials:{
-            SELLING_PARTNER_APP_CLIENT_ID: process.env.SELLING_PARTNER_APP_CLIENT_ID,
-            SELLING_PARTNER_APP_CLIENT_SECRET: process.env.SELLING_PARTNER_APP_CLIENT_SECRET,
-            AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
-            AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
-            AWS_SELLING_PARTNER_ROLE:process.env.AWS_SELLING_PARTNER_ROLE
-          }
-      });
+  //   try {
+  //     let sellingPartner = new SellingPartnerAPI({
+  //       region:'na', // The region to use for the SP-API endpoints ("eu", "na" or "fe")
+  //       refresh_token: process.env.refresh_token, // The refresh token of your app user
+  //       credentials:{
+  //           SELLING_PARTNER_APP_CLIENT_ID: process.env.SELLING_PARTNER_APP_CLIENT_ID,
+  //           SELLING_PARTNER_APP_CLIENT_SECRET: process.env.SELLING_PARTNER_APP_CLIENT_SECRET,
+  //           AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+  //           AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+  //           AWS_SELLING_PARTNER_ROLE:process.env.AWS_SELLING_PARTNER_ROLE
+  //         }
+  //     });
 
 
-      resCatalog = await sellingPartner.callAPI({
-        operation:'getCatalogItem',
-        endpoint:'catalogItems',
-        path:{
-            asin:asin
-        },
-        query: {
-            marketplaceIds: ['A2EUQ1WTGCTBG2'], // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
-            includedData:['attributes','images','identifiers','summaries','salesRanks']
-        },
-        options:{
-            version:'2022-04-01'
-            }
-        });
+  //     resCatalog = await sellingPartner.callAPI({
+  //       operation:'getCatalogItem',
+  //       endpoint:'catalogItems',
+  //       path:{
+  //           asin:asin
+  //       },
+  //       query: {
+  //           marketplaceIds: ['A2EUQ1WTGCTBG2'], // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
+  //           includedData:['attributes','images','identifiers','summaries','salesRanks']
+  //       },
+  //       options:{
+  //           version:'2022-04-01'
+  //           }
+  //       });
 
-        resultObject.infos.push(resCatalog.attributes?.item_name[0]?.value ?? 'no name');
-        resultObject.infos.push(resCatalog.summaries[0].brand),  
-        resultObject.ranks.push(resCatalog.salesRanks[0]?.classificationRanks?.[0]?.rank ?? 'no rank data')
-        resultObject.categories.push(resCatalog.salesRanks[0]?.classificationRanks?.[0]?.title ?? 'no rank data')
-        resultObject.ranks.push(resCatalog.salesRanks[0]?.displayGroupRanks?.[0]?.rank ?? 'no rank data')
-        resultObject.categories.push(resCatalog.salesRanks[0]?.displayGroupRanks?.[0]?.title ?? 'no rank data')
+  //       resultObject.infos.push(resCatalog.attributes?.item_name[0]?.value ?? 'no name');
+  //       resultObject.infos.push(resCatalog.summaries[0].brand),  
+  //       resultObject.ranks.push(resCatalog.salesRanks[0]?.classificationRanks?.[0]?.rank ?? 'no rank data')
+  //       resultObject.categories.push(resCatalog.salesRanks[0]?.classificationRanks?.[0]?.title ?? 'no rank data')
+  //       resultObject.ranks.push(resCatalog.salesRanks[0]?.displayGroupRanks?.[0]?.rank ?? 'no rank data')
+  //       resultObject.categories.push(resCatalog.salesRanks[0]?.displayGroupRanks?.[0]?.title ?? 'no rank data')
         
-        resultArray.push(resultObject)
-        // console.log(resultArray)
+  //       resultArray.push(resultObject)
+  //       // console.log(resultArray)
 
-    // await apiDataArray.push(resultArray);
-    return resultArray
-    // console.log(apiDataArray)
-    } catch(e){
-      return resultArray
-    };
-    // return resCatalog;
+  //   // await apiDataArray.push(resultArray);
+  //   return resultArray
+  //   // console.log(apiDataArray)
+  //   } catch(e){
+  //     return resultArray
+  //   };
+  //   // return resCatalog;
     
-  }; 
+  // }; 
 
   // getAsinRank('B09Q6DTJRR')
 
-  const getAsinRankFromSheet = async () => {
-    const apiDataArray = [];
-    const spreadsheetId = process.env.SPREADSHEET_ID_K; 
-    const range = 'RankTracker!C2:C'; // データ取得の範囲
+  // const getAsinRankFromSheet = async () => {
+  //   const apiDataArray = [];
+  //   const spreadsheetId = process.env.SPREADSHEET_ID_K; 
+  //   const range = 'RankTracker!C2:C'; // データ取得の範囲
 
 
-    const sheetValues = await readValue(spreadsheetId,range);
-    console.log(`sheetvalue is`,sheetValues)
-    const asins = sheetValues.flat();
-    console.log(`asins is `, asins)
+  //   const sheetValues = await readValue(spreadsheetId,range);
+  //   console.log(`sheetvalue is`,sheetValues)
+  //   const asins = sheetValues.flat();
+  //   console.log(`asins is `, asins)
 
 
-    for(const asin of asins){
-        let fetchedData = await getAsinRank(asin);
-        apiDataArray.push(fetchedData);
-    }
-    console.log(`apiDataArray is`,apiDataArray);
+  //   for(const asin of asins){
+  //       let fetchedData = await getAsinRank(asin);
+  //       apiDataArray.push(fetchedData);
+  //   }
+  //   console.log(`apiDataArray is`,apiDataArray);
 
-    return apiDataArray;
+  //   return apiDataArray;
 
-  };
+  // };
   
 
-  const checkStringIncludes = (targetStr,str1,str2) =>{
-   return !targetStr.includes(str1) && !targetStr.includes(str2)
-  }
+
 
 
   // getAsinRankFromSheet();
@@ -351,6 +361,6 @@ const getCatalogItem = async(asin) => {//const getShipments =
 
   module.exports ={
     getCatalogItemFromSheet,
-    getSearchCatalogItems,
-    getAsinRankFromSheet
+    // getSearchCatalogItems,
+    // getAsinRankFromSheet
   }
