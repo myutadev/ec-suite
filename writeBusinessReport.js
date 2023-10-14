@@ -65,6 +65,7 @@ const getSheetData = async () => {
     return sheetValues[0];
   } catch (err) {
     console.error(err);
+    throw err
   }
 };
 
@@ -98,18 +99,22 @@ const updateData = (values) =>{
 
 const writeBusinessReport = async () => {
     console.log("writeActiveInventoryReport starts");
+    const sheetValues = await getSheetData()
 
-    const asinTitleObj = await getAsinTitleObj();
-    const sheetValues = await getSheetData();
+    try {
+            const [asinTitleObj, amazonData] = await Promise.all([
+                getAsinTitleObj(),
+                getBusinessReport(sheetValues)
+            ]);
 
-    const amazonData = await getBusinessReport(sheetValues);
-
-    if (amazonData == null) {
-        console.log('writeActiveInventoryReport no data for today');
-        return; 
-    }
+            if (amazonData == null) {
+                console.log('writeActiveInventoryReport no data for today');
+                return; 
+            }
+        
+    
     const jsonData = JSON.parse(amazonData);
-    console.log(jsonData.salesAndTrafficByDate)
+    // console.log(jsonData.salesAndTrafficByDate)
 
     const values = jsonData.salesAndTrafficByAsin.map(item => [
         jsonData.reportSpecification.dataStartTime,
@@ -139,11 +144,12 @@ const writeBusinessReport = async () => {
         item.salesByAsin.totalOrderItems,
         item.salesByAsin.totalOrderItemsB2B,
     ])
-        console.log(values);
-
+        // console.log(values);
         updateData(values);
-    console.log("writeInventoryhLedgerReport ends");
-
+        console.log("writeInventoryhLedgerReport ends");
+    }catch(err){
+    console.error(err)
+    }
   };
 
 

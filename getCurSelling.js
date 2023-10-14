@@ -51,7 +51,7 @@ const getActiveInventoryReport = async() => {
         }, {});
       });
 
-    console.log(arrayData.slice(0, 10));
+    // console.log(arrayData.slice(0, 10));
 
     const values = arrayData.map(item => [
         item.asin1,
@@ -60,7 +60,7 @@ const getActiveInventoryReport = async() => {
         item.price,
         item.quantity // caなぜかquantity入ってない。
     ])
-console.log(`values is `,values);
+// console.log(`values is `,values);
   return values;
 
   } catch(e) {     

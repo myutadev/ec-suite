@@ -160,7 +160,7 @@ const getFinances = async(params) => {
 
 const getInventorySummaries = async(marketPlaceID,skuArray) => { 
   let res;
-  console.log('skuArray',skuArray)
+  // console.log('skuArray',skuArray)
   try {
       let sellingPartner = new SellingPartnerAPI({
           region: 'na',
@@ -186,8 +186,8 @@ const getInventorySummaries = async(marketPlaceID,skuArray) => {
           //   MarketplaceIds: ['A2EUQ1WTGCTBG2'] // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
           }
       });
-      console.log(res);
-      console.log(res.inventorySummaries[0].fnSku);
+      // console.log(res);
+      // console.log(res.inventorySummaries[0].fnSku);
 
       // fs.writeFileSync('output.json', JSON.stringify(res, null, 2));
     } catch(e) {
