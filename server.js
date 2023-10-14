@@ -1,11 +1,22 @@
 const express = require('express');
 const {writeValueCa,writeValueUs} = require('./writeFetchedData');
 const {writeFetchedValues} = require('./writeGetInventorySummaries')
+const {writeBusinessReport} = require('./writeBusinessReport')
 
 
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.get('/write/bizreport', async (req, res) => {
+    try {
+        await writeBusinessReport();
+        console.log(`writevalueCA started`);
+        res.send('writevalueCA completed.');
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('An error occurred in writevalueCA.');
+    }
+});
 app.get('/write/ca', async (req, res) => {
     try {
         await writeValueCa();

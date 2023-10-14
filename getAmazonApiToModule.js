@@ -160,6 +160,7 @@ const getFinances = async(params) => {
 
 const getInventorySummaries = async(marketPlaceID,skuArray) => { 
   let res;
+  console.log('skuArray',skuArray)
   try {
       let sellingPartner = new SellingPartnerAPI({
           region: 'na',
@@ -196,6 +197,55 @@ const getInventorySummaries = async(marketPlaceID,skuArray) => {
 }; 
 
 
+//小山さん依頼:ビジネスレポートの値･ユニットセッション率･カート取得率等
+const getBusinessReport = async(sheetValues) => { 
+  console.log('getBusinessReport Function started!');
+  console.log(sheetValues[0])
+  console.log(sheetValues[1])
+  console.log(sheetValues[2])
+  let res
+  try {
+      let sellingPartner = new SellingPartnerAPI({
+          region: 'na',
+          refresh_token: process.env.refresh_token,
+          credentials:{
+              SELLING_PARTNER_APP_CLIENT_ID: process.env.SELLING_PARTNER_APP_CLIENT_ID,
+              SELLING_PARTNER_APP_CLIENT_SECRET: process.env.SELLING_PARTNER_APP_CLIENT_SECRET,
+              AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+              AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+              AWS_SELLING_PARTNER_ROLE:process.env.AWS_SELLING_PARTNER_ROLE
+          }
+      });
+      res = await sellingPartner.downloadReport({
+          body:{
+              reportType: 'GET_SALES_AND_TRAFFIC_REPORT',
+              marketplaceIds: [sheetValues[0]],
+              dataStartTime : sheetValues[1], // 2023-09-10T00:00:00-07:00 startOfYesterday
+              dataEndTime : sheetValues[2],//2023-09-10T23:59:59-07:00 getEndOfYesterday(startOfYesterday)
+              reportOptions:{
+                  dateGranularity:'DAY',//DAY, WEEK, MONTH. Default: DAY.
+                  asinGranularity:'CHILD'//PARENT, CHILD, SKU. Default: PARENT.
+              }
+          },
+          version:'2021-06-30',
+          interval:8000,
+          // download:{
+          //   json:true,
+          //   file:'/Users/ssdef/AmazonApi/report.json'
+          // }
+      });
+      // fs.writeFileSync('output.json', JSON.stringify(res, null, 2));
+      // console.log(res);
+  } catch(e) {     
+      console.log(e);
+  };
+  console.log('Function end!');
+  return res;
+}; 
+
+// getBusinessReport();
+
+
 // getInventorySummaries("A2EUQ1WTGCTBG2",["CA51003-231002-B01BZKPWTM-34.9","CA51003-231002-B01BZKPWTM-34.9"])
 module.exports = {
   getOrderMetricsUS,
@@ -203,6 +253,7 @@ module.exports = {
   getOrderMetricsMX,
   getInventoryhLedgerReport,
   getFinances,
-  getInventorySummaries
+  getInventorySummaries,
+  getBusinessReport
 };
 

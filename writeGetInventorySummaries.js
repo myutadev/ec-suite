@@ -75,6 +75,7 @@ const writeFetchedValues = async () =>{ // 配列を渡して複数対応する�
         values.push([ele.fnSku])
     })
 
+
     console.log(values);
 
     const range = 'getInventorySummary!B2:B'
