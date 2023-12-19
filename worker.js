@@ -4,6 +4,7 @@ const {writeInventoryhLedgerReport} = require('./writeInventoryLedgerReportToSpr
 const {writeRefundsGetFinances} = require('./writeRefundGetFinances');
 const {writeOrderMetrics} = require('./src/api/sp-api/na/writeOrderMetrics');
 const {writeFinances} = require('./src/api/sp-api/na/writeFinances');
+const {writeRefundsFromFinances} = require('./src/api/sp-api/na/writeRefundsFromFinances');
 const cron = require('node-cron');
 
 cron.schedule('0 9 * * *',()=>{
@@ -11,7 +12,7 @@ cron.schedule('0 9 * * *',()=>{
     writeOrderMetrics(process.env.SPREADSHEET_ID,"US","getOrderMetricsUS!A2:X");
     writeOrderMetrics(process.env.SPREADSHEET_ID,"MX","getOrderMetricsMX!A2:X");
     writeFinances(process.env.SPREADSHEET_ID,"getFinances!A3:Z")
-    writeRefundsGetFinances();
+    writeRefundsFromFinances(process.env.SPREADSHEET_ID,"refunds");
     writeInventoryhLedgerReport();
 
 })

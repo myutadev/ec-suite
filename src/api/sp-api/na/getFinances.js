@@ -24,8 +24,8 @@ try {
         endpoint: 'finances', // ここも変更　無くても行ける
         // path:'/fba/inbound/v0/shipmentItems',// ここ変更！
         query: {
-            PostedAfter:start,
-            PostedBefore:end,
+            PostedAfter:start, // 2023-12-17T00:00:00-07:00
+            PostedBefore:end, //  2023-12-17T23:59:59-07:00
         }
     });
   } catch(e) {
