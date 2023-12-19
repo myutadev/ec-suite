@@ -1,6 +1,4 @@
 const express = require('express');
-// const {writeValueCa,writeValueUs} = require('./writeFetchedData');
-const {writeFetchedValues} = require('./writeGetInventorySummaries')
 const {writeBusinessReport} =require('./src/api/sp-api/na/writeBusinessReport');
 const {writeGetCatalogItemToSheet} = require('./src/api/sp-api/na/writeGetCatalogItemToSheet');
 const {writeSkuToFnsku} = require('./src/api/sp-api/na/writeskuToFnsku');
@@ -22,7 +20,6 @@ app.get('/write/bizreport', async (req, res) => {
 });
 
 // 12/19 changed
-
 app.get('/write/catalog', async (req, res) => {
     try {
         await writeGetCatalogItemToSheet(process.env.SPREADSHEET_ID,"NAfetchProdInfo");

@@ -15,9 +15,10 @@ const getEndOfYesterday =() => {
   return `${endOfYesterday}`; //  2022-01-01T00:00:00-07:00
 };
 
-const getInterval = (startOfYesterday) => {
-  let end = getEndOfYesterday(startOfYesterday);
-  return `${startOfYesterday}--${end}`;
+const getInterval = () => {
+  let start = getStartOfYesterday()
+  let end = getEndOfYesterday();
+  return `${start}--${end}`;
 };
 
 

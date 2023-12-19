@@ -32,7 +32,7 @@ const sheets = google.sheets({version: 'v4', auth});
 // 更新するスプレッドシートと範囲を指定
 const spreadsheetId = process.env.SPREADSHEET_ID; 
 
-// 最終行のデータを取得して比較する関数
+// 12/19 exported 最終行のデータを取得して比較する関数 
 const checkIfUpdateNeeded = async(newLastRowData,range) =>{
     let lastUpdatedData = ''
     try{
@@ -68,7 +68,7 @@ const updateData = (range,values) =>{
         }
     });
 } 
-
+// 12/19 will change / export as a write order metriccs
 const getOrderMetrics =  async (getOrderMetricsCountry,rangesKey) => {
     const amazonData = await getOrderMetricsCountry;// 更新する範囲を指定 要変更
     
