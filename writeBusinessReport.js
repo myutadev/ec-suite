@@ -153,7 +153,7 @@ const writeBusinessReport = async () => {
   };
 
 
-writeBusinessReport()
+// writeBusinessReport()
 // getMarketPlaceIdFromSheet()
 
   module.exports = {
