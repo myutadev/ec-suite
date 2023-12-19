@@ -196,7 +196,7 @@ const getInventorySummaries = async(marketPlaceID,skuArray) => {
   return res;
 }; 
 
-
+//2023/12/19 切り出し済み 削除OK
 //小山さん依頼:ビジネスレポートの値･ユニットセッション率･カート取得率等
 const getBusinessReport = async(sheetValues) => { 
   console.log('getBusinessReport Function started!');

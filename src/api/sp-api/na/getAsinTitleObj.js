@@ -1,7 +1,8 @@
-const { getActiveInventoryReport } = require("./getCurSelling");
+const { getActiveInventoryReport } = require("./getActiveInventoryReport");
 
-const getAsinTitleObj = async () => {
-  const curSelling = await getActiveInventoryReport();
+const getAsinTitleObj = async (marketPlace) => {
+  const curSelling = await getActiveInventoryReport(marketPlace);
+  console.log(curSelling);
   // curSellingのデータ構造
   //   [
   //       item.asin1,
@@ -22,13 +23,13 @@ const getAsinTitleObj = async () => {
     return acc;
   }, {});
 
-  // console.log(asinTitleObj);
+  console.log(asinTitleObj);
   // console.log(asinTitleObj['B000AQYY38'])
 
   return asinTitleObj;
 };
 
-// getAsinTitleObj();
+// getAsinTitleObj("CA");
 
 module.exports = {
 getAsinTitleObj

@@ -1,6 +1,6 @@
 const {google} = require('googleapis');
 const {getBusinessReport} = require('./getAmazonApiToModule');
-const {getAsinTitleObj} = require('./getAsinTitleObj');
+const {getAsinTitleObj} = require('./src/api/sp-api/na/getAsinTitleObj');
 
 require('dotenv').config();
 
