@@ -80,7 +80,7 @@ const marketPlaceId = {
 // const getOrderMetricsCA = getOrderMetrics(marketPlaceId['CA']);
 // const getOrderMetricsMX = getOrderMetrics(marketPlaceId['MX']);
 
-
+// 12/19 exported as getInventoryLedgerReport
 //＊FBAに納品された商品情報を取得
 const getInventoryhLedgerReport = async(params) => { 
   console.log('Function started!');
