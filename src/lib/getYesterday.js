@@ -22,9 +22,6 @@ const getInterval = () => {
 };
 
 
-console.log(getStartOfYesterday())
-console.log(getEndOfYesterday())
-
 module.exports = {
   getStartOfYesterday,
   getEndOfYesterday,

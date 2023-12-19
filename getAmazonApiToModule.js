@@ -126,40 +126,40 @@ const getInventoryhLedgerReport = async(params) => {
 
 
 
-
-const getFinances = async(params) => { 
-  let res;
-  try {
-      let sellingPartner = new SellingPartnerAPI({
-          region: 'na',
-          refresh_token: process.env.refresh_token,
-          credentials:{
-              SELLING_PARTNER_APP_CLIENT_ID: process.env.SELLING_PARTNER_APP_CLIENT_ID,
-              SELLING_PARTNER_APP_CLIENT_SECRET: process.env.SELLING_PARTNER_APP_CLIENT_SECRET,
-              AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
-              AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
-              AWS_SELLING_PARTNER_ROLE: process.env.AWS_SELLING_PARTNER_ROLE
-          }
-      });
-      res = await sellingPartner.callAPI({
-          operation:'listFinancialEvents', // ここ変更！
-          endpoint: 'finances', // ここも変更　無くても行ける
-          // path:'/fba/inbound/v0/shipmentItems',// ここ変更！
-          query: {
-              PostedAfter:startOfYesterday,
-              // PostedAfter:'2023-08-01T23:59:59Z',              
-              PostedBefore:getEndOfYesterday(startOfYesterday),
-          //   LastUpdatedBefore:'2023-07-31T23:59:59Z',
-          // QueryType:'DATE_RANGE'
-          //   MarketplaceIds: ['A2EUQ1WTGCTBG2'] // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
-          }
-      });
-      // fs.writeFileSync('output.json', JSON.stringify(res, null, 2));
-    } catch(e) {
-      console.log(e);
-  };
-  return res;
-}; 
+// 12/19 code refactor exported as getFinances
+// const getFinances = async(params) => { 
+//   let res;
+//   try {
+//       let sellingPartner = new SellingPartnerAPI({
+//           region: 'na',
+//           refresh_token: process.env.refresh_token,
+//           credentials:{
+//               SELLING_PARTNER_APP_CLIENT_ID: process.env.SELLING_PARTNER_APP_CLIENT_ID,
+//               SELLING_PARTNER_APP_CLIENT_SECRET: process.env.SELLING_PARTNER_APP_CLIENT_SECRET,
+//               AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
+//               AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
+//               AWS_SELLING_PARTNER_ROLE: process.env.AWS_SELLING_PARTNER_ROLE
+//           }
+//       });
+//       res = await sellingPartner.callAPI({
+//           operation:'listFinancialEvents', // ここ変更！
+//           endpoint: 'finances', // ここも変更　無くても行ける
+//           // path:'/fba/inbound/v0/shipmentItems',// ここ変更！
+//           query: {
+//               PostedAfter:startOfYesterday,
+//               // PostedAfter:'2023-08-01T23:59:59Z',              
+//               PostedBefore:getEndOfYesterday(startOfYesterday),
+//           //   LastUpdatedBefore:'2023-07-31T23:59:59Z',
+//           // QueryType:'DATE_RANGE'
+//           //   MarketplaceIds: ['A2EUQ1WTGCTBG2'] // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
+//           }
+//       });
+//       // fs.writeFileSync('output.json', JSON.stringify(res, null, 2));
+//     } catch(e) {
+//       console.log(e);
+//   };
+//   return res;
+// }; 
 
 // //12/19 getFbaInventorySummaries.js で切り出し
 // const getInventorySummaries = async(marketPlaceID,skuArray) => { 
@@ -254,7 +254,7 @@ const getFinances = async(params) => {
 module.exports = {
 
   getInventoryhLedgerReport,
-  getFinances,
+//   getFinances,
   // getInventorySummaries,
   // getBusinessReport
 };
