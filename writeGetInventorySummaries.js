@@ -62,7 +62,7 @@ const readInputMarketId = async() => {
 
 
 
-
+// 12/19 writeSkuToFnskuとして切り出し あとで消す
 const writeFetchedValues = async () =>{ // 配列を渡して複数対応する。
 
     const skus = await readInputSkus()

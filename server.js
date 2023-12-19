@@ -3,6 +3,8 @@ const express = require('express');
 const {writeFetchedValues} = require('./writeGetInventorySummaries')
 const {writeBusinessReport} =require('./src/api/sp-api/na/writeBusinessReport');
 const {writeGetCatalogItemToSheet} = require('./src/api/sp-api/na/writeGetCatalogItemToSheet');
+const {writeSkuToFnsku} = require('./src/api/sp-api/na/writeskuToFnsku');
+
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -19,7 +21,7 @@ app.get('/write/bizreport', async (req, res) => {
     }
 });
 
-//writeGetCatalogItemToSheet
+// 12/19 changed
 
 app.get('/write/catalog', async (req, res) => {
     try {
@@ -32,36 +34,13 @@ app.get('/write/catalog', async (req, res) => {
     }
 });
 
-// //12/19 delete
-// app.get('/write/ca', async (req, res) => {
-//     try {
-//         await writeValueCa();
-//         console.log(`writevalueCA started`);
-//         res.send('writevalueCA completed.');
-//     } catch (error) {
-//         console.log(error);
-//         res.status(500).send('An error occurred in writevalueCA.');
-//     }
-// });
 
-// //12/19 delete
-
-// app.get('/write/us', async (req, res) => {
-//     try {
-//         await writeValueUs();
-//         console.log(`writevalueUS started`);
-//         res.send('writevalueUS completed.');
-//     } catch (error) {
-//         console.log(error);
-//         res.status(500).send('An error occurred in writevalueUS');
-//     }
-// });
-
-app.get('/write/skutofnsku', async (req, res) => {
+//12/19 changed
+app.get('/write/fnsku', async (req, res) => {
     try {
-        await writeFetchedValues();
-        console.log(`writevaluestarted`);
-        res.send('Write value completed.');
+        await writeSkuToFnsku(process.env.SPREADSHEET_ID,"skuToFnsku");
+        console.log(`writeSkuToFnsku`);
+        res.send('writeSkuToFnsku completed.');
     } catch (error) {
         console.log(error);
         res.status(500).send('An error occurred.');

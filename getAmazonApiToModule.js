@@ -158,6 +158,7 @@ const getFinances = async(params) => {
   return res;
 }; 
 
+//12/19 getFbaInventorySummaries.js で切り出し
 const getInventorySummaries = async(marketPlaceID,skuArray) => { 
   let res;
   // console.log('skuArray',skuArray)
