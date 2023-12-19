@@ -1,5 +1,5 @@
 const {google} = require('googleapis');
-const {getCatalogItemFromSheet} = require('./getAmazonApiToModuleForFetch');
+const {getCatalogItemFromSheet} = require('./dlgetAmazonApiToModuleForFetch');
 const fs = require('fs');
 require('dotenv').config();
 
