@@ -5,7 +5,7 @@ require("dotenv").config();
 const writeCurSellingCompetitivePrice = async () => {
     let values = [];
     values = await getCurSellingCompetitivePricing();
-    console.log("Fetched values: ", values);
+    console.log("Fetched values: ", values);``
 
     //書き込み先
     const spreadsheetId = process.env.SPREADSHEET_ID2;
@@ -13,7 +13,7 @@ const writeCurSellingCompetitivePrice = async () => {
     updateArrayDataToSheets(spreadsheetId, range, values);
 };
 
-writeCurSellingCompetitivePrice();
+// writeCurSellingCompetitivePrice();
 
 module.exports = {
     writeCurSellingCompetitivePrice,

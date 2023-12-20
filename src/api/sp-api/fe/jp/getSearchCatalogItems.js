@@ -7,7 +7,7 @@ const getSearchCatalogItems = async (keywordArray) => {
   try {
     let sellingPartner = new SellingPartnerAPI({
       region: "fe", // The region to use for the SP-API endpoints ("eu", "na" or "fe")
-      refresh_token_JP: process.env.refresh_token, // The refresh token of your app user
+      refresh_token: process.env.refresh_token_JP, // The refresh token of your app user
       credentials: {
         SELLING_PARTNER_APP_CLIENT_ID:
           process.env.SELLING_PARTNER_APP_CLIENT_ID_JP,
