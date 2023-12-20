@@ -1,5 +1,5 @@
 const {google} = require('googleapis');
-const {getFinances} = require('./getAmazonApiToModule'); // ここも変更
+const {getFinances} = require('./dlgetAmazonApiToModule'); // ここも変更
 require('dotenv').config();
 
 // Google OAuth2 clientをセットアップ

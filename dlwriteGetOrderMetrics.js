@@ -1,5 +1,5 @@
 const {google} = require('googleapis');
-const {getOrderMetricsCA,getOrderMetricsUS,getOrderMetricsMX,getFinances} = require('./getAmazonApiToModule');
+const {getOrderMetricsCA,getOrderMetricsUS,getOrderMetricsMX,getFinances} = require('./dlgetAmazonApiToModule');
 require('dotenv').config();
 
 

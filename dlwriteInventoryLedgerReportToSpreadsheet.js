@@ -1,5 +1,5 @@
 const {google} = require('googleapis');
-const {getInventoryhLedgerReport} = require('./getAmazonApiToModule'); // ここも変更
+const {getInventoryhLedgerReport} = require('./dlgetAmazonApiToModule'); // ここも変更
 require('dotenv').config();
 const fs = require('fs');
 

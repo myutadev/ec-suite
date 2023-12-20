@@ -2,7 +2,9 @@ const express = require('express');
 const {writeBusinessReport} =require('./src/api/sp-api/na/writeBusinessReport');
 const {writeGetCatalogItemToSheet} = require('./src/api/sp-api/na/writeGetCatalogItemToSheet');
 const {writeSkuToFnsku} = require('./src/api/sp-api/na/writeskuToFnsku');
-
+const {writeCatalogItemFromSheet} = require('./src/api/sp-api/fe/jp/writeCatalogItemFromSheet');
+const {writeCurSellingCompetitivePrice} =  require('./src/api/sp-api/fe/sg/writeCurSellingCompetitivePrice')
+const {writeActiveInventoryReport} = require('./src/api/sp-api/fe/sg/writeActiveInventoryReport')
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -43,6 +45,45 @@ app.get('/write/fnsku', async (req, res) => {
         res.status(500).send('An error occurred.');
     }
 });
+
+
+//Amazon JP need to check
+
+app.get('/main', async (req, res) => {
+    try {
+        await writeCatalogItemFromSheet(process.env.SPREADSHEET_ID,"fetchProdInfo");
+        console.log(`writeCatalogItemFromSheet started`);
+        res.send('writeCatalogItemFromSheet completed.');
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('An error occurred in writeCatalogItemFromSheet.');
+    }
+});
+
+app.get('/writesg', async (req, res) => {
+    try {
+        await writeCurSellingCompetitivePrice();
+        console.log(`writesg started`);
+        res.send('writesg completed.');
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('An error occurred in writesg.');
+    }
+});
+
+app.get('/writeactivesg', async (req, res) => {
+    try {
+        await writeActiveInventoryReport();
+        console.log(`writeactivesg started`);
+        res.send('writeactivesg completed.');
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('An error occurred in writeactivesg.');
+    }
+});
+
+
+//Amazon JP end
 
 app.listen(port, () => {
     console.log(`App is running on port ${port}`);
