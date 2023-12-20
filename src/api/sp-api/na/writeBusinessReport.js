@@ -1,4 +1,5 @@
 const { getBusinessReport } = require("./getBusinessReport");
+const {getCurSellingFbaInventoryObj} = require('./getCurSellingFbaInventoryObj.js');
 const {
   appendArrayDataToSheets,
 } = require("../../../lib/appendArrayDataToSheets");
@@ -20,8 +21,8 @@ const writeBusinessReport = async () => {
   
 
   try {
-    const [asinTitleObj,amazonData] = await Promise.all([
-    getAsinTitleObj(marketPlace),getBusinessReport(start, end,marketPlace)]);
+    const [asinTitleObj,amazonData,curSellingObj] = await Promise.all([
+    getAsinTitleObj(marketPlace),getBusinessReport(start, end,marketPlace),getCurSellingFbaInventoryObj(marketPlace)]);
     if (amazonData == null) {
       console.log("no data for today");
       return;
@@ -29,7 +30,11 @@ const writeBusinessReport = async () => {
 
     const jsonData = JSON.parse(amazonData);
 
-    const values = jsonData.salesAndTrafficByAsin.map((item) => [
+    const values = jsonData.salesAndTrafficByAsin.map((item) => {
+   
+    const sku = asinTitleObj[item.childAsin]?.sku ?? "";
+
+    return [
       jsonData.reportSpecification.dataStartTime,
       jsonData.reportSpecification.dataEndTime,
       item.parentAsin,
@@ -56,7 +61,9 @@ const writeBusinessReport = async () => {
       item.salesByAsin.orderedProductSalesB2B.amount,
       item.salesByAsin.totalOrderItems,
       item.salesByAsin.totalOrderItemsB2B,
-    ]);
+      // curSellingObj[sku]? curSellingObj[sku]['totalQuantity']:"none",
+      // curSellingObj[sku]? curSellingObj[sku]['lastUpdatedTime']:"none"     
+    ]});
     // console.log(values);
 
     //更新先のシート情報
@@ -74,4 +81,4 @@ module.exports = {
   writeBusinessReport,
 };
 
-// writeBusinessReport();
+writeBusinessReport();

@@ -1,4 +1,3 @@
-const {getFbaInventorySummaries} = require('./getFbaInventorySummaries.js');
 const {getCurSellingFbaInventoryObj} = require('./getCurSellingFbaInventoryObj.js');
 const {
   readSpreadsheetValue,
@@ -49,4 +48,4 @@ module.exports ={
     writeSkuToFnsku
   }
 
-writeSkuToFnsku(process.env.SPREADSHEET_ID,"skuToFnsku")
+// writeSkuToFnsku(process.env.SPREADSHEET_ID,"skuToFnsku")

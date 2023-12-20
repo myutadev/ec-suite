@@ -10,7 +10,7 @@ const getCurSellingFbaInventoryObj = async (marketPlace) =>{ // 配列を渡し�
       return acc
     },{});
     
-    console.log(skuInfoObj);
+    console.log('sku infoObj is', skuInfoObj);
     return skuInfoObj
 }
 
