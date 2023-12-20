@@ -1,4 +1,5 @@
 const {getFbaInventorySummaries} = require('./getFbaInventorySummaries.js');
+const {getCurSellingFbaInventoryObj} = require('./getCurSellingFbaInventoryObj.js');
 const {
   readSpreadsheetValue,
 } = require("../../../lib/readSpreadsheetValue.js");
@@ -16,14 +17,16 @@ const writeSkuToFnsku = async (spreadsheetId,sheetName) =>{ // 配列を渡し�
     const skusSheetData = await readSpreadsheetValue(spreadsheetId,`${sheetName}!A3:A`);
     const skus = skusSheetData.flat();
 
-    const apiResponse = await getFbaInventorySummaries(marketPlace);
+    // const apiResponse = await getFbaInventorySummaries(marketPlace);
 
-    const skuInfoObj = apiResponse['inventorySummaries'].reduce((acc,item)=>{
-      acc[item.sellerSku] = item;
-      return acc
-    },{});
+    // const skuInfoObj = apiResponse['inventorySummaries'].reduce((acc,item)=>{
+    //   acc[item.sellerSku] = item;
+    //   return acc
+    // },{});
 
-    
+
+    const skuInfoObj =  await getCurSellingFbaInventoryObj(marketPlace);
+
     const values = [];
 
     skus.forEach(sku => {
@@ -46,4 +49,4 @@ module.exports ={
     writeSkuToFnsku
   }
 
-// writeSkuToFnsku(process.env.SPREADSHEET_ID,"skuToFnsku")
+writeSkuToFnsku(process.env.SPREADSHEET_ID,"skuToFnsku")

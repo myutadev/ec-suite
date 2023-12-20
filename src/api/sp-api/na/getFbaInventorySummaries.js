@@ -34,7 +34,7 @@ const getFbaInventorySummaries = async(marketPlace) => {
               marketplaceIds:[marketPlaceId[marketPlace]],
           }
       });
-
+    console.log(res);
     } catch(e) {
       console.log(e);
   };
@@ -43,7 +43,7 @@ const getFbaInventorySummaries = async(marketPlace) => {
 
 
 // getFbaInventorySummaries('CA',[`CA20001-220305-B07FBJ5SQJ-74.85-89.81`,`CA3973-221002-B07DVPWQ23-72.46`])
-// getFbaInventorySummaries('CA')
+getFbaInventorySummaries('CA')
 
 module.exports = {
   getFbaInventorySummaries,

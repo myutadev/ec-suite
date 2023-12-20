@@ -59,7 +59,7 @@ try {
         item.price,
         item.quantity // caなぜかquantity入ってない。
     ])
-// console.log(`values is `,values);
+console.log(`values is `,values);
   return values;
 
   } catch(e) {     
