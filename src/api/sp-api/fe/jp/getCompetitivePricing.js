@@ -9,7 +9,7 @@ const getCompetitivePricing = async (asins) => {
   try {
     let sellingPartner = new SellingPartnerAPI({
       region: "fe", // The region to use for the SP-API endpoints ("eu", "na" or "fe")
-      refresh_token_JP: process.env.refresh_token, // The refresh token of your app user
+      refresh_token: process.env.refresh_token_JP, // The refresh token of your app user
       credentials: {
         SELLING_PARTNER_APP_CLIENT_ID:
           process.env.SELLING_PARTNER_APP_CLIENT_ID_JP,
@@ -80,7 +80,7 @@ const getCompetitivePricing = async (asins) => {
     console.log(resultArray);
     return resultArray;
   } catch (e) {
-    console.log(`probably ASIN:${item} page is not exist`, e);
+    console.log(e);
     return resultArray;
   }
 };
@@ -88,3 +88,5 @@ const getCompetitivePricing = async (asins) => {
 module.exports = {
   getCompetitivePricing,
 };
+
+// getCompetitivePricing( [ 'B00JQ9RELY', 'B01777VFES', 'B0713V2D7J' ])

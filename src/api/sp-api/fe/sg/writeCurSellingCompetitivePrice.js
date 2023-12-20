@@ -13,7 +13,7 @@ const writeCurSellingCompetitivePrice = async () => {
     updateArrayDataToSheets(spreadsheetId, range, values);
 };
 
-// writeCurSellingCompetitivePrice();
+writeCurSellingCompetitivePrice();
 
 module.exports = {
     writeCurSellingCompetitivePrice,
