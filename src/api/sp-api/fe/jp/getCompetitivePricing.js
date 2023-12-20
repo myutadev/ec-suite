@@ -80,7 +80,7 @@ const getCompetitivePricing = async (asins) => {
     console.log(resultArray);
     return resultArray;
   } catch (e) {
-    console.log(`probably ASIN:${asin} page is not exist`, e);
+    console.log(`probably ASIN:${item} page is not exist`, e);
     return resultArray;
   }
 };

@@ -51,7 +51,7 @@ app.get('/write/fnsku', async (req, res) => {
 
 app.get('/main', async (req, res) => {
     try {
-        await writeCatalogItemFromSheet(process.env.SPREADSHEET_ID,"fetchProdInfo");
+        await writeCatalogItemFromSheet(process.env.SPREADSHEET_ID2,"fetchProdInfo");
         console.log(`writeCatalogItemFromSheet started`);
         res.send('writeCatalogItemFromSheet completed.');
     } catch (error) {
