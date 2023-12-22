@@ -8,7 +8,7 @@ const getAvailablePriceArr = (obj, asin) => {
   const isMaximumHoursValid = (num) => num <= 144 && num > 0;
   const isAvailabilityTypeFuture = (str) => str === "FUTURE_WITH_DATE";
 
-  console.log("obj[asin]", obj[asin]);
+  // console.log("obj[asin]", obj[asin]);
 
   const offerLength = obj[asin].LowestPrice.length;
 

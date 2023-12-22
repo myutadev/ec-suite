@@ -69,7 +69,7 @@ const getItemOffers = async (asin) => {
       },
     };
 
-    console.log("resultObj is", resultObj);
+    // console.log("resultObj is", resultObj);
     return resultObj;
   } catch (e) {
     console.log(e);
