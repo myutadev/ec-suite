@@ -37,6 +37,10 @@ const getItemOffers = async (asin) => {
     const resultObj = {
       [res.ASIN]: {
         update: moment().tz("Asia/Tokyo").format(),
+        Shipping:[
+          res?.Offers[0] ? res?.Offers[0].Shipping.Amount ?? "" : "",
+          res?.Offers[1] ? res?.Offers[1].Shipping.Amount ?? "" : "",
+        ],
         LowestPrice: [
           res?.Offers[0] ? res?.Offers[0].ListingPrice.Amount ?? "" : "",
           res?.Offers[1] ? res?.Offers[1].ListingPrice.Amount ?? "" : "",
@@ -72,8 +76,13 @@ const getItemOffers = async (asin) => {
     // console.log("resultObj is", resultObj);
     return resultObj;
   } catch (e) {
-    console.log(e);
-    return;
+    // console.log(e.code);
+    return {
+      [asin]: {
+        update: moment().tz("Asia/Tokyo").format(),
+        error: e.code,
+      },
+    };
   }
 };
 
@@ -81,4 +90,4 @@ module.exports = {
   getItemOffers,
 };
 
-// getItemOffers("B000UANWH8");
+// getItemOffers("B000IGKWA4")

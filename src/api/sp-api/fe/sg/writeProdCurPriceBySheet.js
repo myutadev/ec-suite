@@ -30,7 +30,7 @@ const writeProdCurPriceBySheet = async (
   let updateStartRow = readRow;
 
   for (let i = 0; i < asinArr.length; i += batchSize) {
-    console.log(`batch ${i} started`)
+    console.log(`batch ${i} started`);
     const priceInfoArr = [];
     let updateEndRow = updateStartRow + batchSize - 1;
     let updateRange = `${sheetName}!${updateStartCol}${updateStartRow}:${updateEndCol}${updateEndRow}`;
@@ -53,8 +53,7 @@ const writeProdCurPriceBySheet = async (
     });
     updateArrayDataToSheets(spreadsheetId, updateRange, priceInfoArr);
     updateStartRow += batchSize;
-    console.log(`batch ${i} end`)
-
+    console.log(`batch ${i} end`);
   }
 };
 
@@ -69,5 +68,5 @@ module.exports = {
 //   "C",
 //   "B",
 //   "E",
-//   99
+//   100
 // );

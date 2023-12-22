@@ -1,10 +1,16 @@
 const getAvailablePriceArr = (obj, asin) => {
+  //エラーobjだったとき
+  if (obj[asin].error)
+    return [
+      `https://www.amazon.co.jp/dp/${asin}`,
+      obj[asin].update,
+      asin,
+      obj[asin].error,
+    ];
+
   const isShipFromJp = (str) => str === "" || str === "JP";
-
   const isMaximumHoursBelow72 = (num) => num <= 144;
-
   const isAvailabilityTypeNow = (str) => str === "NOW";
-
   const isMaximumHoursValid = (num) => num <= 144 && num > 0;
   const isAvailabilityTypeFuture = (str) => str === "FUTURE_WITH_DATE";
 
@@ -31,7 +37,7 @@ const getAvailablePriceArr = (obj, asin) => {
         `https://www.amazon.co.jp/dp/${asin}`,
         obj[asin].update,
         asin,
-        obj[asin].LowestPrice[i],
+        obj[asin].LowestPrice[i] + obj[asin].Shipping[i],
       ];
     }
   }
@@ -42,32 +48,24 @@ module.exports = {
   getAvailablePriceArr,
 };
 
-// // forTest
+// forTest
 // const obj = {
-//   B00KKEBTEM: {
-//     update: "2023-12-22T11:20:22+09:00",
-//     LowestPrice: [3027, 3730],
-//     BuyBoxPrices: 2997,
-//     TotalOfferCount: 14,
-//     Condition: "new",
-//     ShipsFromCountry: ["", "JP"],
-//     AvailabilityType: ["NOW", "NOW"],
-//     MaximumHours: [1008, 24],
-//   },
+//   B00KKEBTEM: { update: "2023-12-22T17:29:07+09:00", error: "InvalidInput" },
 // };
 
 // const asin = "B00KKEBTEM";
 
 // const obj2 = {
 //   B00KKEBTEM: {
-//     update: "2023-12-22T11:20:22+09:00",
-//     LowestPrice: [3027, 3730],
-//     BuyBoxPrices: 2997,
-//     TotalOfferCount: 14,
+//     update: "2023-12-22T17:46:54+09:00",
+//     Shipping: [590, 0],
+//     LowestPrice: [2637, 3270],
+//     BuyBoxPrices: "",
+//     TotalOfferCount: 17,
 //     Condition: "new",
-//     ShipsFromCountry: ["US", "JP"],
+//     ShipsFromCountry: ["JP", ""],
 //     AvailabilityType: ["NOW", "NOW"],
-//     MaximumHours: [62, 24],
+//     MaximumHours: [72, 0],
 //   },
 // };
 

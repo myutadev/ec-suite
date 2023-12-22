@@ -120,6 +120,25 @@ app.get("/write/prodprice/", async (req, res) => {
   }
 });
 
+app.get("/write/prodprice/manual", async (req, res) => {
+  try {
+    await writeProdCurPriceBySheet(
+      process.env.SPREADSHEET_ID3,
+      "Fetch_manual",
+      "D", // asinのある列
+      "C",
+      "B",
+      "E",
+      100
+    );
+    console.log(`writeProdCurPriceBySheet started`);
+    res.send("writeProdCurPriceBySheet completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeactivesg.");
+  }
+});
+
 app.listen(port, () => {
   console.log(`App is running on port ${port}`);
 });
