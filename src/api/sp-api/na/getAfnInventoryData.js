@@ -58,4 +58,4 @@ module.exports = {
     getAfnInventoryData
 }
 
-getAfnInventoryData("CA");
+// getAfnInventoryData("CA");
