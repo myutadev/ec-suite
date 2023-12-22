@@ -59,12 +59,12 @@ module.exports = {
   writeProdCurPriceBySheet,
 };
 
-writeProdCurPriceBySheet(
-  process.env.SPREADSHEET_ID3,
-  "test+",
-  "D", // asinのある列
-  "C",
-  "B",
-  "E",
-  99
-);
+// writeProdCurPriceBySheet(
+//   process.env.SPREADSHEET_ID3,
+//   "test+",
+//   "D", // asinのある列
+//   "C",
+//   "B",
+//   "E",
+//   99
+// );

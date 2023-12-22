@@ -105,7 +105,7 @@ app.get("/write/prodprice/", async (req, res) => {
   try {
     await writeProdCurPriceBySheet(
       process.env.SPREADSHEET_ID3,
-      "test+",
+      "Prod_DB",
       "D", // asinのある列
       "C",
       "B",
