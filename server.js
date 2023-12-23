@@ -110,7 +110,7 @@ app.get("/write/prodprice/", async (req, res) => {
       "C",
       "B",
       "E",
-      100
+      500 // 100個で実行 1h 1600 /  500個実行してみる→スピード上がってエラーなければこれに
     );
     console.log(`writeProdCurPriceBySheet started`);
     res.send("writeProdCurPriceBySheet completed.");
