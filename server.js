@@ -11,7 +11,7 @@ const {
 } = require("./src/api/sp-api/fe/jp/writeCatalogItemFromSheet");
 const {
   writeCurSellingCompetitivePrice,
-} = require("./src/api/sp-api/fe/sg/writeCurSellingCompetitivePrice");
+} = require("./src/api/sp-api/fe/sg/archive/writeCurSellingCompetitivePrice.js");
 const {
   writeActiveInventoryReport,
 } = require("./src/api/sp-api/fe/sg/writeActiveInventoryReport");
@@ -83,20 +83,27 @@ app.get("/main", async (req, res) => {
   }
 });
 
-app.get("/writesg", async (req, res) => {
-  try {
-    await writeCurSellingCompetitivePrice();
-    console.log(`writesg started`);
-    res.send("writesg completed.");
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("An error occurred in writesg.");
-  }
-});
+// 12/24 新しいツール作成したため不要
 
-app.get("/writeactivesg", async (req, res) => {
+// app.get("/writesg", async (req, res) => {
+//   try {
+//     await writeCurSellingCompetitivePrice();
+//     console.log(`writesg started`);
+//     res.send("writesg completed.");
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send("An error occurred in writesg.");
+//   }
+// });
+
+//12/24 新しいシートに変更
+
+app.get("/write/activesg", async (req, res) => {
   try {
-    await writeActiveInventoryReport();
+    await writeActiveInventoryReport(
+      process.env.SPREADSHEET_ID3,
+      "Sg_Selling!A2:F"
+    );
     console.log(`writeactivesg started`);
     res.send("writeactivesg completed.");
   } catch (error) {
@@ -149,11 +156,11 @@ app.get("/write/prodprice/manual", async (req, res) => {
 app.get("/write/shippingInfo", async (req, res) => {
   try {
     writeShippingInfo(process.env.SPREADSHEET_ID3, "Prod_DB");
-    console.log(`writeProdCurPriceBySheet started`);
-    res.send("writeProdCurPriceBySheet completed.");
+    console.log(`writeShippingInfo started`);
+    res.send("writeShippingInfo completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeactivesg.");
+    res.status(500).send("An error occurred in writeShippingInfo.");
   }
 });
 
