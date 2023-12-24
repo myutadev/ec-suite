@@ -1,5 +1,5 @@
 const SellingPartnerAPI = require("amazon-sp-api");
-const {checkStringIncludes} = require('../../../../lib/checkStringIncludes')
+const { checkStringIncludes } = require("../../../../lib/checkStringIncludes");
 require("dotenv").config();
 
 const getCatalogItem = async (asin) => {
@@ -118,18 +118,50 @@ const getCatalogItem = async (asin) => {
     // resultArray.push(resCatalog?.attributes?.bullet_point?.[2]?.value  ?? '')
     // resultArray.push(resCatalog?.attributes?.bullet_point?.[3]?.value  ?? '')
     // resultArray.push(resCatalog?.attributes?.bullet_point?.[4]?.value  ?? '')
-    resultArray.push(
-      resCatalog.attributes?.item_package_weight
-        ? resCatalog.attributes?.item_package_weight[0]?.unit ??
-            "no package weight"
-        : "no package weight data"
-    );
-    resultArray.push(
-      resCatalog.attributes?.item_package_weight
-        ? resCatalog.attributes?.item_package_weight[0]?.value ??
-            "no package weight"
-        : "no package weight data"
-    );
+
+    // kilograms pounds gramsの三種類があるので、gramsに統一する
+    const weightUnit = resCatalog.attributes?.item_package_weight
+      ? resCatalog.attributes?.item_package_weight[0]?.unit ??
+        "no package weight"
+      : "no package weight data";
+
+    const weightData = resCatalog.attributes?.item_package_weight
+      ? resCatalog.attributes?.item_package_weight[0]?.value ??
+        "no package weight"
+      : "no package weight data";
+
+    const poundToGramUnit = 453.592;
+    const kgToGramUnit = 1000;
+
+    if (
+      weightUnit === "no package weight" ||
+      weightUnit == "no package weight data"
+    ) {
+      resultArray.push("no package weight");
+    } else {
+      resultArray.push("grams");
+    }
+
+    switch (weightUnit) {
+      case "pounds":
+        resultArray.push(Math.ceil(parseFloat(weightData) * poundToGramUnit));
+        break;
+      case "kilograms":
+        resultArray.push(Math.ceil(parseFloat(weightData) * kgToGramUnit));
+        break;
+      case "grams":
+        resultArray.push(Math.ceil(parseFloat(weightData)));
+        break;
+      default:
+        resultArray.push("no package weight");
+        break;
+    }
+    // resultArray.push(
+    //   resCatalog.attributes?.item_package_weight
+    //     ? resCatalog.attributes?.item_package_weight[0]?.value ??
+    //         "no package weight"
+    //     : "no package weight data"
+    // );
     resultArray.push(
       resCatalog.attributes?.item_package_dimensions
         ? resCatalog.attributes?.item_package_dimensions[0]?.length.unit ??
@@ -173,5 +205,5 @@ const getCatalogItem = async (asin) => {
 };
 
 module.exports = {
-  getCatalogItem
-}
+  getCatalogItem,
+};

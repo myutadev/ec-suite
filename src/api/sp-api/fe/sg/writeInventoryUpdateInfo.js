@@ -83,8 +83,8 @@ const writeInventoryUpdateInfo = async (
 
   curSellingArr.forEach((item) => {
     const asin = item[0];
-    console.log(asin);
-    console.log(dbDataAsinObj[asin]);
+    // console.log(asin);
+    // console.log(dbDataAsinObj[asin]);
 
     // console.log(dbDataAsinObj[asin].price);
 
@@ -116,7 +116,7 @@ const writeInventoryUpdateInfo = async (
     const shippingMethod = dbDataAsinObj[asin].method;
     const newPrice = parseFloat(dbDataAsinObj[asin].price);
     let ceiledShippingWeight;
-    console.log("shippingWeight", shippingWeight);
+    // console.log("shippingWeight", shippingWeight);
 
     if (shippingWeight <= 2000) {
       ceiledShippingWeight = Math.ceil(shippingWeight / 100) * 100;
@@ -125,11 +125,11 @@ const writeInventoryUpdateInfo = async (
     } else {
       ceiledShippingWeight = Math.ceil(shippingWeight / 1000) * 1000;
     }
-    console.log("ceiledShippingWeight", ceiledShippingWeight);
-    console.log(
-      "shippingFeeObj[ceiledShippingWeight]",
-      shippingFeeObj[ceiledShippingWeight]
-    );
+    // console.log("ceiledShippingWeight", ceiledShippingWeight);
+    // console.log(
+    //   "shippingFeeObj[ceiledShippingWeight]",
+    //   shippingFeeObj[ceiledShippingWeight]
+    // );
 
     const shippingFee = parseFloat(
       shippingFeeObj[ceiledShippingWeight][shippingMethod]
@@ -163,7 +163,7 @@ const writeInventoryUpdateInfo = async (
     // console.log("newListingPrice is", newListingPrice);
   });
 
-  console.log(newPriceInventoryArr);
+  // console.log(newPriceInventoryArr);
 
   // process.exit();
 
@@ -172,12 +172,12 @@ const writeInventoryUpdateInfo = async (
   updateArrayDataToSheets(spreadsheetId, writeRange, newPriceInventoryArr);
 };
 
-writeInventoryUpdateInfo(
-  process.env.SPREADSHEET_ID3,
-  "Config",
-  "Sg_Selling",
-  "Prod_DB"
-);
+// writeInventoryUpdateInfo(
+//   process.env.SPREADSHEET_ID3,
+//   "Config",
+//   "Sg_Selling",
+//   "Prod_DB"
+// );
 
 module.exports = {
   writeInventoryUpdateInfo,

@@ -14,7 +14,6 @@ const writeCatalogItemFromSheet =async (spreadsheetId,sheetName) =>{
     const asins = sheetValues.flat();
 
 
-
     const promises = asins.map((asin)=> getCatalogItem(asin));
     const values = await Promise.all(promises);
     
@@ -28,7 +27,7 @@ const writeCatalogItemFromSheet =async (spreadsheetId,sheetName) =>{
     }
 }
 
-// writeCatalogItemFromSheet(process.env.SPREADSHEET_ID2,"fetchProdInfo");
+writeCatalogItemFromSheet(process.env.SPREADSHEET_ID2,"fetchProdInfo");
 
 module.exports ={
     writeCatalogItemFromSheet,
