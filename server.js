@@ -18,6 +18,12 @@ const {
 const {
   writeProdCurPriceBySheet,
 } = require("./src/api/sp-api/fe/sg/writeProdCurPriceBySheet.js");
+const {
+  writeShippingInfo,
+} = require("./src/api/sp-api/fe/sg/writeShippingInfo.js");
+const {
+  writeInventoryUpdateInfo,
+} = require("./src/api/sp-api/fe/sg/writeInventoryUpdateInfo.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -110,7 +116,8 @@ app.get("/write/prodprice/", async (req, res) => {
       "C",
       "B",
       "E",
-      500 // 100個で実行 1h 1600 /  500個実行してみる→スピード上がってエラーなければこれに
+      800 // 100個で実行 1h 1600 /  500個実行してみる→12.5h  1h1800のペース 1秒0.5リクエスト 目安  10万で2.5  /
+      // 12/24 11:51 twtime 500-> 800
     );
     console.log(`writeProdCurPriceBySheet started`);
     res.send("writeProdCurPriceBySheet completed.");
@@ -129,13 +136,40 @@ app.get("/write/prodprice/manual", async (req, res) => {
       "C",
       "B",
       "E",
-      100
+      800
     );
     console.log(`writeProdCurPriceBySheet started`);
     res.send("writeProdCurPriceBySheet completed.");
   } catch (error) {
     console.log(error);
     res.status(500).send("An error occurred in writeactivesg.");
+  }
+});
+
+app.get("/write/shippingInfo", async (req, res) => {
+  try {
+    writeShippingInfo(process.env.SPREADSHEET_ID3, "Prod_DB");
+    console.log(`writeProdCurPriceBySheet started`);
+    res.send("writeProdCurPriceBySheet completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeactivesg.");
+  }
+});
+
+app.get("/write/inventoryupdateinfo", async (req, res) => {
+  try {
+    writeInventoryUpdateInfo(
+      process.env.SPREADSHEET_ID3,
+      "Config",
+      "Sg_Selling",
+      "Prod_DB"
+    );
+    console.log(`writeInventoryUpdateInfo started`);
+    res.send("writeInventoryUpdateInfo completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeInventoryUpdateInfo.");
   }
 });
 
