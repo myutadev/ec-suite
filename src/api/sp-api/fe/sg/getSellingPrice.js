@@ -47,4 +47,4 @@ module.exports = {
   getSellingPrice,
 };
 
-getSellingPrice(280, "smallPacket", "280", 90, 300);
+// getSellingPrice(280, "smallPacket", "280", 90, 300);
