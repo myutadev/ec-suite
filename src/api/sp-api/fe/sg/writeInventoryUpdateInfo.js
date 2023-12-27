@@ -89,7 +89,7 @@ const writeInventoryUpdateInfo = async (
     // console.log(dbDataAsinObj[asin].price);
 
     if (!dbDataAsinObj[asin]) {
-      newPriceInventoryArr.push([asin, item[1], item[2], item[3], 0]);
+      newPriceInventoryArr.push([asin, item[2], item[1], item[3], , , 0]);
       return;
     }
 
@@ -99,13 +99,17 @@ const writeInventoryUpdateInfo = async (
       dbDataAsinObj[asin].method == "size over" ||
       dbDataAsinObj[asin].method == "blank error"
     ) {
-      newPriceInventoryArr.push([asin, item[1], item[2], item[3], 0]);
+      newPriceInventoryArr.push([asin, item[2], item[1], item[3], , , 0]);
       return;
     }
 
     // 条件1.priceがnullならInventory 0 で配列作成
-    if (dbDataAsinObj[asin].price == "-" || dbDataAsinObj[asin].price == "") {
-      newPriceInventoryArr.push([asin, item[1], item[2], item[3], 0]);
+    if (
+      dbDataAsinObj[asin].price == "-" ||
+      dbDataAsinObj[asin].price == "" ||
+      dbDataAsinObj[asin].price == "InvalidInput"
+    ) {
+      newPriceInventoryArr.push([asin, item[2], item[1], item[3], , , 0]);
       return;
     }
 
@@ -143,16 +147,26 @@ const writeInventoryUpdateInfo = async (
     // 復活出品分は在庫50にもどす
 
     if (item[4] == "0") {
-      newPriceInventoryArr.push([asin, item[1], item[2], newListingPrice, 50]);
+      newPriceInventoryArr.push([
+        asin,
+        item[2],
+        item[1],
+        newListingPrice,
+        ,
+        ,
+        50,
+      ]);
       return;
     }
 
     newPriceInventoryArr.push([
       asin,
-      item[1],
-      item[2],
+      item[2], // name
+      item[1], // sku
       newListingPrice,
-      item[4],
+      ,
+      ,
+      item[4], // invenotry
     ]);
 
     // console.log("shippingFee is", shippingFee);
@@ -167,17 +181,17 @@ const writeInventoryUpdateInfo = async (
 
   // process.exit();
 
-  const writeRange = `${curSellingSheet}!H3:L`;
+  const writeRange = `${curSellingSheet}!H3:O`;
 
   updateArrayDataToSheets(spreadsheetId, writeRange, newPriceInventoryArr);
 };
 
-// writeInventoryUpdateInfo(
-//   process.env.SPREADSHEET_ID3,
-//   "Config",
-//   "Sg_Selling",
-//   "Prod_DB"
-// );
+writeInventoryUpdateInfo(
+  process.env.SPREADSHEET_ID3,
+  "Config",
+  "Sg_Selling",
+  "Prod_DB"
+);
 
 module.exports = {
   writeInventoryUpdateInfo,
