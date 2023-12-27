@@ -227,13 +227,14 @@ app.get("/write/listingrestrictions/manual", async (req, res) => {
 
 app.get("/write/newlisting", async (req, res) => {
   try {
-    writeNewListing(
+    console.log(`writeNewListing starts`);
+
+    await writeNewListing(
       process.env.SPREADSHEET_ID3,
       "Config",
       "Sg_Listing",
       "Prod_DB"
     );
-    console.log(`writeNewListing starts`);
     res.send("writeNewListing completed.");
   } catch (error) {
     console.log(error);
