@@ -25,10 +25,10 @@ const writeNewListing = async (
 ) => {
   console.log("dbSheet is", dbSheet);
 
-  // Prod_DBからデータ取得 A:G
+  // Prod_DBからデータ取得 A:Q
   const dbDataArr = await readSpreadsheetValue(
     spreadsheetId,
-    `${dbSheet}!A3000:110000`
+    `${dbSheet}!A2:Q`
   );
 
   const notUploadedArr = [];
