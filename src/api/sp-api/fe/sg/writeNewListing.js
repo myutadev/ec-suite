@@ -31,12 +31,16 @@ const writeNewListing = async (
     `${dbSheet}!A2:O`
   );
 
+  console.log("dbDataArr is", dbDataArr);
+
   const notUploadedArr = [];
   dbDataArr.forEach((item) => {
     if (item[16] == "FALSE") {
       notUploadedArr.push(item);
     }
   });
+
+  console.log("not uploaded Arr is", notUploadedArr);
 
   const resultArr = [];
   const today = await getTodayShort();
