@@ -24,6 +24,12 @@ const {
 const {
   writeInventoryUpdateInfo,
 } = require("./src/api/sp-api/fe/sg/writeInventoryUpdateInfo.js");
+const {
+  writeNewListing,
+} = require("./src/api/sp-api/fe/sg/writeNewListing.js");
+const {
+  writeListingsRestrictions,
+} = require("./src/api/sp-api/fe/sg/writeListingsRestrictions.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -177,6 +183,37 @@ app.get("/write/inventoryupdateinfo", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send("An error occurred in writeInventoryUpdateInfo.");
+  }
+});
+
+app.get("/write/listingrestrictions/all", async (req, res) => {
+  try {
+    writeListingsRestrictions(process.env.SPREADSHEET_ID3, "Sg_Listing", 2, "");
+    console.log(`listingrestrictions/all started`);
+    res.send("listingrestrictions/all completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in listingrestrictions/all.");
+  }
+});
+
+app.get("/write/listingrestrictions/manual", async (req, res) => {
+  try {
+    const start = req.body.start;
+    const end = req.body.end;
+    writeListingsRestrictions(
+      process.env.SPREADSHEET_ID3,
+      "Sg_Listing",
+      start,
+      end
+    );
+    console.log(`write/listingrestrictions/manual`);
+    res.send("write/listingrestrictions/manual completed.");
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .send("An error occurred in write/listingrestrictions/manual.");
   }
 });
 
