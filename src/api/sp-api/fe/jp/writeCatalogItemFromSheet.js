@@ -44,7 +44,7 @@ const writeCatalogItemFromSheet = async (
   }
 };
 
-writeCatalogItemFromSheet(process.env.SPREADSHEET_ID2, "fetchProdInfo", 20);
+// writeCatalogItemFromSheet(process.env.SPREADSHEET_ID2, "fetchProdInfo", 20);
 
 module.exports = {
   writeCatalogItemFromSheet,

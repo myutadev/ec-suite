@@ -79,7 +79,8 @@ app.get("/main", async (req, res) => {
   try {
     await writeCatalogItemFromSheet(
       process.env.SPREADSHEET_ID2,
-      "fetchProdInfo"
+      "fetchProdInfo",
+      20
     );
     console.log(`writeCatalogItemFromSheet started`);
     res.send("writeCatalogItemFromSheet completed.");
@@ -214,6 +215,21 @@ app.get("/write/listingrestrictions/manual", async (req, res) => {
     res
       .status(500)
       .send("An error occurred in write/listingrestrictions/manual.");
+  }
+});
+app.get("/write/newlisting", async (req, res) => {
+  try {
+    writeNewListing(
+      process.env.SPREADSHEET_ID3,
+      "Config",
+      "Sg_Listing",
+      "Prod_DB"
+    );
+    console.log(`writeNewListing starts`);
+    res.send("writeNewListing completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeNewListing.");
   }
 });
 
