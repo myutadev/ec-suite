@@ -30,6 +30,7 @@ const {
 const {
   writeListingsRestrictions,
 } = require("./src/api/sp-api/fe/sg/writeListingsRestrictions.js");
+const { readSpreadsheetValue } = require("./src/lib/readSpreadsheetValue.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -200,8 +201,13 @@ app.get("/write/listingrestrictions/all", async (req, res) => {
 
 app.get("/write/listingrestrictions/manual", async (req, res) => {
   try {
-    const start = req.query.start;
-    const end = req.query.end;
+    const rangeData = readSpreadsheetValue(
+      process.env.SPREADSHEET_ID3,
+      "Sg_Listing!Y1:Z1"
+    );
+    const readDataFlattened = rangeData.flat();
+    const start = readDataFlattened[0];
+    const end = readDataFlattened[1];
     writeListingsRestrictions(
       process.env.SPREADSHEET_ID3,
       "Sg_Listing",
