@@ -201,10 +201,11 @@ app.get("/write/listingrestrictions/all", async (req, res) => {
 
 app.get("/write/listingrestrictions/manual", async (req, res) => {
   try {
-    const rangeData = readSpreadsheetValue(
+    const rangeData = await readSpreadsheetValue(
       process.env.SPREADSHEET_ID3,
       "Sg_Listing!Y1:Z1"
     );
+
     const readDataFlattened = rangeData.flat();
     const start = readDataFlattened[0];
     const end = readDataFlattened[1];
@@ -223,6 +224,7 @@ app.get("/write/listingrestrictions/manual", async (req, res) => {
       .send("An error occurred in write/listingrestrictions/manual.");
   }
 });
+
 app.get("/write/newlisting", async (req, res) => {
   try {
     writeNewListing(
