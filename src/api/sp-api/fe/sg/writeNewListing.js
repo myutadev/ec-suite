@@ -84,7 +84,7 @@ const writeNewListing = async (
         rates,
         shippingFees
       );
-      sku = `SG-${today}-${asin}-${price}-jpy-${listingPrice}-sgd`;
+      sku = `SG-${today}-${asin}-${price}-jpy-${listingPrice}`;
       // console.log(listingPrice);
       // console.log(sku);
       const curArr = [
