@@ -200,8 +200,8 @@ app.get("/write/listingrestrictions/all", async (req, res) => {
 
 app.get("/write/listingrestrictions/manual", async (req, res) => {
   try {
-    const start = req.body.start;
-    const end = req.body.end;
+    const start = req.query.start;
+    const end = req.query.end;
     writeListingsRestrictions(
       process.env.SPREADSHEET_ID3,
       "Sg_Listing",
