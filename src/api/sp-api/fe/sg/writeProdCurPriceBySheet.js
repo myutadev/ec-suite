@@ -1,11 +1,7 @@
 const SellingPartnerAPI = require("amazon-sp-api");
 require("dotenv").config();
-const {
-  readSpreadsheetValue,
-} = require("../../../../lib/readSpreadsheetValue.js");
-const {
-  updateArrayDataToSheets,
-} = require("../../../../lib/updateArrayDataToSheets.js");
+const { readSpreadsheetValue } = require("../../../../lib/readSpreadsheetValue.js");
+const { updateArrayDataToSheets } = require("../../../../lib/updateArrayDataToSheets.js");
 
 const { getItemOffers } = require("../jp/getItemOffers.js");
 const { getAvailablePriceArr } = require("./getAvailablePriceArr.js");
@@ -39,9 +35,7 @@ const writeProdCurPriceBySheet = async (
     console.log(batch);
     // process.exit();
     const batchResults = await Promise.allSettled(
-      batch.map((asin) =>
-        getItemOffers(asin).then((data) => getAvailablePriceArr(data, asin))
-      )
+      batch.map((asin) => getItemOffers(asin).then((data) => getAvailablePriceArr(data, asin)))
     );
 
     batchResults.forEach((result) => {
@@ -63,10 +57,10 @@ module.exports = {
 
 // writeProdCurPriceBySheet(
 //   process.env.SPREADSHEET_ID3,
-//   "test+",
+//   "Fetch_manual",
 //   "D", // asinのある列
 //   "C",
 //   "B",
 //   "E",
-//   100
+//   800
 // );

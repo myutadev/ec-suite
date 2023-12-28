@@ -223,3 +223,4 @@ app.get("/write/spsg/newlisting", async (req, res) => {
 app.listen(port, () => {
   console.log(`App is running on port ${port}`);
 });
+

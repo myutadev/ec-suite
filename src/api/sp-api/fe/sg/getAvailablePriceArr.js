@@ -1,20 +1,12 @@
 const getAvailablePriceArr = (obj, asin) => {
   //エラーobjだったとき
-  if (obj[asin].error)
-    return [
-      `https://www.amazon.co.jp/dp/${asin}`,
-      obj[asin].update,
-      asin,
-      obj[asin].error,
-    ];
+  if (obj[asin].error) return [`https://www.amazon.co.jp/dp/${asin}`, obj[asin].update, asin, obj[asin].error];
 
   const isShipFromJp = (str) => str === "" || str === "JP";
   const isMaximumHoursBelow72 = (num) => num <= 144;
   const isAvailabilityTypeNow = (str) => str === "NOW";
   const isMaximumHoursValid = (num) => num <= 144 && num > 0;
   const isAvailabilityTypeFuture = (str) => str === "FUTURE_WITH_DATE";
-
-  // console.log("obj[asin]", obj[asin]);
 
   const offerLength = obj[asin].LowestPrice.length;
 

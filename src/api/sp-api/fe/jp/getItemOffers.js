@@ -10,10 +10,8 @@ const getItemOffers = async (asin) => {
       region: "fe", // The region to use for the SP-API endpoints ("eu", "na" or "fe")
       refresh_token: process.env.refresh_token_JP, // The refresh token of your app user
       credentials: {
-        SELLING_PARTNER_APP_CLIENT_ID:
-          process.env.SELLING_PARTNER_APP_CLIENT_ID_JP,
-        SELLING_PARTNER_APP_CLIENT_SECRET:
-          process.env.SELLING_PARTNER_APP_CLIENT_SECRET_JP,
+        SELLING_PARTNER_APP_CLIENT_ID: process.env.SELLING_PARTNER_APP_CLIENT_ID_JP,
+        SELLING_PARTNER_APP_CLIENT_SECRET: process.env.SELLING_PARTNER_APP_CLIENT_SECRET_JP,
         AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
         AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
         AWS_SELLING_PARTNER_ROLE: process.env.AWS_SELLING_PARTNER_ROLE,
@@ -33,11 +31,12 @@ const getItemOffers = async (asin) => {
     });
     // console.log("this is res", res);
     // console.log("this is res?.Offers[0]", res?.Offers[0].ListingPrice.Amount);
+    console.log("resis", res);
 
     const resultObj = {
       [res.ASIN]: {
         update: moment().tz("Asia/Tokyo").format(),
-        Shipping:[
+        Shipping: [
           res?.Offers[0] ? res?.Offers[0].Shipping.Amount ?? "" : "",
           res?.Offers[1] ? res?.Offers[1].Shipping.Amount ?? "" : "",
         ],
@@ -55,12 +54,8 @@ const getItemOffers = async (asin) => {
           res?.Offers[1] ? res?.Offers[1].ShipsFrom?.Country ?? "" : "",
         ],
         AvailabilityType: [
-          res?.Offers[0]
-            ? res?.Offers[0].ShippingTime?.availabilityType ?? ""
-            : "",
-          res?.Offers[1]
-            ? res?.Offers[1].ShippingTime?.availabilityType ?? ""
-            : "",
+          res?.Offers[0] ? res?.Offers[0].ShippingTime?.availabilityType ?? "" : "",
+          res?.Offers[1] ? res?.Offers[1].ShippingTime?.availabilityType ?? "" : "",
         ],
         MaximumHours: [
           res?.Offers[0] ? res?.Offers[0].ShippingTime?.maximumHours ?? "" : "",
@@ -90,4 +85,4 @@ module.exports = {
   getItemOffers,
 };
 
-// getItemOffers("B000IGKWA4")
+// getItemOffers("B086ZS4RT1");
