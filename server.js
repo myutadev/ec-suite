@@ -30,6 +30,9 @@ const {
 const {
   writeListingsRestrictions,
 } = require("./src/api/sp-api/fe/sg/writeListingsRestrictions.js");
+const {
+  writeInventoryUpdateInfoSpMy,
+} = require("./src/api/shopee/my/writeInventoryUpdateInfo.js");
 const { readSpreadsheetValue } = require("./src/lib/readSpreadsheetValue.js");
 
 const app = express();
@@ -239,6 +242,25 @@ app.get("/write/newlisting", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send("An error occurred in writeNewListing.");
+  }
+});
+
+// shopee endpoint
+
+app.get("/write/spmy/newlisting", async (req, res) => {
+  try {
+    console.log(`writeNewListing starts`);
+
+    await writeInventoryUpdateInfoSpMy(
+      process.env.SPREADSHEET_ID3,
+      "Config_Sp",
+      "Sp_My_Selling",
+      "Prod_DB"
+    );
+    res.send("writeInventoryUpdateInfoSpMy completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeInventoryUpdateInfoSpMy.");
   }
 });
 
