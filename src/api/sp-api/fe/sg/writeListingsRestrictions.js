@@ -5,7 +5,7 @@ const { updateArrayDataToSheets } = require("../../../../lib/updateArrayDataToSh
 const { getListingsRestrictions } = require("./getListingsRestrictions.js");
 
 const writeListingsRestrictions = async (spreadsheetId, sheetName, start, end) => {
-  const writeRange = `${sheetName}!X${start}:X${end}`;
+  const writeRange = `${sheetName}!X${start}:Y${end}`;
   const readRange = `${sheetName}!D${start}:D${end}`;
   const sheetData = await readSpreadsheetValue(spreadsheetId, readRange);
 
