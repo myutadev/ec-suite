@@ -1,19 +1,10 @@
 require("dotenv").config();
-const {
-  readSpreadsheetValue,
-} = require("../../../../lib/readSpreadsheetValue.js");
-const {
-  updateArrayDataToSheets,
-} = require("../../../../lib/updateArrayDataToSheets.js");
+const { readSpreadsheetValue } = require("../../../../lib/readSpreadsheetValue.js");
+const { updateArrayDataToSheets } = require("../../../../lib/updateArrayDataToSheets.js");
 
 const { getListingsRestrictions } = require("./getListingsRestrictions.js");
 
-const writeListingsRestrictions = async (
-  spreadsheetId,
-  sheetName,
-  start,
-  end
-) => {
+const writeListingsRestrictions = async (spreadsheetId, sheetName, start, end) => {
   const writeRange = `${sheetName}!X${start}:X${end}`;
   const readRange = `${sheetName}!D${start}:D${end}`;
   const sheetData = await readSpreadsheetValue(spreadsheetId, readRange);
@@ -27,7 +18,10 @@ const writeListingsRestrictions = async (
   for (let asin of asins) {
     const res = await getListingsRestrictions(asin);
     console.log(res);
-    results.push([res]);
+    results.push([
+      res,
+      `https://sellercentral.amazon.sg/hz/approvalrequest/restrictions/approve?asin=${asin}&itemcondition=null&ref_=xx_catadd_dnav_xx`,
+    ]);
   }
 
   // const results = await Promise.allSettled(
