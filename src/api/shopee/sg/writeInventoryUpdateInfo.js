@@ -1,15 +1,27 @@
 require("dotenv").config();
 const { config } = require("dotenv");
-const { readSpreadsheetValue } = require("../../../lib/readSpreadsheetValue.js");
-const { updateArrayDataToSheets } = require("../../../lib/updateArrayDataToSheets.js");
+const {
+  readSpreadsheetValue,
+} = require("../../../lib/readSpreadsheetValue.js");
+const {
+  updateArrayDataToSheets,
+} = require("../../../lib/updateArrayDataToSheets.js");
 
-const writeInventoryUpdateInfoSpMy = async (spreadsheetId, configSheet, curSellingSheet, dbSheet) => {
+const writeInventoryUpdateInfoSpSg = async (
+  spreadsheetId,
+  configSheet,
+  curSellingSheet,
+  dbSheet
+) => {
   // configシートから価格計算に必要なデータを取得
-  const readRangeForRates = `${configSheet}!A3:D3`;
-  const readRangeForShippingFees = `${configSheet}!A6:B`;
+  const readRangeForRates = `${configSheet}!F3:I3`;
+  const readRangeForShippingFees = `${configSheet}!F6:G`;
 
   const rates = await readSpreadsheetValue(spreadsheetId, readRangeForRates);
-  const shippingFees = await readSpreadsheetValue(spreadsheetId, readRangeForShippingFees);
+  const shippingFees = await readSpreadsheetValue(
+    spreadsheetId,
+    readRangeForShippingFees
+  );
 
   const profitRate = parseFloat(rates[0][0]);
   const amazonFeeRate = parseFloat(rates[0][1]);
@@ -44,7 +56,10 @@ const writeInventoryUpdateInfoSpMy = async (spreadsheetId, configSheet, curSelli
   // 現在販売中の出品データ取得
 
   const readRangeForCurSelling = `${curSellingSheet}!A2:J`;
-  const curSellingArr = await readSpreadsheetValue(spreadsheetId, readRangeForCurSelling);
+  const curSellingArr = await readSpreadsheetValue(
+    spreadsheetId,
+    readRangeForCurSelling
+  );
   const newPriceInventoryArr = [];
 
   //ここから繰り返し処理
@@ -75,14 +90,35 @@ const writeInventoryUpdateInfoSpMy = async (spreadsheetId, configSheet, curSelli
     // console.log(dbDataAsinObj[asin].price);
 
     if (!dbDataAsinObj[asin]) {
-      newPriceInventoryArr.push([item[0], item[1], item[2], item[3], item[4], item[5], item[6], 0, item[8], item[9]]);
+      newPriceInventoryArr.push([
+        item[0],
+        item[1],
+        item[2],
+        item[3],
+        item[4],
+        item[5],
+        item[6],
+        0,
+      ]);
       return;
     }
 
     //条件0  配送methodがblankerror or sizeoverの場合は在庫0にする
 
-    if (dbDataAsinObj[asin].method == "size over" || dbDataAsinObj[asin].method == "blank error") {
-      newPriceInventoryArr.push([item[0], item[1], item[2], item[3], item[4], item[5], item[6], 0, item[8], item[9]]);
+    if (
+      dbDataAsinObj[asin].method == "size over" ||
+      dbDataAsinObj[asin].method == "blank error"
+    ) {
+      newPriceInventoryArr.push([
+        item[0],
+        item[1],
+        item[2],
+        item[3],
+        item[4],
+        item[5],
+        item[6],
+        0,
+      ]);
       return;
     }
 
@@ -92,7 +128,16 @@ const writeInventoryUpdateInfoSpMy = async (spreadsheetId, configSheet, curSelli
       dbDataAsinObj[asin].price == "" ||
       dbDataAsinObj[asin].price == "InvalidInput"
     ) {
-      newPriceInventoryArr.push([item[0], item[1], item[2], item[3], item[4], item[5], item[6], 0, item[8], item[9]]);
+      newPriceInventoryArr.push([
+        item[0],
+        item[1],
+        item[2],
+        item[3],
+        item[4],
+        item[5],
+        item[6],
+        0,
+      ]);
       return;
     }
 
@@ -102,21 +147,37 @@ const writeInventoryUpdateInfoSpMy = async (spreadsheetId, configSheet, curSelli
     const shippingWeight = dbDataAsinObj[asin].weight;
     // const shippingMethod = dbDataAsinObj[asin].method;
     const newPrice = parseFloat(dbDataAsinObj[asin].price);
-    const ceiledShippingWeight = Math.ceil(shippingWeight / 10) * 10;
-    // console.log("shippingWeight", shippingWeight);
+    let ceiledShippingWeight;
+    if (shippingWeight <= 500) {
+      ceiledShippingWeight = Math.ceil(shippingWeight / 100) * 100;
+    } else {
+      ceiledShippingWeight = Math.ceil(shippingWeight / 250) * 250;
+    }
+    console.log(
+      "shippingWeight",
+      shippingWeight,
+      "ceiled",
+      ceiledShippingWeight
+    );
 
     const shippingFee = parseFloat(shippingFeeObj[ceiledShippingWeight]);
 
     const totalCost = shippingFee + otherFees + newPrice;
     const sgdTotalCost = Math.ceil(totalCost / currencyRate);
-    const newListingPrice = Math.ceil((sgdTotalCost / (1 - profitRate - amazonFeeRate)) * 100) / 100;
+    const newListingPrice =
+      Math.ceil((sgdTotalCost / (1 - profitRate - amazonFeeRate)) * 100) / 100;
 
     // 復活出品分は在庫50にもどす
     console.log(asin);
-    console.log(newListingPrice);
-    console.log(sgdTotalCost);
+    console.log("new Listing price is", newListingPrice);
+    console.log("new Listing price is", sgdTotalCost);
     console.log("totalCost", totalCost);
-    console.log("totalCost is shippingFee,otherFees,newPrice", shippingFee, otherFees, newPrice);
+    console.log(
+      "shippingFee,otherFees,newPrice",
+      shippingFee,
+      otherFees,
+      newPrice
+    );
     console.log("ceiledShippingWeight", ceiledShippingWeight);
 
     if (item[7] == "0") {
@@ -129,8 +190,6 @@ const writeInventoryUpdateInfoSpMy = async (spreadsheetId, configSheet, curSelli
         item[5],
         newListingPrice,
         50,
-        item[8],
-        item[9],
       ]);
 
       return;
@@ -145,8 +204,6 @@ const writeInventoryUpdateInfoSpMy = async (spreadsheetId, configSheet, curSelli
       item[5],
       newListingPrice,
       item[7],
-      item[8],
-      item[9],
     ]);
 
     // console.log("shippingFee is", shippingFee);
@@ -166,13 +223,13 @@ const writeInventoryUpdateInfoSpMy = async (spreadsheetId, configSheet, curSelli
   updateArrayDataToSheets(spreadsheetId, writeRange, newPriceInventoryArr);
 };
 
-// writeInventoryUpdateInfoSpMy(
+// writeInventoryUpdateInfoSpSg(
 //   process.env.SPREADSHEET_ID3,
 //   "Config_Sp",
-//   "Sp_My_Selling",
+//   "Sp_Sg_Selling",
 //   "Prod_DB"
 // );
 
 module.exports = {
-  writeInventoryUpdateInfoSpMy,
+  writeInventoryUpdateInfoSpSg,
 };
