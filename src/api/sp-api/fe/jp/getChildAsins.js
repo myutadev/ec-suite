@@ -1,7 +1,7 @@
 const SellingPartnerAPI = require("amazon-sp-api");
 require("dotenv").config();
 
-const getSearchCatalogItems = async (keywordArray) => {
+const getChildAsins = async (asin) => {
   try {
     let sellingPartner = new SellingPartnerAPI({
       region: "fe", // The region to use for the SP-API endpoints ("eu", "na" or "fe")
@@ -15,30 +15,34 @@ const getSearchCatalogItems = async (keywordArray) => {
       },
     });
 
-    resSearch = await sellingPartner.callAPI({
-      operation: "searchCatalogItems",
+    resCatalog = await sellingPartner.callAPI({
+      operation: "getCatalogItem",
       endpoint: "catalogItems",
+      path: {
+        asin: asin,
+      },
       query: {
-        keywords: keywordArray,
         marketplaceIds: ["A1VC38T7YXB528"], // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
-        pageSize: 20,
-        includedData: ["summaries", "relationships"],
+        includedData: ["attributes", "relationships", "summaries"],
       },
       options: {
         version: "2022-04-01",
       },
     });
-    // console.log(resSearch);
-    console.log(resSearch.items[0].relationships[0].relationships);  // [] -> バリエーションなし、 
-
-    return resSearch;
+    const asinsArr = resCatalog?.relationships[0]?.relationships[0]?.childAsins ?? "";
+    // console.log(asinsArr);
+    return asinsArr;
   } catch (e) {
-    console.log(e);
+    console.log(`probably ASIN:${asin} page is not exist`, e);
+    return resultArray;
   }
 };
 
-module.exports = {
-  getSearchCatalogItems,
-};
+// getChildAsins("B0BLGQ7362"); // 親ASINでリクエスト
+// getChildAsins("B083X76H61"); // 子ASINでリクエスト
+// getChildAsins("B09P37W3LZ"); // バリエーションなしでリクエスト
+// getChildAsins("B098YGC4KP");
 
-// getSearchCatalogItems(["資生堂 ビューラー"]);
+module.exports = {
+  getChildAsins,
+};

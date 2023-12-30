@@ -15,6 +15,8 @@ const { writeListingsRestrictions } = require("./src/api/sp-api/fe/sg/writeListi
 const { writeInventoryUpdateInfoSpMy } = require("./src/api/shopee/my/writeInventoryUpdateInfo.js");
 const { writeInventoryUpdateInfoSpSg } = require("./src/api/shopee/sg/writeInventoryUpdateInfo.js");
 const { readSpreadsheetValue } = require("./src/lib/readSpreadsheetValue.js");
+const { writeSearchCatalogItems } = require("./src/api/sp-api/fe/jp/writeSearchCatalogItems.js");
+const { writeSearchCatalogItemsAll } = require("./src/api/sp-api/fe/jp/writeSearchCatalogItemsAll.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -196,6 +198,30 @@ app.get("/write/newlisting", async (req, res) => {
   }
 });
 
+app.get("/write/searchcatalogitems", async (req, res) => {
+  try {
+    console.log(`writeNewListing starts`);
+
+    await writeSearchCatalogItems();
+    res.send("writeSearchCatalogItems completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeSearchCatalogItems.");
+  }
+});
+
+app.get("/write/searchcatalogitemsall", async (req, res) => {
+  try {
+    console.log(`writeNewListing starts`);
+
+    await writeSearchCatalogItemsAll();
+    res.send("writeSearchCatalogItemsAll completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeSearchCatalogItemsAll.");
+  }
+});
+
 // shopee endpoint
 
 app.get("/write/spmy/newlisting", async (req, res) => {
@@ -223,4 +249,3 @@ app.get("/write/spsg/newlisting", async (req, res) => {
 app.listen(port, () => {
   console.log(`App is running on port ${port}`);
 });
-
