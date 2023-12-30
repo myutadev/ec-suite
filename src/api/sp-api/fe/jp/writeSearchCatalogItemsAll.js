@@ -26,6 +26,7 @@ const writeSearchCatalogItemsAll = async () => {
         // console.log(parentAsinArr);
       } else {
         console.log("asin doesnt have variatio", item.asin);
+        
         resultArr.push(item.asin);
       }
     });
@@ -53,7 +54,7 @@ const writeSearchCatalogItemsAll = async () => {
 };
 
 module.exports = {
-  writeSearchCatalogItemsAll,
+  writeSearchCatalogItemsAll,sa
 };
 
 // writeSearchCatalogItems();
