@@ -1,18 +1,10 @@
 require("dotenv").config();
 const { getToday, getTodayShort } = require("../../../../lib/getToday.js");
-const {
-  readSpreadsheetValue,
-} = require("../../../../lib/readSpreadsheetValue.js");
-const {
-  updateArrayDataToSheets,
-} = require("../../../../lib/updateArrayDataToSheets.js");
-const {
-  batchUpdateArrayDataToSheets,
-} = require("../../../../lib/batchUpdateArrayDataToSheets.js");
+const { readSpreadsheetValue } = require("../../../../lib/readSpreadsheetValue.js");
+const { updateArrayDataToSheets } = require("../../../../lib/updateArrayDataToSheets.js");
+const { batchUpdateArrayDataToSheets } = require("../../../../lib/batchUpdateArrayDataToSheets.js");
 
-const {
-  appendArrayDataToSheets,
-} = require("../../../../lib/appendArrayDataToSheets.js");
+const { appendArrayDataToSheets } = require("../../../../lib/appendArrayDataToSheets.js");
 const { getSellingPrice } = require("./getSellingPrice.js");
 
 const writeNewListing = async (
@@ -23,15 +15,10 @@ const writeNewListing = async (
   // readStart,
   // readEnd
 ) => {
-  console.log("dbSheet is", dbSheet);
-
   // Prod_DBからデータ取得 A:Q
-  const dbDataArr = await readSpreadsheetValue(
-    spreadsheetId,
-    `${dbSheet}!A2:Q`
-  );
+  const dbDataArr = await readSpreadsheetValue(spreadsheetId, `${dbSheet}!A2:Q`);
 
-  console.log("dbDataArr is", dbDataArr);
+  // console.log("dbDataArr is", dbDataArr);
 
   const notUploadedArr = [];
   dbDataArr.forEach((item) => {
@@ -39,8 +26,7 @@ const writeNewListing = async (
       notUploadedArr.push(item);
     }
   });
-
-  console.log("not uploaded Arr is", notUploadedArr);
+  // console.log("not uploaded arr", notUploadedArr);
 
   const resultArr = [];
   const today = await getTodayShort();
@@ -52,10 +38,7 @@ const writeNewListing = async (
   const readRangeForShippingFees = `${configSheet}!A6:D`;
 
   const rates = await readSpreadsheetValue(spreadsheetId, readRangeForRates);
-  const shippingFees = await readSpreadsheetValue(
-    spreadsheetId,
-    readRangeForShippingFees
-  );
+  const shippingFees = await readSpreadsheetValue(spreadsheetId, readRangeForShippingFees);
 
   for (const item of notUploadedArr) {
     const num = parseInt(item[0]);
@@ -70,46 +53,23 @@ const writeNewListing = async (
     let sku;
     let listingPrice;
 
-    if (
-      price != "-" &&
-      price != "" &&
-      isEffectiveMethod == true &&
-      isNoUpload == "FALSE" &&
-      isUploaded == "FALSE"
-    ) {
-      listingPrice = await getSellingPrice(
-        weight,
-        method,
-        price,
-        rates,
-        shippingFees
-      );
+    if (price != "-" && price != "" && isEffectiveMethod == true && isNoUpload == "FALSE" && isUploaded == "FALSE") {
+      listingPrice = await getSellingPrice(weight, method, price, rates, shippingFees);
       sku = `SG-${today}-${asin}-${price}-jpy-${listingPrice}`;
       // console.log(listingPrice);
       // console.log(sku);
-      const curArr = [
-        sku,
-        listingPrice,
-        50,
-        asin,
-        "ASIN",
-        "New",
-        ,
-        ,
-        ,
-        ,
-        ,
-        ,
-        ,
-        4,
-      ];
-      console.log(curArr);
+      const curArr = [sku, listingPrice, 50, asin, "ASIN", "New", , , , , , , , 4];
+      // console.log(curArr);
       resultArr.push(curArr);
     }
 
     const updateRange = `${dbSheet}!Q${num + 1}:Q${num + 1}`;
     updateRanges.push(updateRange);
     updateData.push([["TRUE"]]);
+    console.log("range", updateRanges);
+    console.log("data", updateData);
+
+    // process.exit();
   }
 
   // console.log(newListingSheet);
@@ -118,7 +78,7 @@ const writeNewListing = async (
   appendArrayDataToSheets(spreadsheetId, `${newListingSheet}!A2:V`, resultArr);
 };
 
-// writeNewListing(process.env.SPREADSHEET_ID3, "Config", "Sg_Listing", "Prod_DB");
+writeNewListing(process.env.SPREADSHEET_ID3, "Config", "Sg_Listing", "Prod_DB");
 
 module.exports = {
   writeNewListing,
