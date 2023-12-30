@@ -1,5 +1,6 @@
 const SellingPartnerAPI = require("amazon-sp-api");
 const { checkStringIncludes } = require("../../../../lib/checkStringIncludes");
+const { getAvailablePrice } = require("../sg/getAvailablePrice");
 require("dotenv").config();
 
 const getCatalogItem = async (asin) => {
@@ -12,10 +13,8 @@ const getCatalogItem = async (asin) => {
       region: "fe", // The region to use for the SP-API endpoints ("eu", "na" or "fe")
       refresh_token: process.env.refresh_token_JP, // The refresh token of your app user
       credentials: {
-        SELLING_PARTNER_APP_CLIENT_ID:
-          process.env.SELLING_PARTNER_APP_CLIENT_ID_JP,
-        SELLING_PARTNER_APP_CLIENT_SECRET:
-          process.env.SELLING_PARTNER_APP_CLIENT_SECRET_JP,
+        SELLING_PARTNER_APP_CLIENT_ID: process.env.SELLING_PARTNER_APP_CLIENT_ID_JP,
+        SELLING_PARTNER_APP_CLIENT_SECRET: process.env.SELLING_PARTNER_APP_CLIENT_SECRET_JP,
         AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
         AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
         AWS_SELLING_PARTNER_ROLE: process.env.AWS_SELLING_PARTNER_ROLE,
@@ -32,6 +31,8 @@ const getCatalogItem = async (asin) => {
       },
     });
 
+    const resPrice2 = await getAvailablePrice(asin);
+
     resCatalog = await sellingPartner.callAPI({
       operation: "getCatalogItem",
       endpoint: "catalogItems",
@@ -40,13 +41,7 @@ const getCatalogItem = async (asin) => {
       },
       query: {
         marketplaceIds: ["A1VC38T7YXB528"], // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
-        includedData: [
-          "attributes",
-          "images",
-          "identifiers",
-          "summaries",
-          "salesRanks",
-        ],
+        includedData: ["attributes", "images", "identifiers", "summaries", "salesRanks"],
       },
       options: {
         version: "2022-04-01",
@@ -55,55 +50,23 @@ const getCatalogItem = async (asin) => {
 
     resultArray.push(resCatalog.attributes?.item_name[0]?.value ?? "no name");
     resultArray.push(resCatalog.summaries[0].brand),
-      resultArray.push(
-        resCatalog.identifiers[0]?.identifiers[0]?.identifier ?? "no identifier"
-      );
+      resultArray.push(resCatalog.identifiers[0]?.identifiers[0]?.identifier ?? "no identifier");
     // resultArray.push(resCatalog.attributes.list_price ? resCatalog.attributes?.list_price[0]?.value ?? 'no name' : 'no data')
+    resultArray.push(resPrice2);
+    // resultArray.push(resPrice[0]?.Product?.CompetitivePricing?.CompetitivePrices[0]?.Price.LandedPrice.Amount ?? "");
     resultArray.push(
-      resPrice[0]?.Product?.CompetitivePricing?.CompetitivePrices[0]?.Price
-        .LandedPrice.Amount ?? ""
+      resPrice[0]?.Product?.CompetitivePricing?.CompetitivePrices[0]?.Price.LandedPrice.CurrencyCode ?? ""
     );
-    resultArray.push(
-      resPrice[0]?.Product?.CompetitivePricing?.CompetitivePrices[0]?.Price
-        .LandedPrice.CurrencyCode ?? ""
-    );
-    resultArray.push(
-      resPrice[0]?.Product?.CompetitivePricing?.NumberOfOfferListings[0]
-        ?.condition ?? ""
-    );
-    resultArray.push(
-      resPrice[0]?.Product?.CompetitivePricing?.NumberOfOfferListings[0]
-        ?.Count ?? ""
-    );
-    resultArray.push(
-      resPrice[0]?.Product?.CompetitivePricing?.NumberOfOfferListings[1]
-        ?.condition ?? ""
-    );
-    resultArray.push(
-      resPrice[0]?.Product?.CompetitivePricing?.NumberOfOfferListings[1]
-        ?.Count ?? ""
-    );
-    resultArray.push(
-      resPrice[0]?.Product?.CompetitivePricing?.NumberOfOfferListings[2]
-        ?.condition ?? ""
-    );
-    resultArray.push(
-      resPrice[0]?.Product?.CompetitivePricing?.NumberOfOfferListings[2]
-        ?.Count ?? ""
-    );
-    resultArray.push(
-      resCatalog.salesRanks[0]?.classificationRanks?.[0]?.title ??
-        "no rank data"
-    );
-    resultArray.push(
-      resCatalog.salesRanks[0]?.classificationRanks?.[0]?.rank ?? "no rank data"
-    );
-    resultArray.push(
-      resCatalog.salesRanks[0]?.displayGroupRanks?.[0]?.title ?? "no rank data"
-    );
-    resultArray.push(
-      resCatalog.salesRanks[0]?.displayGroupRanks?.[0]?.rank ?? "no rank data"
-    );
+    resultArray.push(resPrice[0]?.Product?.CompetitivePricing?.NumberOfOfferListings[0]?.condition ?? "");
+    resultArray.push(resPrice[0]?.Product?.CompetitivePricing?.NumberOfOfferListings[0]?.Count ?? "");
+    resultArray.push(resPrice[0]?.Product?.CompetitivePricing?.NumberOfOfferListings[1]?.condition ?? "");
+    resultArray.push(resPrice[0]?.Product?.CompetitivePricing?.NumberOfOfferListings[1]?.Count ?? "");
+    resultArray.push(resPrice[0]?.Product?.CompetitivePricing?.NumberOfOfferListings[2]?.condition ?? "");
+    resultArray.push(resPrice[0]?.Product?.CompetitivePricing?.NumberOfOfferListings[2]?.Count ?? "");
+    resultArray.push(resCatalog.salesRanks[0]?.classificationRanks?.[0]?.title ?? "no rank data");
+    resultArray.push(resCatalog.salesRanks[0]?.classificationRanks?.[0]?.rank ?? "no rank data");
+    resultArray.push(resCatalog.salesRanks[0]?.displayGroupRanks?.[0]?.title ?? "no rank data");
+    resultArray.push(resCatalog.salesRanks[0]?.displayGroupRanks?.[0]?.rank ?? "no rank data");
     // Amazonもしくは保証という文字を含んでいる場合は空文字をpushする
     for (let i = 0; i < 5; i++) {
       let bulletStr = resCatalog.attributes?.bullet_point?.[i]?.value ?? "";
@@ -121,22 +84,17 @@ const getCatalogItem = async (asin) => {
 
     // kilograms pounds gramsの三種類があるので、gramsに統一する
     const weightUnit = resCatalog.attributes?.item_package_weight
-      ? resCatalog.attributes?.item_package_weight[0]?.unit ??
-        "no package weight"
+      ? resCatalog.attributes?.item_package_weight[0]?.unit ?? "no package weight"
       : "no package weight data";
 
     const weightData = resCatalog.attributes?.item_package_weight
-      ? resCatalog.attributes?.item_package_weight[0]?.value ??
-        "no package weight"
+      ? resCatalog.attributes?.item_package_weight[0]?.value ?? "no package weight"
       : "no package weight data";
 
     const poundToGramUnit = 453.592;
     const kgToGramUnit = 1000;
 
-    if (
-      weightUnit === "no package weight" ||
-      weightUnit == "no package weight data"
-    ) {
+    if (weightUnit === "no package weight" || weightUnit == "no package weight data") {
       resultArray.push("no package weight");
     } else {
       resultArray.push("grams");
@@ -164,26 +122,22 @@ const getCatalogItem = async (asin) => {
     // );
     resultArray.push(
       resCatalog.attributes?.item_package_dimensions
-        ? resCatalog.attributes?.item_package_dimensions[0]?.length.unit ??
-            "no package dimensions"
+        ? resCatalog.attributes?.item_package_dimensions[0]?.length.unit ?? "no package dimensions"
         : "no package dimentions data"
     );
     resultArray.push(
       resCatalog.attributes?.item_package_dimensions
-        ? resCatalog.attributes?.item_package_dimensions[0]?.length.value ??
-            "no package dimensions"
+        ? resCatalog.attributes?.item_package_dimensions[0]?.length.value ?? "no package dimensions"
         : "no package dimentions data"
     );
     resultArray.push(
       resCatalog.attributes?.item_package_dimensions
-        ? resCatalog.attributes?.item_package_dimensions[0]?.width.value ??
-            "no package dimensions"
+        ? resCatalog.attributes?.item_package_dimensions[0]?.width.value ?? "no package dimensions"
         : "no package dimentions data"
     );
     resultArray.push(
       resCatalog.attributes?.item_package_dimensions
-        ? resCatalog.attributes?.item_package_dimensions[0]?.height.value ??
-            "no package dimensions"
+        ? resCatalog.attributes?.item_package_dimensions[0]?.height.value ?? "no package dimensions"
         : "no package dimentions data"
     );
     resultArray.push(resCatalog.images[0]?.images[0]?.link ?? "");

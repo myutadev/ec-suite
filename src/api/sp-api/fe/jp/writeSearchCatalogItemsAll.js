@@ -54,7 +54,7 @@ const writeSearchCatalogItemsAll = async () => {
 };
 
 module.exports = {
-  writeSearchCatalogItemsAll,sa
+  writeSearchCatalogItemsAll,
 };
 
 // writeSearchCatalogItems();

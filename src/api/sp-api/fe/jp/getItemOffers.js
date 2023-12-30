@@ -31,7 +31,7 @@ const getItemOffers = async (asin) => {
     });
     // console.log("this is res", res);
     // console.log("this is res?.Offers[0]", res?.Offers[0].ListingPrice.Amount);
-    console.log("resis", res);
+    // console.log("resis", res);
 
     const resultObj = {
       [res.ASIN]: {
