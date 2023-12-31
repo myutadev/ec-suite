@@ -246,6 +246,21 @@ app.get("/write/spsg/newlisting", async (req, res) => {
   }
 });
 
+// keepa endpoint
+
+app.get("/write/keepa/rivalsellerasins", async (req, res) => {
+  try {
+    console.log(`writeRivalSellerAsins starts`);
+    await writeRivalSellerAsins();
+    res.send("writeRivalSellerAsins completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeRivalSellerAsins.");
+  }
+});
+
+
+
 app.listen(port, () => {
   console.log(`App is running on port ${port}`);
 });
