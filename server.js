@@ -17,6 +17,7 @@ const { writeInventoryUpdateInfoSpSg } = require("./src/api/shopee/sg/writeInven
 const { readSpreadsheetValue } = require("./src/lib/readSpreadsheetValue.js");
 const { writeSearchCatalogItems } = require("./src/api/sp-api/fe/jp/writeSearchCatalogItems.js");
 const { writeSearchCatalogItemsAll } = require("./src/api/sp-api/fe/jp/writeSearchCatalogItemsAll.js");
+const { writeRivalSellerAsins } = require("./src/api/keepa/writeRivalSellerAsins.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -258,8 +259,6 @@ app.get("/write/keepa/rivalsellerasins", async (req, res) => {
     res.status(500).send("An error occurred in writeRivalSellerAsins.");
   }
 });
-
-
 
 app.listen(port, () => {
   console.log(`App is running on port ${port}`);
