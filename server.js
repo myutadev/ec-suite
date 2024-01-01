@@ -108,7 +108,7 @@ app.get("/write/prodprice/", async (req, res) => {
       "C",
       "B",
       "E",
-      500 // 100個で実行 1h 1600 /  500個実行してみる→12.5h  1h1800のペース 1秒0.5リクエスト 目安  10万で2.5  /
+      300 // 100個で実行 1h 1600 /  500個実行してみる→12.5h  1h1800のペース 1秒0.5リクエスト 目安  10万で2.5  /
       // 12/24 11:51 twtime 500-> 800
     );
     console.log(`writeProdCurPriceBySheet started`);
@@ -128,7 +128,7 @@ app.get("/write/prodprice/manual", async (req, res) => {
       "C",
       "B",
       "E",
-      500
+      300
     );
     console.log(`writeProdCurPriceBySheet started`);
     res.send("writeProdCurPriceBySheet completed.");
@@ -224,7 +224,7 @@ app.get("/write/searchcatalogitemsall", async (req, res) => {
 });
 
 // shopee endpoint
-// 
+//
 
 app.get("/write/spmy/newlisting", async (req, res) => {
   try {
