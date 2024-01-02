@@ -18,6 +18,7 @@ const { readSpreadsheetValue } = require("./src/lib/readSpreadsheetValue.js");
 const { writeSearchCatalogItems } = require("./src/api/sp-api/fe/jp/writeSearchCatalogItems.js");
 const { writeSearchCatalogItemsAll } = require("./src/api/sp-api/fe/jp/writeSearchCatalogItemsAll.js");
 const { writeRivalSellerAsins } = require("./src/api/keepa/writeRivalSellerAsins.js");
+const { writeNewListingAu } = require("./src/api/sp-api/fe/aus/writeNewListing.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -223,8 +224,20 @@ app.get("/write/searchcatalogitemsall", async (req, res) => {
   }
 });
 
+//Amazon AUS
+app.get("/write/newlisting/au", async (req, res) => {
+  try {
+    console.log(`writeNewListingAu starts`);
+
+    await writeNewListingAu(process.env.SPREADSHEET_ID3, "Config", "Au_Listing", "Prod_DB");
+    res.send("writeNewListingAu completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeNewListingAu.");
+  }
+});
+
 // shopee endpoint
-//
 
 app.get("/write/spmy/newlisting", async (req, res) => {
   try {

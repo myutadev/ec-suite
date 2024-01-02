@@ -37,6 +37,7 @@ const appendArrayDataToSheets = async (spreadsheetId, range, values) => {
 
   try {
     await sheets.spreadsheets.values.append(request);
+    console.log("appended data successfully");
   } catch (error) {
     console.error("Error writing to sheet: ", error);
   }
