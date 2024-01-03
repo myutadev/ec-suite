@@ -19,6 +19,7 @@ const { writeSearchCatalogItems } = require("./src/api/sp-api/fe/jp/writeSearchC
 const { writeSearchCatalogItemsAll } = require("./src/api/sp-api/fe/jp/writeSearchCatalogItemsAll.js");
 const { writeRivalSellerAsins } = require("./src/api/keepa/writeRivalSellerAsins.js");
 const { writeNewListingAu } = require("./src/api/sp-api/fe/aus/writeNewListing.js");
+const { writeListingsRestrictionsAu } = require("./src/api/sp-api/fe/aus/writeListingsRestrictions.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -185,6 +186,34 @@ app.get("/write/listingrestrictions/manual", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send("An error occurred in write/listingrestrictions/manual.");
+  }
+});
+
+// australia
+app.get("/write/listingrestrictions/au/all", async (req, res) => {
+  try {
+    writeListingsRestrictionsAu(process.env.SPREADSHEET_ID3, "Au_Listing", 2, "");
+    console.log(`writeListingsRestrictionsAu started`);
+    res.send("writeListingsRestrictionsAu completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeListingsRestrictionsAu.");
+  }
+});
+
+app.get("/write/listingrestrictions/au/manual", async (req, res) => {
+  try {
+    const rangeData = await readSpreadsheetValue(process.env.SPREADSHEET_ID3, "Sg_Listing!Y1:Z1");
+
+    const readDataFlattened = rangeData.flat();
+    const start = readDataFlattened[0];
+    const end = readDataFlattened[1];
+    writeListingsRestrictionsAu(process.env.SPREADSHEET_ID3, "Au_Listing", start, end);
+    console.log(`writeListingsRestrictionsAu/manual`);
+    res.send("writeListingsRestrictionsAu/manual completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeListingsRestrictionsAu/manual.");
   }
 });
 
