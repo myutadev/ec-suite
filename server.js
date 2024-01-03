@@ -203,7 +203,7 @@ app.get("/write/listingrestrictions/au/all", async (req, res) => {
 
 app.get("/write/listingrestrictions/au/manual", async (req, res) => {
   try {
-    const rangeData = await readSpreadsheetValue(process.env.SPREADSHEET_ID3, "Sg_Listing!Y1:Z1");
+    const rangeData = await readSpreadsheetValue(process.env.SPREADSHEET_ID3, "Au_Listing!Y1:Z1");
 
     const readDataFlattened = rangeData.flat();
     const start = readDataFlattened[0];
