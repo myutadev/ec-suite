@@ -28,12 +28,12 @@ const writeListingsRestrictionsAu = async (spreadsheetId, sheetName, start, end)
   //   asins.map((asin) => getListingsRestrictions(asin).then((data)=>[data]))
   // );
 
-  console.log(results);
+  // console.log(results);
 
   updateArrayDataToSheets(spreadsheetId, writeRange, results);
 };
 
-writeListingsRestrictionsAu(process.env.SPREADSHEET_ID3, "Au_Listing", 11, 100);
+// writeListingsRestrictionsAu(process.env.SPREADSHEET_ID3, "Au_Listing", 11, 100);
 module.exports = {
   writeListingsRestrictionsAu,
 };
