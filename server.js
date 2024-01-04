@@ -90,7 +90,7 @@ app.get("/main", async (req, res) => {
 
 app.get("/write/activesg", async (req, res) => {
   try {
-    await writeActiveInventoryReport(process.env.SPREADSHEET_ID3, "Sg_Selling!A2:F");
+    writeActiveInventoryReport(process.env.SPREADSHEET_ID3, "Sg_Selling!A3:F");
     console.log(`writeactivesg started`);
     res.send("writeactivesg completed.");
   } catch (error) {

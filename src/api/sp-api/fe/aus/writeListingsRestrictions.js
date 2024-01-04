@@ -20,7 +20,7 @@ const writeListingsRestrictionsAu = async (spreadsheetId, sheetName, start, end)
     console.log(res);
     results.push([
       res,
-      `https://sellercentral.amazon.sg/hz/approvalrequest/restrictions/approve?asin=${asin}&itemcondition=null&ref_=xx_catadd_dnav_xx`,
+      `https://sellercentral.amazon.com.au/hz/approvalrequest/restrictions/approve?asin=${asin}&itemcondition=null&ref_=xx_catadd_dnav_xx`,
     ]);
   }
 

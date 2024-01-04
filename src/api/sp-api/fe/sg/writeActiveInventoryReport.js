@@ -1,7 +1,5 @@
 const { getActiveInventoryReport } = require("./getActiveInventoryReport");
-const {
-  updateArrayDataToSheets,
-} = require("../../../../lib/updateArrayDataToSheets");
+const { updateArrayDataToSheets } = require("../../../../lib/updateArrayDataToSheets");
 require("dotenv").config();
 
 const writeActiveInventoryReport = async (spreadsheetId, range) => {
@@ -35,14 +33,10 @@ const writeActiveInventoryReport = async (spreadsheetId, range) => {
   ]);
   console.log(values);
   // updateData(range,values); // かえる
-  updateArrayDataToSheets(
-    process.env.SPREADSHEET_ID2,
-    "SGCurSelling!A2:F",
-    values
-  );
+  updateArrayDataToSheets(spreadsheetId, range, values);
   console.log("writeInventoryhLedgerReport ends");
 };
-// writeActiveInventoryReport(process.env.SPREADSHEET_ID3, "Sg_Selling!A2:F");
+// writeActiveInventoryReport(process.env.SPREADSHEET_ID3, "Sg_Selling!A3:F");
 
 // writeActiveInventoryReport()
 
