@@ -8,6 +8,8 @@ const { writeRefundsFromFinances } = require("./src/api/sp-api/na/writeRefundsFr
 const { writeInventoryLedgerReport } = require("./src/api/sp-api/na/writeInventoryLedgerReport");
 const cron = require("node-cron");
 const { writeOrderMetricsSg } = require("./src/api/sp-api/fe/sg/writeOrderMetrics");
+const { writeSalesAndTrafficReportByDate } = require("./src/api/sp-api/fe/sg/writeSalesAndTrafficReportByDate");
+const { getStartOfYesterday, getEndOfYesterday } = require("./src/lib/getYesterday");
 
 cron.schedule("0 9 * * *", () => {
   writeOrderMetrics(process.env.SPREADSHEET_ID, "CA", "getOrderMetricsCA!A2:X");
@@ -18,8 +20,12 @@ cron.schedule("0 9 * * *", () => {
   writeInventoryLedgerReport(process.env.SPREADSHEET_ID, "getInventoryLedger!A3:Z");
 });
 
-cron.schedule("0 0 * * *", () => {
+cron.schedule("0 0 * * *", async () => {
+  const start = await getStartOfYesterday();
+  const end = await getEndOfYesterday();
+
   writeOrderMetricsSg(process.env.SPREADSHEET_ID, "SG", "getOrderMetricsSG!A2:X");
+  writeSalesAndTrafficReportByDate(process.env.SPREADSHEET_ID4, "AmaSG!A2:J", `${start}-07:00`, `${end}-07:00`, "SG");
 });
 
 //テスト用 1分ごとに実行
