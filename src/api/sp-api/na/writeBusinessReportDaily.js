@@ -80,7 +80,6 @@ module.exports = {
   writeBusinessReportDaily,
 };
 
-// writeBusinessReport();
 // function formatDate(date) {
 //   // ISOフォーマット（YYYY-MM-DDTHH:mm:ssZ）で日付を整形する関数
 //   return date.toISOString();
@@ -102,7 +101,7 @@ module.exports = {
 //     const endDateTime = formatDate(addDays(currentDate, 1));
 
 //     // レポート生成関数の実行
-//     await writeBusinessReportDaily(process.env.SPREADSHEET_ID, "BizReport_US!A2:AH", "CA", startDateTime, endDateTime);
+//     await writeBusinessReportDaily(process.env.SPREADSHEET_ID, "BizReport_US!A2:AH", "US", startDateTime, endDateTime);
 
 //     // 次の日に進む
 //     currentDate = addDays(currentDate, 1);
@@ -110,4 +109,4 @@ module.exports = {
 // }
 
 // // 開始日と終了日を設定し、レポート生成関数を実行
-// generateReports("2024-01-05T00:00:00-07:00", "2024-01-08T23:59:59-07:00");
+// generateReports("2023-12-01T00:00:00-07:00", "2024-01-08T23:59:59-07:00");

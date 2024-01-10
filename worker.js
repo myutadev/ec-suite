@@ -40,14 +40,22 @@ cron.schedule("0 9 * * *", async () => {
     "CA"
   );
   writeBusinessReportDaily(process.env.SPREADSHEET_ID, "BizReport_CA!A2:AH", "CA", `${start}-07:00`, `${end}-07:00`);
+  writeBusinessReportDaily(process.env.SPREADSHEET_ID, "BizReport_US!A2:AH", "US", `${start}-07:00`, `${end}-07:00`);
 });
 
 cron.schedule("0 0 * * *", async () => {
   const start = await getStartOfYesterday();
   const end = await getEndOfYesterday();
 
-  writeOrderMetricsSg(process.env.SPREADSHEET_ID, "SG", "getOrderMetricsSG!A2:X");
+  writeOrderMetricsSg(process.env.SPREADSHEET_ID, "SG", "getOrderMetricsSG!A2:X"); // 不要かも しばらく運用して不要であれば削除
   writeSalesAndTrafficReportByDate(process.env.SPREADSHEET_ID4, "AmaSG!A2:J", `${start}-07:00`, `${end}-07:00`, "SG");
+  writeSalesAndTrafficReportByDateAu(
+    process.env.SPREADSHEET_ID4,
+    "AmaAUS!A2:J",
+    `${start}-07:00`,
+    `${end}-07:00`,
+    "AU"
+  );
 });
 
 //テスト用 1分ごとに実行
