@@ -10,14 +10,34 @@ const cron = require("node-cron");
 const { writeOrderMetricsSg } = require("./src/api/sp-api/fe/sg/writeOrderMetrics");
 const { writeSalesAndTrafficReportByDate } = require("./src/api/sp-api/fe/sg/writeSalesAndTrafficReportByDate");
 const { getStartOfYesterday, getEndOfYesterday } = require("./src/lib/getYesterday");
+const { writeReportData } = require("./src/api/sp-api/na/writeReportData");
 
-cron.schedule("0 9 * * *", () => {
+cron.schedule("0 9 * * *", async () => {
+  const start = await getStartOfYesterday();
+  const end = await getEndOfYesterday();
+
   writeOrderMetrics(process.env.SPREADSHEET_ID, "CA", "getOrderMetricsCA!A2:X");
   writeOrderMetrics(process.env.SPREADSHEET_ID, "US", "getOrderMetricsUS!A2:X");
   writeOrderMetrics(process.env.SPREADSHEET_ID, "MX", "getOrderMetricsMX!A2:X");
   writeFinances(process.env.SPREADSHEET_ID, "getFinances!A3:Z");
   writeRefundsFromFinances(process.env.SPREADSHEET_ID, "refunds");
   writeInventoryLedgerReport(process.env.SPREADSHEET_ID, "getInventoryLedger!A3:Z");
+  writeReportData(
+    process.env.SPREADSHEET_ID,
+    "InvReport_US!A2:AB",
+    "GET_FBA_INVENTORY_PLANNING_DATA",
+    `${start}-07:00`,
+    `${end}-07:00`,
+    "US"
+  );
+  writeReportData(
+    process.env.SPREADSHEET_ID,
+    "InvReport_CA!A2:AB",
+    "GET_FBA_INVENTORY_PLANNING_DATA",
+    `${start}-07:00`,
+    `${end}-07:00`,
+    "CA"
+  );
 });
 
 cron.schedule("0 0 * * *", async () => {
