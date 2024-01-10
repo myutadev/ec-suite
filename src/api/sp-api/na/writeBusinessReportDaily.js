@@ -72,8 +72,16 @@ const writeBusinessReportDaily = async (spreadsheetId, range, marketPlace, start
 //   process.env.SPREADSHEET_ID,
 //   "BizReport_CA!A2:AH",
 //   "CA",
-//   "2024-01-08T00:00:00-07:00",
-//   "2024-01-08T23:59:59-07:00"
+//   "2024-01-09T00:00:00-07:00",
+//   "2024-01-09T23:59:59-07:00"
+// );
+
+// writeBusinessReportDaily(
+//   process.env.SPREADSHEET_ID,
+//   "BizReport_US!A2:AH",
+//   "US",
+//   "2024-01-09T00:00:00-07:00",
+//   "2024-01-09T23:59:59-07:00"
 // );
 
 module.exports = {
