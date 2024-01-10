@@ -37,7 +37,7 @@ const getBusinessReport = async (start,end,marketPlace) => {
       version: "2021-06-30",
       interval: 8000,
     });
-    console.log(res);
+    // console.log(res);
   } catch (e) {
     console.log(e);
   }
@@ -51,4 +51,4 @@ module.exports = {
 
 //手動用
 
-// getBusinessReport("2023-12-15T00:00:00-07:00","2023-12-15T23:59:59-07:00","CA")
+// getBusinessReport("2024-01-05T00:00:00-07:00","2024-01-05T23:59:59-07:00","CA")

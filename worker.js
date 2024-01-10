@@ -11,6 +11,7 @@ const { writeOrderMetricsSg } = require("./src/api/sp-api/fe/sg/writeOrderMetric
 const { writeSalesAndTrafficReportByDate } = require("./src/api/sp-api/fe/sg/writeSalesAndTrafficReportByDate");
 const { getStartOfYesterday, getEndOfYesterday } = require("./src/lib/getYesterday");
 const { writeReportData } = require("./src/api/sp-api/na/writeReportData");
+const { writeBusinessReportDaily } = require("./src/api/sp-api/na/writeBusinessReportDaily");
 
 cron.schedule("0 9 * * *", async () => {
   const start = await getStartOfYesterday();
@@ -38,6 +39,7 @@ cron.schedule("0 9 * * *", async () => {
     `${end}-07:00`,
     "CA"
   );
+  writeBusinessReportDaily(process.env.SPREADSHEET_ID, "BizReport_CA!A2:AH", "CA", `${start}-07:00`, `${end}-07:00`);
 });
 
 cron.schedule("0 0 * * *", async () => {

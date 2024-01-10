@@ -78,7 +78,7 @@ const writeNewListing = async (
   appendArrayDataToSheets(spreadsheetId, `${newListingSheet}!A2:V`, resultArr);
 };
 
-writeNewListing(process.env.SPREADSHEET_ID3, "Config", "Sg_Listing", "Prod_DB");
+// writeNewListing(process.env.SPREADSHEET_ID3, "Config", "Sg_Listing", "Prod_DB");
 
 module.exports = {
   writeNewListing,
