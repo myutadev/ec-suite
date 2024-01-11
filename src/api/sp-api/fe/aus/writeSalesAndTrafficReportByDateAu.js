@@ -45,11 +45,11 @@ const writeSalesAndTrafficReportByDateAu = async (spreadsheetId, range, start, e
 //   const end = await getEndOfYesterday();
 //   console.log(start);
 //   console.log(end);
-//   writeSalesAndTrafficReportByDate(
+//   writeSalesAndTrafficReportByDateAu(
 //     process.env.SPREADSHEET_ID4,
 //     "AmaAUS!A2:J",
-//     "2024-01-07T00:00:00-07:00",
-//     "2024-01-07T23:59:59-07:00",
+//     "2024-01-10T00:00:00-07:00",
+//     "2024-01-10T23:59:59-07:00",
 //     "AU"
 //   );
 // };
