@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js & node worker.js",
-    "dev":"nodemon server.js & nodemon worker.js"
+    "dev": "nodemon server.js & nodemon worker.js"
   },
   "keywords": [],
   "author": "",
@@ -20,8 +20,10 @@
     "moment": "^2.29.4",
     "moment-timezone": "^0.5.43",
     "node-cron": "^3.0.2",
-    "nodemon": "^3.0.3",
     "puppeteer": "^21.6.1",
     "selling-partner-api": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.3"
   }
 }
