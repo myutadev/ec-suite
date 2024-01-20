@@ -6,7 +6,7 @@ const auth = new google.auth.GoogleAuth({
     type: process.env.TYPE,
     project_id: process.env.PROJECT_ID,
     private_key_id: process.env.PRIVATE_KEY_ID,
-    private_key: process.env.PRIVATE_KEY.replace(/\\n/g, "\n"),
+    private_key: process.env.PRIVATE_KEY.replace(/\\n/gm, "\n"),
     client_email: process.env.CLIENT_EMAIL,
     client_id: process.env.CLIENT_ID,
     auth_uri: process.env.AUTH_URI,
@@ -23,8 +23,8 @@ const sheets = google.sheets({
   auth,
 });
 
-const getColumnNameBySheet = async (sheetId,sheetName) => {
-  let num = await getLatestColumn(sheetId,sheetName);
+const getColumnNameBySheet = async (sheetId, sheetName) => {
+  let num = await getLatestColumn(sheetId, sheetName);
   let columnName = "";
 
   while (num > 0) {
@@ -35,14 +35,12 @@ const getColumnNameBySheet = async (sheetId,sheetName) => {
   return columnName;
 };
 
-const getLatestColumn = async (sheetId,sheetName) => {
-  
-  const range = `${sheetName}!A:ZZZ`// "RankTracker!A:ZZZ"
-
+const getLatestColumn = async (sheetId, sheetName) => {
+  const range = `${sheetName}!A:ZZZ`; // "RankTracker!A:ZZZ"
 
   const request = {
     spreadsheetId: sheetId,
-    range: range , // "RankTracker!A:ZZZ"
+    range: range, // "RankTracker!A:ZZZ"
   };
 
   try {

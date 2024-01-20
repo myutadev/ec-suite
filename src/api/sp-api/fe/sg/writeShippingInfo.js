@@ -1,18 +1,11 @@
 require("dotenv").config();
-const {
-  readSpreadsheetValue,
-} = require("../../../../lib/readSpreadsheetValue.js");
-const {
-  updateArrayDataToSheets,
-} = require("../../../../lib/updateArrayDataToSheets.js");
+const { readSpreadsheetValue } = require("../../../../lib/readSpreadsheetValue.js");
+const { updateArrayDataToSheets } = require("../../../../lib/updateArrayDataToSheets.js");
 
 const writeShippingInfo = async (spreadsheetId, sheetName) => {
   const writeRange = `${sheetName}!H2:K`;
   const readRange = `${sheetName}!L2:O`;
-  const sheetData = await readSpreadsheetValue(
-    process.env.SPREADSHEET_ID3,
-    readRange
-  );
+  const sheetData = await readSpreadsheetValue(process.env.SPREADSHEET_ID3, readRange);
   const results = [];
 
   sheetData.forEach((items) => {
@@ -47,10 +40,7 @@ const writeShippingInfo = async (spreadsheetId, sheetName) => {
       return;
     }
 
-    const shippingMethod =
-      longest < 57 && packagedWeight < 2000 && total < 150
-        ? "smallPacket"
-        : "EMS";
+    const shippingMethod = longest < 57 && packagedWeight < 2000 && total < 150 ? "smallPacket" : "EMS";
 
     const curInfoArr = [shippingMethod, packagedWeight, sWeight, longest];
     results.push(curInfoArr);
@@ -61,7 +51,7 @@ const writeShippingInfo = async (spreadsheetId, sheetName) => {
   // console.log(results);
 };
 
-writeShippingInfo(process.env.SPREADSHEET_ID3, "Prod_DB");
+// writeShippingInfo(process.env.SPREADSHEET_ID3, "Prod_DB");
 module.exports = {
   writeShippingInfo,
 };

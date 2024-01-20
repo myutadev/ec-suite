@@ -4,14 +4,14 @@ require("dotenv").config();
 if (!process.env.PRIVATE_KEY) {
   throw new Error("PRIVATE_KEY environment variable is not set.");
 }
-const privateKey = process.env.PRIVATE_KEY.replace(/\\n/g, "\n");
+const privateKey = process.env.PRIVATE_KEY.replace(/\\n/gm, "\n");
 
 const auth = new google.auth.GoogleAuth({
   credentials: {
     type: process.env.TYPE,
     project_id: process.env.PROJECT_ID,
     private_key_id: process.env.PRIVATE_KEY_ID,
-    private_key: process.env.PRIVATE_KEY.replace(/\\n/g, "\n"),
+    private_key: process.env.PRIVATE_KEY.replace(/\\n/gm, "\n"),
     client_email: process.env.CLIENT_EMAIL,
     client_id: process.env.CLIENT_ID,
     auth_uri: process.env.AUTH_URI,
@@ -28,7 +28,8 @@ const sheets = google.sheets({
   auth,
 });
 
-const readSpreadsheetValue = async (spreadsheetId, range) => { // ex  process.env.SPREADSHEET_ID."fetchProdInfo_na!A1:A1"
+const readSpreadsheetValue = async (spreadsheetId, range) => {
+  // ex  process.env.SPREADSHEET_ID."fetchProdInfo_na!A1:A1"
   const request = {
     spreadsheetId,
     range,

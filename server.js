@@ -303,6 +303,10 @@ app.get("/write/keepa/rivalsellerasins", async (req, res) => {
   }
 });
 
+app.get("/", (req, res) => {
+  res.send("<h2>Hi there!!!</h2>");
+});
+
 app.listen(port, () => {
   console.log(`App is running on port ${port}`);
 });

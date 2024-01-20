@@ -12,7 +12,7 @@ const { writeSalesAndTrafficReportByDate } = require("./src/api/sp-api/fe/sg/wri
 const { getStartOfYesterday, getEndOfYesterday } = require("./src/lib/getYesterday");
 const { writeReportData } = require("./src/api/sp-api/na/writeReportData");
 const { writeBusinessReportDaily } = require("./src/api/sp-api/na/writeBusinessReportDaily");
-const { writeSalesAndTrafficReportByDateAu } = require("./src/api/sp-api/fe/aus/writeSalesAndTrafficReportByDateAu")
+const { writeSalesAndTrafficReportByDateAu } = require("./src/api/sp-api/fe/aus/writeSalesAndTrafficReportByDateAu");
 
 cron.schedule("0 9 * * *", async () => {
   const start = await getStartOfYesterday();
@@ -57,6 +57,8 @@ cron.schedule("0 0 * * *", async () => {
     `${end}-07:00`,
     "AU"
   );
+
+  console.log("cron set");
 });
 
 //テスト用 1分ごとに実行

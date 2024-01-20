@@ -1,6 +1,6 @@
 const { google } = require("googleapis");
-const {getColumnNameBySheet} = require("./getLatestColumnName")
-const {getToday} = require("./getToday");
+const { getColumnNameBySheet } = require("./getLatestColumnName");
+const { getToday } = require("./getToday");
 require("dotenv").config();
 
 const auth = new google.auth.GoogleAuth({
@@ -8,7 +8,7 @@ const auth = new google.auth.GoogleAuth({
     type: process.env.TYPE,
     project_id: process.env.PROJECT_ID,
     private_key_id: process.env.PRIVATE_KEY_ID,
-    private_key: process.env.PRIVATE_KEY.replace(/\\n/g, "\n"),
+    private_key: process.env.PRIVATE_KEY.replace(/\\n/gm, "\n"),
     client_email: process.env.CLIENT_EMAIL,
     client_id: process.env.CLIENT_ID,
     auth_uri: process.env.AUTH_URI,
@@ -25,15 +25,14 @@ const sheets = google.sheets({
   auth,
 });
 
-const writeDailyDataHorizontal = async (sheetId,sheetName,values) => {
+const writeDailyDataHorizontal = async (sheetId, sheetName, values) => {
   //書き込み先のシートID
   const spreadsheetId = sheetId; // ここは変数で
 
   //ランク書き込み用の処理
-  const updateColLetter = await getColumnNameBySheet(sheetId,sheetName);
+  const updateColLetter = await getColumnNameBySheet(sheetId, sheetName);
 
   const range = `${sheetName}!${updateColLetter}1:${updateColLetter}`; // ここは変数のシート名から取得
-
 
   //最後に最初の1行目に当日日付をyyyy/mm/ddで入力
   const todaysDate = getToday();
@@ -57,9 +56,6 @@ const writeDailyDataHorizontal = async (sheetId,sheetName,values) => {
   }
 };
 
-
-
-module.exports ={
-    writeDailyDataHorizontal
-  }
-
+module.exports = {
+  writeDailyDataHorizontal,
+};
