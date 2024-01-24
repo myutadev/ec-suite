@@ -24,6 +24,10 @@ const { writeListingsRestrictionsAu } = require("./src/api/sp-api/fe/aus/writeLi
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.get("/", (req, res) => {
+  res.send("<h2>ec-suite v1.0</h2>");
+});
+
 // 12/19 changed
 app.get("/write/bizreport", async (req, res) => {
   try {
@@ -301,10 +305,6 @@ app.get("/write/keepa/rivalsellerasins", async (req, res) => {
     console.log(error);
     res.status(500).send("An error occurred in writeRivalSellerAsins.");
   }
-});
-
-app.get("/", (req, res) => {
-  res.send("<h2>Hi there!!!!</h2>");
 });
 
 app.listen(port, () => {

@@ -15,6 +15,8 @@ const { writeBusinessReportDaily } = require("./src/api/sp-api/na/writeBusinessR
 const { writeSalesAndTrafficReportByDateAu } = require("./src/api/sp-api/fe/aus/writeSalesAndTrafficReportByDateAu");
 
 cron.schedule("0 18 * * *", async () => {
+  console.log("cron set at 18");
+
   const start = await getStartOfYesterday();
   const end = await getEndOfYesterday();
 
@@ -44,7 +46,8 @@ cron.schedule("0 18 * * *", async () => {
   writeBusinessReportDaily(process.env.SPREADSHEET_ID, "BizReport_US!A2:AH", "US", `${start}-07:00`, `${end}-07:00`);
 });
 
-cron.schedule("0 9 * * *", async () => {
+cron.schedule("0 10 * * *", async () => {
+  console.log("cron set at 10 am");
   const start = await getStartOfYesterday();
   const end = await getEndOfYesterday();
 
@@ -57,8 +60,6 @@ cron.schedule("0 9 * * *", async () => {
     `${end}-07:00`,
     "AU"
   );
-
-  console.log("cron set");
 });
 
 //テスト用 1分ごとに実行
