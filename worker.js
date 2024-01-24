@@ -14,7 +14,7 @@ const { writeReportData } = require("./src/api/sp-api/na/writeReportData");
 const { writeBusinessReportDaily } = require("./src/api/sp-api/na/writeBusinessReportDaily");
 const { writeSalesAndTrafficReportByDateAu } = require("./src/api/sp-api/fe/aus/writeSalesAndTrafficReportByDateAu");
 
-cron.schedule("0 9 * * *", async () => {
+cron.schedule("0 18 * * *", async () => {
   const start = await getStartOfYesterday();
   const end = await getEndOfYesterday();
 
@@ -44,7 +44,7 @@ cron.schedule("0 9 * * *", async () => {
   writeBusinessReportDaily(process.env.SPREADSHEET_ID, "BizReport_US!A2:AH", "US", `${start}-07:00`, `${end}-07:00`);
 });
 
-cron.schedule("0 0 * * *", async () => {
+cron.schedule("0 9 * * *", async () => {
   const start = await getStartOfYesterday();
   const end = await getEndOfYesterday();
 
