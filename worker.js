@@ -14,8 +14,10 @@ const { writeReportData } = require("./src/api/sp-api/na/writeReportData");
 const { writeBusinessReportDaily } = require("./src/api/sp-api/na/writeBusinessReportDaily");
 const { writeSalesAndTrafficReportByDateAu } = require("./src/api/sp-api/fe/aus/writeSalesAndTrafficReportByDateAu");
 
+console.log("worker.js is running");
+
 cron.schedule("0 18 * * *", async () => {
-  console.log("cron set at 18");
+  console.log("cron job at 18");
 
   const start = await getStartOfYesterday();
   const end = await getEndOfYesterday();
@@ -47,7 +49,7 @@ cron.schedule("0 18 * * *", async () => {
 });
 
 cron.schedule("0 10 * * *", async () => {
-  console.log("cron set at 10 am");
+  console.log("cron job at 10");
   const start = await getStartOfYesterday();
   const end = await getEndOfYesterday();
 
