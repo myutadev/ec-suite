@@ -16,7 +16,7 @@ async function useSavedCookies() {
   await page.goto("https://sellercentral.amazon.sg/product-search/search?q=B086Z2QF7H&ref_=xx_catadd_dnav_xx"); // セッションが必要なページにアクセス
 
   // パスワードを入力フィールドに入力
-  await page.type("#ap_password", "1974221Ds");
+  await page.type("#ap_password", "");
 
   // サインインボタンをクリック
   await page.click("#signInSubmit");
@@ -32,4 +32,4 @@ async function useSavedCookies() {
   // await browser.close();
 }
 
-useSavedCookies();
+// useSavedCookies();
