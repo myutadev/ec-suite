@@ -20,6 +20,10 @@ RUN apt-get update \
     libxrender1 libxss1 libxtst6 ca-certificates fonts-liberation libappindicator1 libnss3 lsb-release xdg-utils \
     --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
+    # Puppeteerのキャッシュディレクトリを作成
+RUN mkdir -p /home/pptruser/.cache/puppeteer
+RUN chown -R pptruser:pptruser /home/pptruser/.cache
+
 
 # 非rootユーザーで実行するために、ユーザーを作成
 RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
