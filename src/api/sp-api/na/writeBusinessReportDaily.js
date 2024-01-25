@@ -73,7 +73,7 @@ const writeBusinessReportDaily = async (spreadsheetId, range, marketPlace, start
 //   "BizReport_CA!A2:AH",
 //   "CA",
 //   "2024-01-09T00:00:00-07:00",
-//   "2024-01-09T23:59:59-07:00"
+//   "2024-01-10T23:59:59-07:00"
 // );
 
 // writeBusinessReportDaily(
@@ -81,7 +81,7 @@ const writeBusinessReportDaily = async (spreadsheetId, range, marketPlace, start
 //   "BizReport_US!A2:AH",
 //   "US",
 //   "2024-01-09T00:00:00-07:00",
-//   "2024-01-09T23:59:59-07:00"
+//   "2024-01-10T23:59:59-07:00"
 // );
 
 module.exports = {
@@ -109,7 +109,7 @@ module.exports = {
 //     const endDateTime = formatDate(addDays(currentDate, 1));
 
 //     // レポート生成関数の実行
-//     await writeBusinessReportDaily(process.env.SPREADSHEET_ID, "BizReport_US!A2:AH", "US", startDateTime, endDateTime);
+//     await writeBusinessReportDaily(process.env.SPREADSHEET_ID, "BizReport_CA!A2:AH", "CA", startDateTime, endDateTime);
 
 //     // 次の日に進む
 //     currentDate = addDays(currentDate, 1);
@@ -117,4 +117,4 @@ module.exports = {
 // }
 
 // // 開始日と終了日を設定し、レポート生成関数を実行
-// generateReports("2023-12-01T00:00:00-07:00", "2024-01-08T23:59:59-07:00");
+// generateReports("2024-01-09T00:00:00-07:00", "2024-01-23T23:59:59-07:00");

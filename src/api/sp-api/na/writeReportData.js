@@ -34,6 +34,23 @@ module.exports = {
   writeReportData,
 };
 
+// writeReportData(
+//   process.env.SPREADSHEET_ID,
+//   "InvReport_US!A2:AB",
+//   "GET_FBA_INVENTORY_PLANNING_DATA",
+//   `2024-01-23T00:00:00-07:00`,
+//   `2024-01-23T23:59:59-07:00`,
+//   "US"
+// );
+// writeReportData(
+//   process.env.SPREADSHEET_ID,
+//   "InvReport_CA!A2:AB",
+//   "GET_FBA_INVENTORY_PLANNING_DATA",
+//   `2024-01-23T00:00:00-07:00`,
+//   `2024-01-23T23:59:59-07:00`,
+//   "CA"
+// );
+
 // const test = async () => {
 //   const start = await getStartOfYesterday();
 //   const end = await getEndOfYesterday();

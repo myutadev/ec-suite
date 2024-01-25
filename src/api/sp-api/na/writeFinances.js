@@ -40,7 +40,7 @@ const writeFinances = async (spreadsheetId,range) => {
 
   };
 
-// writeFinances(process.env.SPREADSHEET_ID,"getFinances!A3:Z")
+  // writeFinances(process.env.SPREADSHEET_ID, "getFinances!A3:Z");
 
 module.exports = {
   writeFinances

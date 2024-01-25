@@ -32,7 +32,7 @@ const getOrderMetrics = async(marketPlace) => {//const getShipments =
         path:'/sales/v1/orderMetrics',// ここ変更！
         query: {
           marketplaceIds: [marketPlaceId[marketPlace]], // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
-          interval: yesterday,//'2023-12-16T00:00:00-07:00--2023-12-17T00:00:00-07:00',// yesterday
+          interval: yesterday,//'2024-01-23T00:00:00-07:00--2024-01-24T00:00:00-07:00',// yesterday
           granularity:'Day'
         }
     });

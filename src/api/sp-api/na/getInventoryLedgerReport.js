@@ -24,10 +24,10 @@ const getInventoryLedgerReport = async () => {
       body: {
         reportType: "GET_LEDGER_SUMMARY_VIEW_DATA",
         marketplaceIds: ["ATVPDKIKX0DER"],
-        dataStartTime : start, // 2023-09-10T00:00:00-07:00
-        dataEndTime : end,//2023-09-10T23:59:59-07:00
-        // dataStartTime: `2023-12-18T00:00:00-07:00`, // 2023-09-10T00:00:00-07:00
-        // dataEndTime: `2024-01-02T23:59:59-07:00`, //2023-09-10T23:59:59-07:00
+        dataStartTime: start, // 2023-09-10T00:00:00-07:00
+        dataEndTime: end, //2023-09-10T23:59:59-07:00
+        // dataStartTime: `2024-01-01T00:00:00-07:00`, // 2023-09-10T00:00:00-07:00
+        // dataEndTime: `2024-01-23T23:59:59-07:00`, //2023-09-10T23:59:59-07:00
         reportOptions: {
           aggregateByLocation: "COUNTRY",
           aggregatedByTimePeriod: "DAILY",
