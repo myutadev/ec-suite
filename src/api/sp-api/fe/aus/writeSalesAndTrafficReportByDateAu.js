@@ -48,8 +48,8 @@ const writeSalesAndTrafficReportByDateAu = async (spreadsheetId, range, start, e
 //   writeSalesAndTrafficReportByDateAu(
 //     process.env.SPREADSHEET_ID4,
 //     "AmaAUS!A2:J",
-//     "2024-01-10T00:00:00-07:00",
-//     "2024-01-10T23:59:59-07:00",
+//     `${start}-07:00`,
+//     `${end}-07:00`,
 //     "AU"
 //   );
 // };
