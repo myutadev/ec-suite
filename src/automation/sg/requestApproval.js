@@ -13,12 +13,21 @@ async function useSavedCookies() {
   await page.setCookie(...cookies);
 
   // クッキーを使用してログイン状態を復元
-  await page.goto(
-    "https://sellercentral.amazon.sg/product-search/search?q=B086Z2QF7H&ref_=xx_catadd_dnav_xx"
-  ); // セッションが必要なページにアクセス
+  await page.goto("https://sellercentral.amazon.sg/product-search/search?q=B086Z2QF7H&ref_=xx_catadd_dnav_xx"); // セッションが必要なページにアクセス
 
-  // ... 以後の自動化処理 ...
-  await page.click("a.copy-kat-button.primary");
+  // パスワードを入力フィールドに入力
+  await page.type("#ap_password", "1974221Ds");
+
+  // サインインボタンをクリック
+  await page.click("#signInSubmit");
+
+
+    // 要素を確認1.Approvalリクエスト or available 
+    // if available - なにもしない  B07FMFLS8L
+    // if approval request = click 
+
+
+
 
   // await browser.close();
 }

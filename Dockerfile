@@ -1,4 +1,5 @@
 FROM node:18.16.0
+ENV TZ=Asia/Tokyo
 WORKDIR /app
 COPY package.json .
 ARG NODE_ENV
