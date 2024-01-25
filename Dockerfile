@@ -26,5 +26,8 @@ RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
     && mkdir -p /home/pptruser/Downloads \
     && chown -R pptruser:pptruser /home/pptruser
 COPY . ./
+# 非rootユーザーで実行
+USER pptruser
+
 EXPOSE $PORT
 CMD ["npm", "start"]
