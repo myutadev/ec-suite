@@ -105,3 +105,7 @@ async function submitApprovalRequest(spreadsheetId, sheetName) {
 }
 
 // submitApprovalRequest(process.env.SPREADSHEET_ID3, "Au_Listing");
+
+module.exports = {
+  submitApprovalRequest,
+};

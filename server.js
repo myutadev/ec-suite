@@ -20,6 +20,8 @@ const { writeSearchCatalogItemsAll } = require("./src/api/sp-api/fe/jp/writeSear
 const { writeRivalSellerAsins } = require("./src/api/keepa/writeRivalSellerAsins.js");
 const { writeNewListingAu } = require("./src/api/sp-api/fe/aus/writeNewListing.js");
 const { writeListingsRestrictionsAu } = require("./src/api/sp-api/fe/aus/writeListingsRestrictions.js");
+const { loginAndSaveCookies } = require("./src/automation/aus/loginAndSaveCookies.js");
+const { submitApprovalRequest } = require("./src/automation/aus/requestApproval.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -304,6 +306,30 @@ app.get("/write/keepa/rivalsellerasins", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send("An error occurred in writeRivalSellerAsins.");
+  }
+});
+
+// Approval submission for Amazon AU,SG
+
+app.get("/automation/aus/savecookie", async (req, res) => {
+  try {
+    console.log(`savecookie aus starts`);
+    await loginAndSaveCookies();
+    res.send("savecookie aus completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in savecookie aus.");
+  }
+});
+
+app.get("/automation/aus/requestapproval", async (req, res) => {
+  try {
+    console.log(`requestapproval aus starts`);
+    await submitApprovalRequest(process.env.SPREADSHEET_ID3, "Au_Listing");
+    res.send("requestapproval aus completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in requestapproval aus.");
   }
 });
 
