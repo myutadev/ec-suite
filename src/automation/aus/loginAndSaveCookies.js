@@ -8,6 +8,7 @@ async function loginAndSaveCookies() {
   const browser = await puppeteer.launch({
     headless: false,
     executablePath: "/usr/bin/google-chrome", // Chromeの実行可能ファイルのパスを指定
+    args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"],
   }); // ヘッドレスモードを無効にしてブラウザを表示
   const page = await browser.newPage();
 
