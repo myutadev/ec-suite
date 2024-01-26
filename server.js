@@ -22,6 +22,8 @@ const { writeNewListingAu } = require("./src/api/sp-api/fe/aus/writeNewListing.j
 const { writeListingsRestrictionsAu } = require("./src/api/sp-api/fe/aus/writeListingsRestrictions.js");
 const { loginAndSaveCookies } = require("./src/automation/aus/loginAndSaveCookies.js");
 const { submitApprovalRequest } = require("./src/automation/aus/requestApproval.js");
+const { writeActiveInventoryReportAu } = require("./src/api/sp-api/fe/aus/writeActiveInventoryReport.js");
+const { writeInventoryUpdateInfoAu } = require("./src/api/sp-api/fe/aus/writeInventoryUpdateInfo.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -104,6 +106,16 @@ app.get("/write/activesg", async (req, res) => {
     res.status(500).send("An error occurred in writeactivesg.");
   }
 });
+app.get("/write/activeau", async (req, res) => {
+  try {
+    writeActiveInventoryReportAu(process.env.SPREADSHEET_ID3, "Au_Selling!A3:F");
+    console.log(`activeau started`);
+    res.send("activeau completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in activeau.");
+  }
+});
 
 //Amazon JP end
 
@@ -165,6 +177,17 @@ app.get("/write/inventoryupdateinfo", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send("An error occurred in writeInventoryUpdateInfo.");
+  }
+});
+
+app.get("/write/inventoryupdateinfoau", async (req, res) => {
+  try {
+    writeInventoryUpdateInfoAu(process.env.SPREADSHEET_ID3, "Config", "Au_Selling", "Prod_DB");
+    console.log(`inventoryupdateinfoau started`);
+    res.send("inventoryupdateinfoau completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in inventoryupdateinfoau.");
   }
 });
 
@@ -311,27 +334,27 @@ app.get("/write/keepa/rivalsellerasins", async (req, res) => {
 
 // Approval submission for Amazon AU,SG
 
-app.get("/automation/aus/savecookie", async (req, res) => {
-  try {
-    console.log(`savecookie aus starts`);
-    await loginAndSaveCookies();
-    res.send("savecookie aus completed.");
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("An error occurred in savecookie aus.");
-  }
-});
+// app.get("/automation/aus/savecookie", async (req, res) => {
+//   try {
+//     console.log(`savecookie aus starts`);
+//     await loginAndSaveCookies();
+//     res.send("savecookie aus completed.");
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send("An error occurred in savecookie aus.");
+//   }
+// });
 
-app.get("/automation/aus/requestapproval", async (req, res) => {
-  try {
-    console.log(`requestapproval aus starts`);
-    await submitApprovalRequest(process.env.SPREADSHEET_ID3, "Au_Listing");
-    res.send("requestapproval aus completed.");
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("An error occurred in requestapproval aus.");
-  }
-});
+// app.get("/automation/aus/requestapproval", async (req, res) => {
+//   try {
+//     console.log(`requestapproval aus starts`);
+//     await submitApprovalRequest(process.env.SPREADSHEET_ID3, "Au_Listing");
+//     res.send("requestapproval aus completed.");
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send("An error occurred in requestapproval aus.");
+//   }
+// });
 
 app.listen(port, () => {
   console.log(`App is running on port ${port}`);
