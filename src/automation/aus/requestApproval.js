@@ -57,35 +57,43 @@ async function submitApprovalRequest(spreadsheetId, sheetName) {
       const resArrNow = [elementText];
 
       await page.click('input[data-csm="saw-landing-page-request-approval-button-click"]');
-      await page.waitForNavigation(); // ページが読み込まれるまで待つ
 
-      const elementExists = await page.$eval("h3.saw-module-header", (element) => {
-        return element.textContent.trim() === "Before you list your products, please watch the following video(s):";
-      });
+      // ここから
+      try {
+        await page.waitForNavigation(); // ページが読み込まれるまで待つ
+        const elementExists = await page.$eval("h3.saw-module-header", (element) => {
+          return element.textContent.trim() === "Before you list your products, please watch the following video(s):";
+        });
 
-      if (elementExists) {
-        // 要素が存在する場合に実行したいコードをここに書く
-        console.log("指定の要素が存在します。");
-        // ここにコードを追加
-        await page.click("#saw_ques_seller_type__saw_reseller_dstr");
-        await page.click("#saw_ques_listing_resp_header__saw_ques_listing_resp_option4");
-        await page.click("#saw_ques_illegal_product_header__saw_ques_illegal_product_option_aotb");
-        await page.click("#saw_ques_best_pract_compl_header__saw_ques_best_pract_compl_option_aotb");
+        if (elementExists) {
+          // 要素が存在する場合に実行したいコードをここに書く
+          console.log("指定の要素が存在します。");
+          await page.waitForTimeout(2000);
 
-        // チェックボックスを選択
-        await page.click("#saw_ack_auth__saw_ack_auth");
+          // ここにコードを追加
+          await page.click("#saw_ques_seller_type__saw_reseller_dstr");
+          await page.click("#saw_ques_listing_resp_header__saw_ques_listing_resp_option4");
+          await page.click("#saw_ques_illegal_product_header__saw_ques_illegal_product_option_aotb");
+          await page.click("#saw_ques_best_pract_compl_header__saw_ques_best_pract_compl_option_aotb");
 
-        // メールアドレスを入力
-        await page.type("#myq-application-form-email-input", "recievingjobs.y0414+aus@gmail.com");
+          // チェックボックスを選択
+          await page.click("#saw_ack_auth__saw_ack_auth");
 
-        await page.click("#button-submit-form-category");
-        resArrNow.push("approved");
+          // メールアドレスを入力
+          await page.type("#myq-application-form-email-input", "recievingjobs.y0414+aus@gmail.com");
 
-        console.log(resArrNow);
-      } else {
-        console.log("指定の要素が存在しません。");
-        resArrNow.push("Restrected");
-        console.log(resArrNow);
+          await page.click("#button-submit-form-category");
+          resArrNow.push("approved");
+
+          console.log(resArrNow);
+        } else {
+          console.log("指定の要素が存在しません。");
+          resArrNow.push("Restrected");
+          console.log(resArrNow);
+        }
+      } catch (error) {
+        resArrNow.push("error happened");
+        console.log(error);
       }
       resultArray.push(resArrNow);
       const updatedRows = await updateSpreadsheetIfNecessary(spreadsheetId, sheetName, resultArray, currentRow);
@@ -104,7 +112,7 @@ async function submitApprovalRequest(spreadsheetId, sheetName) {
   await browser.close(); // ブラウザインスタンスを閉じる
 }
 
-// submitApprovalRequest(process.env.SPREADSHEET_ID3, "Au_Listing");
+submitApprovalRequest(process.env.SPREADSHEET_ID3, "Au_Listing");
 
 module.exports = {
   submitApprovalRequest,

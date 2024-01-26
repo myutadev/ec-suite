@@ -7,7 +7,6 @@ const cookiesFilePath = `${__dirname}/cookies.json`;
 async function loginAndSaveCookies() {
   const browser = await puppeteer.launch({
     headless: false,
-    executablePath: "/usr/bin/google-chrome", // Chromeの実行可能ファイルのパスを指定
   }); // ヘッドレスモードを無効にしてブラウザを表示
   const page = await browser.newPage();
 
@@ -38,4 +37,4 @@ module.exports = {
   loginAndSaveCookies,
 };
 
-// loginAndSaveCookies();
+loginAndSaveCookies();
