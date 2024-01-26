@@ -112,7 +112,7 @@ async function submitApprovalRequest(spreadsheetId, sheetName) {
   await browser.close(); // ブラウザインスタンスを閉じる
 }
 
-submitApprovalRequest(process.env.SPREADSHEET_ID3, "Au_Listing");
+// submitApprovalRequest(process.env.SPREADSHEET_ID3, "Au_Listing");
 
 module.exports = {
   submitApprovalRequest,
