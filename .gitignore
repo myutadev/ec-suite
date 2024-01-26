@@ -11,4 +11,4 @@ workerForLocal.js
 fetchProdData.js
 getAmazonSgData.js
 --install-extension
-automation/
+src/automation/ 
