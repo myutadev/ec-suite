@@ -6,7 +6,7 @@ const getAvailablePriceArr = (obj, asin) => {
   const isMaximumHoursBelow72 = (num) => num <= 144;
   const isAvailabilityTypeNow = (str) => str === "NOW";
   const isMaximumHoursValid = (num) => num <= 144 && num > 0;
-  const isAvailabilityTypeFuture = (str) => str === "FUTURE_WITH_DATE";
+  const isAvailabilityTypeNotFuture = (str) => str !== "FUTURE_WITH_DATE";
 
   const offerLength = obj[asin].LowestPrice.length;
 
@@ -19,7 +19,7 @@ const getAvailablePriceArr = (obj, asin) => {
     const conditionGroup2 =
       isShipFromJp(obj[asin].ShipsFromCountry[i]) &&
       isMaximumHoursValid(obj[asin].MaximumHours[i]) &&
-      isAvailabilityTypeFuture(obj[asin].AvailabilityType[i]);
+      isAvailabilityTypeNotFuture(obj[asin].AvailabilityType[i]);
 
     // console.log(conditionGroup1);
     // console.log(conditionGroup2);
@@ -45,47 +45,50 @@ module.exports = {
 //   B00KKEBTEM: { update: "2023-12-22T17:29:07+09:00", error: "InvalidInput" },
 // };
 
-// const asin = "B00KKEBTEM";
+// const asin = "B00FF2PUTY";
 
+//これは省きたい→ FUTURE with Dateを研究
 // const obj2 = {
-//   B00KKEBTEM: {
-//     update: "2023-12-22T17:46:54+09:00",
-//     Shipping: [590, 0],
-//     LowestPrice: [2637, 3270],
-//     BuyBoxPrices: "",
-//     TotalOfferCount: 17,
+//   B07FBCM724: {
+//     update: "2024-01-30T15:19:05+09:00",
+//     Shipping: [0, ""],
+//     LowestPrice: [6160, ""],
+//     BuyBoxPrices: 6098,
+//     TotalOfferCount: 1,
 //     Condition: "new",
 //     ShipsFromCountry: ["JP", ""],
-//     AvailabilityType: ["NOW", "NOW"],
-//     MaximumHours: [72, 0],
+//     AvailabilityType: ["FUTURE_WITH_DATE", ""],
+//     MaximumHours: [24, ""],
 //   },
 // };
 
 // const obj3 = {
-//   B00KKEBTEM: {
-//     update: "2023-12-22T11:20:22+09:00",
-//     LowestPrice: [3027, 3730],
-//     BuyBoxPrices: 2997,
-//     TotalOfferCount: 14,
+//   B00I6QPR4E: {
+//     update: "2024-01-30T15:29:29+09:00",
+//     Shipping: [0, ""],
+//     LowestPrice: [4730, ""],
+//     BuyBoxPrices: 4683,
+//     TotalOfferCount: 1,
 //     Condition: "new",
-//     ShipsFromCountry: ["JP", "JP"],
-//     AvailabilityType: ["NOW", "NOW"],
-//     MaximumHours: [62, 24],
+//     ShipsFromCountry: ["JP", ""],
+//     AvailabilityType: ["FUTURE_WITH_DATE", ""],
+//     MaximumHours: [240, ""],
 //   },
 // };
 
 // const obj4 = {
-//   B00KKEBTEM: {
-//     update: "2023-12-22T11:20:22+09:00",
-//     LowestPrice: [3027, 3730],
-//     BuyBoxPrices: 2997,
-//     TotalOfferCount: 14,
-//     Condition: "new",
-//     ShipsFromCountry: ["KR", "KR"],
-//     AvailabilityType: ["NOW", "NOW"],
-//     MaximumHours: [62, 24],
-//   },
-// };
+//   B00FF2PUTY: {
+//     update: '2024-01-30T15:34:42+09:00',
+//     Shipping: [ 0, '' ],
+//     LowestPrice: [ 4070, '' ],
+//     BuyBoxPrices: 4029,
+//     TotalOfferCount: 1,
+//     Condition: 'new',
+//     ShipsFromCountry: [ 'JP', '' ],
+//     AvailabilityType: [ 'NOW', '' ],
+//     MaximumHours: [ 24, '' ]
+//   }
+// }
 
 // const obj5 = {
 //   B00KKEBTEM: {

@@ -68,7 +68,7 @@ const getItemOffers = async (asin) => {
       },
     };
 
-    // console.log("resultObj is", resultObj);
+    console.log("resultObj is", resultObj);
     return resultObj;
   } catch (e) {
     // console.log(e.code);
@@ -85,4 +85,4 @@ module.exports = {
   getItemOffers,
 };
 
-// getItemOffers("B086ZS4RT1");
+// getItemOffers("B00FF2PUTY");

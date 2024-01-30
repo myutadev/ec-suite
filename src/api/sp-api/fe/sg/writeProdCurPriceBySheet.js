@@ -59,8 +59,8 @@ module.exports = {
 //   process.env.SPREADSHEET_ID3,
 //   "Fetch_manual",
 //   "D", // asinのある列
-//   "C",
-//   "B",
-//   "E",
+//   "C", // update check
+//   "B", // update start
+//   "E",// update end
 //   800
 // );
