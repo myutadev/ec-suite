@@ -68,7 +68,7 @@ async function submitApprovalRequest(spreadsheetId, sheetName) {
         if (elementExists) {
           // 要素が存在する場合に実行したいコードをここに書く
           console.log("指定の要素が存在します。");
-          await page.waitForTimeout(2000);
+          await page.waitForTimeout(1000);
 
           // ここにコードを追加
           await page.click("#saw_ques_seller_type__saw_reseller_dstr");
@@ -83,6 +83,7 @@ async function submitApprovalRequest(spreadsheetId, sheetName) {
           await page.type("#myq-application-form-email-input", "recievingjobs.y0414+aus@gmail.com");
 
           await page.click("#button-submit-form-category");
+          await page.waitForNavigation(); // ページが読み込まれるまで待つ
           resArrNow.push("approved");
 
           console.log(resArrNow);

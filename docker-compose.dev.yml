@@ -3,6 +3,7 @@ services:
   ec-suite:
     build:
       context: .
+      dockerfile: Dockerfile.server
       args:
         NODE_ENV: development
     volumes:
@@ -10,4 +11,4 @@ services:
       - /app/node_modules
     environment:
       - NODE_ENV=development
-    command: npm run dev
+    command: nodemon server.js
