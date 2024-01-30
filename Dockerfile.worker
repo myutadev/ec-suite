@@ -7,6 +7,6 @@ RUN if [ "$NODE_ENV" = "development" ]; \
     then npm install; \ 
     else npm install --only=production; \
     fi
-EXPOSE $PORT
+# EXPOSE $PORT
 COPY . ./
 CMD ["node", "worker.js"]
