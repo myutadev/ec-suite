@@ -48,8 +48,8 @@ cron.schedule("0 18 * * *", async () => {
   writeBusinessReportDaily(process.env.SPREADSHEET_ID, "BizReport_US!A2:AH", "US", `${start}-07:00`, `${end}-07:00`);
 });
 
-cron.schedule("0 10 * * *", async () => {
-  console.log("cron job at 10");
+cron.schedule("30 10 * * *", async () => {
+  console.log("cron job at 10:30");
   const start = await getStartOfYesterday();
   const end = await getEndOfYesterday();
 
@@ -74,4 +74,3 @@ cron.schedule("0 10 * * *", async () => {
 // writeGetFinances();
 // writeRefundsGetFinances();
 // writeInventoryhLedgerReport();
-
