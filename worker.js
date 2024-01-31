@@ -69,16 +69,16 @@ cron.schedule("30 10 * * *", async () => {
 
 //毎週木曜日日本時間夜11時に実行
 
-cron.schedule("* 17 * * 3", async () => {
+cron.schedule("* 19 * * 3", async () => {
   console.log("start update prices");
-  await copyAndPasteFromSheetToSheet(
-    process.env.SPREADSHEET_ID3,
-    "Prod_DB!A2:D",
-    process.env.SPREADSHEET_ID3,
-    "Fetch_manual!A2:D"
-  );
+  // await copyAndPasteFromSheetToSheet(
+  //   process.env.SPREADSHEET_ID3,
+  //   "Prod_DB!A2:D",
+  //   process.env.SPREADSHEET_ID3,
+  //   "Fetch_manual!A2:D"
+  // );
 
-  await deleteSheetRange(process.env.SPREADSHEET_ID3, "Fetch_manual!C2:C");
+  // await deleteSheetRange(process.env.SPREADSHEET_ID3, "Fetch_manual!C2:C");
 
   try {
     await writeProdCurPriceBySheet(
