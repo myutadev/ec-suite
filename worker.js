@@ -69,7 +69,7 @@ cron.schedule("30 10 * * *", async () => {
 
 //毎週木曜日日本時間夜11時に実行
 
-cron.schedule("* 16 * * 3", async () => {
+cron.schedule("* 17 * * 3", async () => {
   console.log("start update prices");
   await copyAndPasteFromSheetToSheet(
     process.env.SPREADSHEET_ID3,
