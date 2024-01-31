@@ -64,6 +64,26 @@ cron.schedule("30 10 * * *", async () => {
   );
 });
 
+//毎週木曜日日本時間夜11時に実行
+
+cron.schedule("0 14 * * 3", async () => {
+  console.log("start update prices");
+  try {
+    await writeProdCurPriceBySheet(
+      process.env.SPREADSHEET_ID3,
+      "Fetch_manual",
+      "D", // asinのある列
+      "C",
+      "B",
+      "E",
+      600
+    );
+  } catch (error) {
+    console.error(error);
+    console.log("error occured while updating");
+  }
+});
+
 //テスト用 1分ごとに実行
 // cron.schedule('*/1 * * * *', () => {
 // cron.schedule('0 9 * * *',()=>{ ````````
