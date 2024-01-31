@@ -13,6 +13,7 @@ const { getStartOfYesterday, getEndOfYesterday } = require("./src/lib/getYesterd
 const { writeReportData } = require("./src/api/sp-api/na/writeReportData");
 const { writeBusinessReportDaily } = require("./src/api/sp-api/na/writeBusinessReportDaily");
 const { writeSalesAndTrafficReportByDateAu } = require("./src/api/sp-api/fe/aus/writeSalesAndTrafficReportByDateAu");
+const { writeProdCurPriceBySheet } = require("./src/api/sp-api/fe/sg/writeProdCurPriceBySheet");
 
 console.log("worker.js is running");
 
