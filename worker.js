@@ -67,7 +67,7 @@ cron.schedule("30 10 * * *", async () => {
 
 //毎週木曜日日本時間夜11時に実行
 
-cron.schedule("20 14 * * 3", async () => {
+cron.schedule("* 23 * * 4", async () => {
   console.log("start update prices");
   try {
     await writeProdCurPriceBySheet(
