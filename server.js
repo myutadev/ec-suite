@@ -20,8 +20,8 @@ const { writeSearchCatalogItemsAll } = require("./src/api/sp-api/fe/jp/writeSear
 const { writeRivalSellerAsins } = require("./src/api/keepa/writeRivalSellerAsins.js");
 const { writeNewListingAu } = require("./src/api/sp-api/fe/aus/writeNewListing.js");
 const { writeListingsRestrictionsAu } = require("./src/api/sp-api/fe/aus/writeListingsRestrictions.js");
-const { loginAndSaveCookies } = require("./src/automation/aus/loginAndSaveCookies.js");
-const { submitApprovalRequest } = require("./src/automation/aus/requestApproval.js");
+// const { loginAndSaveCookies } = require("./src/automation/aus/loginAndSaveCookies.js");
+// const { submitApprovalRequest } = require("./src/automation/aus/requestApproval.js");
 const { writeActiveInventoryReportAu } = require("./src/api/sp-api/fe/aus/writeActiveInventoryReport.js");
 const { writeInventoryUpdateInfoAu } = require("./src/api/sp-api/fe/aus/writeInventoryUpdateInfo.js");
 
