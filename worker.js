@@ -14,6 +14,8 @@ const { writeReportData } = require("./src/api/sp-api/na/writeReportData");
 const { writeBusinessReportDaily } = require("./src/api/sp-api/na/writeBusinessReportDaily");
 const { writeSalesAndTrafficReportByDateAu } = require("./src/api/sp-api/fe/aus/writeSalesAndTrafficReportByDateAu");
 const { writeProdCurPriceBySheet } = require("./src/api/sp-api/fe/sg/writeProdCurPriceBySheet");
+const { deleteSheetRange } = require("./src/lib/deleteSheetRange");
+const { copyAndPasteFromSheetToSheet } = require("./src/lib/copyAndPasteFromSheetToSheet");
 
 console.log("worker.js is running");
 
@@ -67,8 +69,17 @@ cron.schedule("30 10 * * *", async () => {
 
 //毎週木曜日日本時間夜11時に実行
 
-cron.schedule("* 23 * * 4", async () => {
+cron.schedule("* 16 * * 3", async () => {
   console.log("start update prices");
+  await copyAndPasteFromSheetToSheet(
+    process.env.SPREADSHEET_ID3,
+    "Prod_DB!A2:D",
+    process.env.SPREADSHEET_ID3,
+    "Fetch_manual!A2:D"
+  );
+
+  await deleteSheetRange(process.env.SPREADSHEET_ID3, "Fetch_manual!C2:C");
+
   try {
     await writeProdCurPriceBySheet(
       process.env.SPREADSHEET_ID3,
