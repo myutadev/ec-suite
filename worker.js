@@ -51,8 +51,8 @@ cron.schedule("0 18 * * *", async () => {
   writeBusinessReportDaily(process.env.SPREADSHEET_ID, "BizReport_US!A2:AH", "US", `${start}-07:00`, `${end}-07:00`);
 });
 
-cron.schedule("30 10 * * *", async () => {
-  console.log("cron job at 10:30");
+cron.schedule("0 11 * * *", async () => {
+  console.log("cron job at 11:00");
   const start = await getStartOfYesterday();
   const end = await getEndOfYesterday();
 
@@ -67,34 +67,34 @@ cron.schedule("30 10 * * *", async () => {
   );
 });
 
-//毎週木曜日日本時間夜11時に実行
+//毎週木曜日日本時間夜11時に実行→JPのAPI戻るまで一旦更新なし
 
-cron.schedule("* 19 * * 3", async () => {
-  console.log("start update prices");
-  // await copyAndPasteFromSheetToSheet(
-  //   process.env.SPREADSHEET_ID3,
-  //   "Prod_DB!A2:D",
-  //   process.env.SPREADSHEET_ID3,
-  //   "Fetch_manual!A2:D"
-  // );
+// cron.schedule("* 19 * * 3", async () => {
+//   console.log("start update prices");
+//   // await copyAndPasteFromSheetToSheet(
+//   //   process.env.SPREADSHEET_ID3,
+//   //   "Prod_DB!A2:D",
+//   //   process.env.SPREADSHEET_ID3,
+//   //   "Fetch_manual!A2:D"
+//   // );
 
-  // await deleteSheetRange(process.env.SPREADSHEET_ID3, "Fetch_manual!C2:C");
+//   // await deleteSheetRange(process.env.SPREADSHEET_ID3, "Fetch_manual!C2:C");
 
-  try {
-    await writeProdCurPriceBySheet(
-      process.env.SPREADSHEET_ID3,
-      "Fetch_manual",
-      "D", // asinのある列
-      "C",
-      "B",
-      "E",
-      600
-    );
-  } catch (error) {
-    console.error(error);
-    console.log("error occured while updating");
-  }
-});
+//   try {
+//     await writeProdCurPriceBySheet(
+//       process.env.SPREADSHEET_ID3,
+//       "Fetch_manual",
+//       "D", // asinのある列
+//       "C",
+//       "B",
+//       "E",
+//       600
+//     );
+//   } catch (error) {
+//     console.error(error);
+//     console.log("error occured while updating");
+//   }
+// });
 
 //テスト用 1分ごとに実行
 // cron.schedule('*/1 * * * *', () => {

@@ -24,6 +24,8 @@ const { writeListingsRestrictionsAu } = require("./src/api/sp-api/fe/aus/writeLi
 // const { submitApprovalRequest } = require("./src/automation/aus/requestApproval.js");
 const { writeActiveInventoryReportAu } = require("./src/api/sp-api/fe/aus/writeActiveInventoryReport.js");
 const { writeInventoryUpdateInfoAu } = require("./src/api/sp-api/fe/aus/writeInventoryUpdateInfo.js");
+const { writeCheckDengerousProduct } = require("./src/api/sp-api/fe/aus/writeCheckDengerousProduct.js");
+const { writeCheckNgWordsProduct } = require("./src/api/sp-api/fe/aus/writeCheckNgWordsProduct.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -289,6 +291,22 @@ app.get("/write/newlisting/au", async (req, res) => {
 
     await writeNewListingAu(process.env.SPREADSHEET_ID3, "Config", "Au_Listing", "Prod_DB");
     res.send("writeNewListingAu completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeNewListingAu.");
+  }
+});
+
+// prod DB
+
+app.get("/write/ngs", async (req, res) => {
+  try {
+    console.log(`writeCheck Dengerous and NgWords starts`);
+
+    await writeCheckDengerousProduct(process.env.SPREADSHEET_ID3, "Prod_DB", 2, "Ama_NG_Brand&ASIN!D2:D");
+    await writeCheckNgWordsProduct(process.env.SPREADSHEET_ID3, "Prod_DB", 2, "Ama_NG_Brand&ASIN!B2:B");
+
+    res.send("writeCheck Dengerous and NgWords completed.");
   } catch (error) {
     console.log(error);
     res.status(500).send("An error occurred in writeNewListingAu.");
