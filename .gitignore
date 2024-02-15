@@ -12,3 +12,7 @@ fetchProdData.js
 getAmazonSgData.js
 --install-extension
 src/automation/
+coupangScraper.js
+scraper/
+getMarketPlaceOffer.js
+src/api/shopee/my
