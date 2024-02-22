@@ -6,9 +6,9 @@ require("dotenv").config();
 
 const writeSearchCatalogItems = async () => {
   const spreadsheetId = process.env.SPREADSHEET_ID2;
-  const rangeForRead = "inputSearchKeywords!A2:A";
+  const rangeForRead = "searchKeywords!A2:A";
 
-  const rangeForWrite = "searchResult!A2:G";
+  const rangeForWrite = "searchKeywords!C2:J";
 
   const keywordArr2d = await readSpreadsheetValue(spreadsheetId, rangeForRead);
   const keywordArr = keywordArr2d.map((item) => item[0]);

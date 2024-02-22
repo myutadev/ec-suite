@@ -28,8 +28,8 @@ const getSearchCatalogItems = async (keywordArray) => {
         version: "2022-04-01",
       },
     });
-    // console.log(resSearch);
-    console.log(resSearch.items[0].relationships[0].relationships);  // [] -> バリエーションなし、 
+    // console.log(resSearch.items[0]);
+    // console.log(resSearch.items[0].relationships[0].relationships);  // [] -> バリエーションなし、 
 
     return resSearch;
   } catch (e) {
