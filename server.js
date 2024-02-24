@@ -392,6 +392,49 @@ app.get("/write/jp/titleasinswithtranslate", async (req, res) => {
   }
 });
 
+
+
+// DeepL Transration endpoint sample
+
+app.get("/write/deepl/transrate/sample", async (req, res) => {
+  try {
+    console.log(`writeTranslatedText starts`);
+    await writeTranslatedText(process.env.SPREADSHEET_ID_sample, "asinsByName!A2:A", "asinsByName!B2:B");
+    res.send("writeTranslatedText completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeTranslatedText.");
+  }
+});
+
+// Title -> ASINS sample
+
+app.get("/write/jp/titleasins/sample", async (req, res) => {
+  try {
+    console.log(`writeAsinsFromTitle starts`);
+    await writeAsinsFromTitle(process.env.SPREADSHEET_ID_sample, "asinsByName!B2:B", "asinsByName!C2:H");
+    res.send("writeAsinsFromTitle completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeAsinsFromTitle.");
+  }
+});
+
+//deepL + title->Asins sample
+
+app.get("/write/jp/titleasinswithtranslate/sample", async (req, res) => {
+  try {
+    console.log(`writeTranslatedText + asisFromTitle starts`);
+    await writeTranslatedText(process.env.SPREADSHEET_ID_sample, "asinsByName!A2:A", "asinsByName!B2:B");
+    await writeAsinsFromTitle(process.env.SPREADSHEET_ID_sample, "asinsByName!B2:B", "asinsByName!C2:H");
+    res.send("writeTranslatedText + asisFromTitle completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeTranslatedText + asisFromTitle.");
+  }
+});
+
+
 // Approval submission for Amazon AU,SG
 
 // app.get("/automation/aus/savecookie", async (req, res) => {

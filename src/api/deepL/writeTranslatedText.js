@@ -31,3 +31,4 @@ module.exports = {
 };
 
 // writeTranslatedText(process.env.SPREADSHEET_ID2, "asinsByName!A2:A", "asinsByName!B2:B");
+// writeTranslatedText(process.env.SPREADSHEET_ID_sample, "asinsByName!A2:A", "asinsByName!B2:B");
