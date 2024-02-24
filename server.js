@@ -392,8 +392,6 @@ app.get("/write/jp/titleasinswithtranslate", async (req, res) => {
   }
 });
 
-
-
 // DeepL Transration endpoint sample
 
 app.get("/write/deepl/transrate/sample", async (req, res) => {
@@ -426,6 +424,11 @@ app.get("/write/jp/titleasinswithtranslate/sample", async (req, res) => {
   try {
     console.log(`writeTranslatedText + asisFromTitle starts`);
     await writeTranslatedText(process.env.SPREADSHEET_ID_sample, "asinsByName!A2:A", "asinsByName!B2:B");
+
+    setTimeout(() => {
+      console.log("2秒が経過しました。");
+    }, 2000); // 2000ミリ秒 = 2秒
+
     await writeAsinsFromTitle(process.env.SPREADSHEET_ID_sample, "asinsByName!B2:B", "asinsByName!C2:H");
     res.send("writeTranslatedText + asisFromTitle completed.");
   } catch (error) {
@@ -433,7 +436,6 @@ app.get("/write/jp/titleasinswithtranslate/sample", async (req, res) => {
     res.status(500).send("An error occurred in writeTranslatedText + asisFromTitle.");
   }
 });
-
 
 // Approval submission for Amazon AU,SG
 
