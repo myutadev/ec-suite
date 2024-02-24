@@ -8,6 +8,8 @@ const getTranslatedText = async (target) => {
     // source_lang: "KO",
   });
 
+  console.log("this is deepl_api_key", process.env.DEEPL_API_KEY);
+
   const config = {
     method: "post",
     url: "https://api-free.deepl.com/v2/translate",
