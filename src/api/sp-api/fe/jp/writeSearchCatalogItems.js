@@ -28,6 +28,7 @@ const writeSearchCatalogItems = async () => {
     } catch (error) {
       console.error("Error writing to sheet: ", error);
     }
+    
   });
 };
 

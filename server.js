@@ -26,6 +26,8 @@ const { writeActiveInventoryReportAu } = require("./src/api/sp-api/fe/aus/writeA
 const { writeInventoryUpdateInfoAu } = require("./src/api/sp-api/fe/aus/writeInventoryUpdateInfo.js");
 const { writeCheckDengerousProduct } = require("./src/api/sp-api/fe/aus/writeCheckDengerousProduct.js");
 const { writeCheckNgWordsProduct } = require("./src/api/sp-api/fe/aus/writeCheckNgWordsProduct.js");
+const { writeTranslatedText } = require("./src/api/deepL/writeTranslatedText.js");
+const { writeAsinsFromTitle } = require("./src/api/sp-api/fe/jp/writeAsinsFromTitle.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -347,6 +349,46 @@ app.get("/write/keepa/rivalsellerasins", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send("An error occurred in writeRivalSellerAsins.");
+  }
+});
+
+// DeepL Transration endpoint
+
+app.get("/write/deepl/transrate", async (req, res) => {
+  try {
+    console.log(`writeTranslatedText starts`);
+    await writeTranslatedText(process.env.SPREADSHEET_ID2, "asinsByName!A2:A", "asinsByName!B2:B");
+    res.send("writeTranslatedText completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeTranslatedText.");
+  }
+});
+
+// Title -> ASINS
+
+app.get("/write/jp/titleasins", async (req, res) => {
+  try {
+    console.log(`writeAsinsFromTitle starts`);
+    await writeAsinsFromTitle(process.env.SPREADSHEET_ID2, "asinsByName!B2:B", "asinsByName!C2:H");
+    res.send("writeAsinsFromTitle completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeAsinsFromTitle.");
+  }
+});
+
+//deepL + title->Asins
+
+app.get("/write/jp/titleasinswithtranslate", async (req, res) => {
+  try {
+    console.log(`writeTranslatedText + asisFromTitle starts`);
+    await writeTranslatedText(process.env.SPREADSHEET_ID2, "asinsByName!A2:A", "asinsByName!B2:B");
+    await writeAsinsFromTitle(process.env.SPREADSHEET_ID2, "asinsByName!B2:B", "asinsByName!C2:H");
+    res.send("writeTranslatedText + asisFromTitle completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeTranslatedText + asisFromTitle.");
   }
 });
 

@@ -31,7 +31,7 @@ const writeCatalogItemFromSheet = async (spreadsheetId, sheetName, batchSize) =>
   }
 };
 
-// writeCatalogItemFromSheet(process.env.SPREADSHEET_ID2, "fetchProdInfo", 20);
+// writeCatalogItemFromSheet(process.env.SPREADSHEET_ID2, "fetchProdInfo(Yuta)", 100);
 
 module.exports = {
   writeCatalogItemFromSheet,

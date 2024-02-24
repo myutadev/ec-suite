@@ -22,7 +22,8 @@
     "moment-timezone": "^0.5.43",
     "node-cron": "^3.0.2",
     "puppeteer": "^21.6.1",
-    "selling-partner-api": "^1.0.0"
+    "selling-partner-api": "^1.0.0",
+    "string-similarity": "^4.0.4"
   },
   "devDependencies": {
     "nodemon": "^3.0.3"

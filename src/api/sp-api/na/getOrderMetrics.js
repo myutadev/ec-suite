@@ -12,6 +12,8 @@ const getOrderMetrics = async(marketPlace) => {//const getShipments =
   let res;
   const start = `${getStartOfYesterday()}-07:00`// `${getStartOfYesterday()}-07:00`
   const end = `${getEndOfYesterday()}-07:00` //`${getEndOfYesterday()}-07:00`
+  // const start = `2024-02-21T00:00:00-07:00`// `${getStartOfYesterday()}-07:00`
+  // const end = `2024-02-23T00:00:00-07:00` //`${getEndOfYesterday()}-07:00`
   let yesterday = `${start}--${end}`;
 
   try {
