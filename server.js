@@ -28,6 +28,7 @@ const { writeCheckDengerousProduct } = require("./src/api/sp-api/fe/aus/writeChe
 const { writeCheckNgWordsProduct } = require("./src/api/sp-api/fe/aus/writeCheckNgWordsProduct.js");
 const { writeTranslatedText } = require("./src/api/deepL/writeTranslatedText.js");
 const { writeAsinsFromTitle } = require("./src/api/sp-api/fe/jp/writeAsinsFromTitle.js");
+const { writeAsinsFromTitleTranslate } = require("./src/api/sp-api/fe/jp/writeAsinsFromTitleTranslate.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -382,9 +383,8 @@ app.get("/write/jp/titleasins", async (req, res) => {
 
 app.get("/write/jp/titleasinswithtranslate", async (req, res) => {
   try {
-    console.log(`writeTranslatedText + asisFromTitle starts`);
-    await writeTranslatedText(process.env.SPREADSHEET_ID2, "asinsByName!A2:A", "asinsByName!B2:B");
-    await writeAsinsFromTitle(process.env.SPREADSHEET_ID2, "asinsByName!B2:B", "asinsByName!C2:H");
+    console.log(`writeAsinsFromTitleTranslate`);
+    await writeAsinsFromTitleTranslate(process.env.SPREADSHEET_ID2, "asinsByName!A2:A", "asinsByName!B2:G");
     res.send("writeTranslatedText + asisFromTitle completed.");
   } catch (error) {
     console.log(error);
@@ -422,15 +422,9 @@ app.get("/write/jp/titleasins/sample", async (req, res) => {
 
 app.get("/write/jp/titleasinswithtranslate/sample", async (req, res) => {
   try {
-    console.log(`writeTranslatedText + asisFromTitle starts`);
-    await writeTranslatedText(process.env.SPREADSHEET_ID_sample, "asinsByName!A2:A", "asinsByName!B2:B");
-
-    setTimeout(() => {
-      console.log("2秒が経過しました。");
-    }, 2000); // 2000ミリ秒 = 2秒
-
-    await writeAsinsFromTitle(process.env.SPREADSHEET_ID_sample, "asinsByName!B2:B", "asinsByName!C2:H");
-    res.send("writeTranslatedText + asisFromTitle completed.");
+    console.log(`writeAsinsFromTitleTranslate starts`);
+    writeAsinsFromTitleTranslate(process.env.SPREADSHEET_ID_sample, "asinsByName!A2:A", "asinsByName!B2:G");
+    res.send("writeAsinsFromTitleTranslate.");
   } catch (error) {
     console.log(error);
     res.status(500).send("An error occurred in writeTranslatedText + asisFromTitle.");

@@ -3,7 +3,6 @@ const { getSearchCatalogItems } = require("./getSearchCatalogItems");
 const stringSimilarity = require("string-similarity");
 require("dotenv").config();
 
-
 const getAsinsFromTitle = async (keywordArray) => {
   const resObj = await getSearchCatalogItems(keywordArray);
   const asinsObjArr = resObj.items;
@@ -13,7 +12,7 @@ const getAsinsFromTitle = async (keywordArray) => {
   const compareStrings = [];
   const asins = [];
 
-  console.log('compare',compareStrings);
+  console.log("compare", compareStrings);
 
   for (obj of asinsObjArr) {
     compareStrings.push(obj.summaries[0].itemName);
@@ -28,13 +27,17 @@ const getAsinsFromTitle = async (keywordArray) => {
   const indexArr = [];
 
   for (let i = 0; i < 5; i++) {
-    const selectedTitle = sortedBestMatch[i].target;
-    const targetIndex = compareStrings.indexOf(selectedTitle);
-    indexArr.push(targetIndex);
+    try {
+      const selectedTitle = sortedBestMatch[i].target;
+      const targetIndex = compareStrings.indexOf(selectedTitle);
+      indexArr.push(targetIndex);
+    } catch (error) {
+      indexArr.push("");
+    }
   }
 
   const asinsByMatchRank = indexArr.map((index) => asins[index]);
-  const TitleByMatchRank = indexArr.map((index)=>compareStrings[index]);
+  const TitleByMatchRank = indexArr.map((index) => compareStrings[index]);
 
   console.log("result is", asinsByMatchRank);
   console.log("strings check", TitleByMatchRank);
