@@ -1,7 +1,7 @@
 const stringSimilarity = require("string-similarity");
 require("dotenv").config();
 
-const getBestmatch = async (targetString, compareStrings) => {
+const getMatch = async (targetString, compareStrings) => {
   const bestMatch = stringSimilarity.findBestMatch(targetString, compareStrings);
   const sortedBestMatch = bestMatch.ratings.sort((a, b) => b.rating - a.rating);
   console.log(sortedBestMatch);
@@ -9,7 +9,7 @@ const getBestmatch = async (targetString, compareStrings) => {
 };
 
 module.exports = {
-  getBestmatch,
+  getMatch,
 };
 
 // getBestMatch(
