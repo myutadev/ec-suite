@@ -29,7 +29,7 @@ const { writeCheckNgWordsProduct } = require("./src/api/sp-api/fe/aus/writeCheck
 const { writeTranslatedText } = require("./src/api/deepL/writeTranslatedText.js");
 const { writeAsinsFromTitle } = require("./src/api/sp-api/fe/jp/writeAsinsFromTitle.js");
 const { writeAsinsFromTitleTranslate } = require("./src/api/sp-api/fe/jp/writeAsinsFromTitleTranslate.js");
-const { getBestMatch } = require("./src/lib/getBestmatch.js");
+const { getBestmatch } = require("./src/lib/getBestmatch.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -443,7 +443,7 @@ app.post("/api/get/bestmatch", async (req, res) => {
   }
 
   try {
-    const result = await getBestMatch(targetString, compareStrings);
+    const result = await getBestmatch(targetString, compareStrings);
     res.json({ result });
   } catch (error) {
     res.status(500).send({ error: error.message });
