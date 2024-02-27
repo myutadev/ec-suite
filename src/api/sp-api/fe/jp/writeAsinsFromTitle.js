@@ -1,5 +1,4 @@
 const { readSpreadsheetValue } = require("../../../../lib/readSpreadsheetValue.js");
-const { appendArrayDataToSheets } = require("../../../../lib/appendArrayDataToSheets.js");
 const { getAsinsFromTitle } = require("./getAsinsFromTitle.js");
 const { updateArrayDataToSheets } = require("../../../../lib/updateArrayDataToSheets.js");
 

@@ -29,9 +29,12 @@ const { writeCheckNgWordsProduct } = require("./src/api/sp-api/fe/aus/writeCheck
 const { writeTranslatedText } = require("./src/api/deepL/writeTranslatedText.js");
 const { writeAsinsFromTitle } = require("./src/api/sp-api/fe/jp/writeAsinsFromTitle.js");
 const { writeAsinsFromTitleTranslate } = require("./src/api/sp-api/fe/jp/writeAsinsFromTitleTranslate.js");
+const { getBestMatch } = require("./src/lib/getBestmatch.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(express.json());
 
 app.get("/", (req, res) => {
   res.send("<h2>ec-suite v1.0</h2>");
@@ -428,6 +431,22 @@ app.get("/write/jp/titleasinswithtranslate/sample", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send("An error occurred in writeTranslatedText + asisFromTitle.");
+  }
+});
+
+// bestMatch用APIエンドポイント
+app.post("/api/get/bestmatch", async (req, res) => {
+  console.log(res.body);
+  const { targetString, compareStrings } = req.body;
+  if (!targetString || !compareStrings) {
+    return res.status(400).send({ error: "targetString and compareStrings are required" });
+  }
+
+  try {
+    const result = await getBestMatch(targetString, compareStrings);
+    res.json({ result });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
   }
 });
 

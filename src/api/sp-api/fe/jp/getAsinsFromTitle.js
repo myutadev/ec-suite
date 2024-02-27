@@ -19,8 +19,12 @@ const getAsinsFromTitle = async (keywordArray) => {
     asins.push(obj.asin);
   }
 
+  console.log("targetstr is", targetString);
+  console.log("compareStrs is", compareStrings);
+
   const bestMatch = stringSimilarity.findBestMatch(targetString, compareStrings);
   const sortedBestMatch = bestMatch.ratings.sort((a, b) => b.rating - a.rating);
+  console.log(sortedBestMatch);
 
   //トップ5のインデックスを取得
 
@@ -49,6 +53,6 @@ module.exports = {
   getAsinsFromTitle,
 };
 
-// getSearchCatalogItems(["資生堂 ビューラー"]);
+// getAsinsFromTitle(["資生堂 ビューラー"]);
 // getAsinsFromTtile(["遊戯王公式カードゲーム デュエルモンスターズ デュエリストカードプロテクター KC","ガシャポン HG ウルトラ怪獣バトル スペシャル 2. 古代怪獣ゴモラ 単品"]);
 // getAsinsFromTitle(["遊戯王公式カードゲーム デュエルモンスターズ デュエリストカードプロテクター KC"]);
