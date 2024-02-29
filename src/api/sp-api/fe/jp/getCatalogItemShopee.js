@@ -3,7 +3,7 @@ const { checkStringIncludes } = require("../../../../lib/checkStringIncludes");
 const { getAvailablePrice } = require("../sg/getAvailablePrice");
 require("dotenv").config();
 
-const getCatalogItem = async (asin) => {
+const getCatalogItemShopee = async (asin) => {
   let resCatalog;
   let resPrice;
   let resultArray = [];
@@ -21,6 +21,7 @@ const getCatalogItem = async (asin) => {
       },
     });
 
+    //価格取得1
     resPrice = await sellingPartner.callAPI({
       operation: "getCompetitivePricing",
       endpoint: "productPricing",
@@ -31,8 +32,10 @@ const getCatalogItem = async (asin) => {
       },
     });
 
+    //価格取得2
     const resPrice2 = await getAvailablePrice(asin);
 
+    //その他データ取得
     resCatalog = await sellingPartner.callAPI({
       operation: "getCatalogItem",
       endpoint: "catalogItems",
@@ -47,23 +50,12 @@ const getCatalogItem = async (asin) => {
         version: "2022-04-01",
       },
     });
+
     console.log("resCatalog is", resCatalog);
-    // console.log("attributes is", resCatalog.attributes);
-    // console.log("resCatalog displayName is", resCatalog.summaries[0].browseClassification.displayName);
-    // console.log("websiteDisplayGroup displayName is", resCatalog.summaries[0].websiteDisplayGroup);
-    // console.log("color displayName is", resCatalog.attributes?.color?.[0].value ?? "");
-    // console.log("size displayName is", resCatalog.attributes?.size?.[0].value ?? "");
-    // console.log("style displayName is", resCatalog.attributes?.style?.[0].value ?? "");
-    // console.log("pattern displayName is", resCatalog.attributes?.pattern?.[0].value ?? "");
-
-    // console.log("vendorDetails is", resCatalog.vendorDetails[0]);
-    // console.log("relationships is", resCatalog.relationships[0].parentAsins);
-    // console.log("relationships is", resCatalog.relationships[0]);
-    // console.log("parentAsins is", resCatalog.relationships[0].relationships[0]?.parentAsins ?? "");
-    // console.log("relationships[0].relationships is", resCatalog.relationships[0].relationships);
-    // console.log("variationTheme is", resCatalog.relationships[0]?.variationTheme ?? "");
+    console.log("attributes is", resCatalog.attributes);
 
 
+    // 共通項目
     resultArray.push(resCatalog.attributes?.item_name[0]?.value ?? "no name");
     resultArray.push(resCatalog.summaries[0].brand),
       resultArray.push(resCatalog.identifiers[0]?.identifiers[0]?.identifier ?? "no identifier");
@@ -130,12 +122,7 @@ const getCatalogItem = async (asin) => {
         resultArray.push("no package weight");
         break;
     }
-    // resultArray.push(
-    //   resCatalog.attributes?.item_package_weight
-    //     ? resCatalog.attributes?.item_package_weight[0]?.value ??
-    //         "no package weight"
-    //     : "no package weight data"
-    // );
+
     resultArray.push(
       resCatalog.attributes?.item_package_dimensions
         ? resCatalog.attributes?.item_package_dimensions[0]?.length.unit ?? "no package dimensions"
@@ -163,10 +150,68 @@ const getCatalogItem = async (asin) => {
     resultArray.push(resCatalog.images[0]?.images[12]?.link ?? "");
     resultArray.push(resCatalog.images[0]?.images[15]?.link ?? "");
     resultArray.push(resCatalog.images[0]?.images[18]?.link ?? "");
-    // console.log(`result array is `,resultArray);
 
-    // await apiDataArray.push(resultArray);
-    // console.log(`asin:${asin} success`,)
+    //Shopee用追加分
+    const parentAsin = resCatalog.relationships[0].relationships[0]?.parentAsins[0] ?? "";
+    const category1 = resCatalog.summaries[0].websiteDisplayGroupName;
+    const category2 = resCatalog.summaries[0].browseClassification.displayName;
+    resultArray.push(parentAsin);
+    resultArray.push(category1);
+    resultArray.push(category2);
+
+    if (!parentAsin) {
+    } else {
+      const parentAsinRes = await sellingPartner.callAPI({
+        operation: "getCatalogItem",
+        endpoint: "catalogItems",
+        path: {
+          asin: parentAsin,
+        },
+        query: {
+          marketplaceIds: ["A1VC38T7YXB528"], // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
+          includedData: ["attributes", "images", "identifiers", "summaries", "salesRanks", "relationships"],
+        },
+        options: {
+          version: "2022-04-01",
+        },
+      });
+
+      const attributionsArr = parentAsinRes.relationships[0].relationships?.[0].variationTheme?.attributes ?? "";
+      console.log("attributions arr is", attributionsArr);
+
+      //親ASINがある時点で最低1つはattributionsがある。4つのときは出力させない。
+      if (attributionsArr.length > 4) {
+        return resultArray;
+      }
+      resultArray.push(attributionsArr[0]);
+      resultArray.push(resCatalog.attributes[attributionsArr[0]][0].value);
+      // attributionsが2種類のときと3種類のときで処理を分ける。3種類なら 後ろの2つは連結させる
+      switch (attributionsArr.length) {
+        case 2:
+          resultArray.push(attributionsArr[1]);
+          resultArray.push(resCatalog.attributes[attributionsArr[1]][0].value);
+          break;
+        case 3:
+          resultArray.push(`${attributionsArr[1]} / ${attributionsArr[2]}`);
+          resultArray.push(
+            `${resCatalog.attributes[attributionsArr[1]][0].value} / ${
+              resCatalog.attributes[attributionsArr[2]][0].value
+            }`
+          );
+          break;
+
+        case 4:
+          resultArray.push(`${attributionsArr[1]} / ${attributionsArr[2]} / ${attributionsArr[3]}`);
+          resultArray.push(
+            `${resCatalog.attributes[attributionsArr[1]][0].value} / ${
+              resCatalog.attributes[attributionsArr[2]][0].value
+            } / ${resCatalog.attributes[attributionsArr[3]][0].value}`
+          );
+          break;
+      }
+    }
+
+
     return resultArray;
   } catch (e) {
     console.log(`probably ASIN:${asin} page is not exist`, e);
@@ -174,14 +219,9 @@ const getCatalogItem = async (asin) => {
   }
 };
 
-
-
-// getCatalogItem("B0CHQDF4K3"); // iwaki
-// getCatalogItem("B0BGXYCQD8"); // iwaki
-// getCatalogItem("B00FVH32QG"); // iwaki
-// getCatalogItem("B0CJJ9GCHT"); // iwaki
+// 
 // getCatalogItem("B08GFH65D5"); // iwaki
 
 module.exports = {
-  getCatalogItem,
+  getCatalogItemShopee,
 };

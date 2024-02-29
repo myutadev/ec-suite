@@ -22,7 +22,7 @@ const writeCheckNgWordsProduct = async (spreadsheetId, sheetName, start, ngWords
   updateArrayDataToSheets(spreadsheetId, writeRange, checkResArr);
 };
 
-// writeCheckNgWordsProduct(process.env.SPREADSHEET_ID3, "Prod_DB", 2,  "Ama_NG_Brand&ASIN!B2:B");
+writeCheckNgWordsProduct(process.env.SPREADSHEET_ID3, "Prod_DB", 2,  "Ama_NG_Brand&ASIN!B2:B");
 
 module.exports = {
   writeCheckNgWordsProduct,

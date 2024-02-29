@@ -30,6 +30,7 @@ const { writeTranslatedText } = require("./src/api/deepL/writeTranslatedText.js"
 const { writeAsinsFromTitle } = require("./src/api/sp-api/fe/jp/writeAsinsFromTitle.js");
 const { writeAsinsFromTitleTranslate } = require("./src/api/sp-api/fe/jp/writeAsinsFromTitleTranslate.js");
 const { getMatch } = require("./src/lib/getMatch.js");
+const { writeCatalogItemFromSheetShopee } = require("./src/api/sp-api/fe/jp/writeCatalogItemFromSheetShopee.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -450,8 +451,19 @@ app.post("/api/get/bestmatch", async (req, res) => {
   }
 });
 
-// Approval submission for Amazon AU,SG
+// fetch_shopee_data
+app.get("/write/jp/shopee/catalog", async (req, res) => {
+  try {
+    console.log(`writeCatalogItemFromSheetShopee starts`);
+    writeCatalogItemFromSheetShopee(process.env.SPREADSHEET_ID6, "fetch_shopee_data", 50);
+    res.send("writeCatalogItemFromSheetShopee completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeCatalogItemFromSheetShopee.");
+  }
+});
 
+// Approval submission for Amazon AU,SG
 // app.get("/automation/aus/savecookie", async (req, res) => {
 //   try {
 //     console.log(`savecookie aus starts`);
