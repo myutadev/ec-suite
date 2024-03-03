@@ -5,7 +5,6 @@
 const { writeOrderMetrics } = require("./src/api/sp-api/na/writeOrderMetrics");
 const { writeFinances } = require("./src/api/sp-api/na/writeFinances");
 const { writeRefundsFromFinances } = require("./src/api/sp-api/na/writeRefundsFromFinances");
-const { writeInventoryLedgerReport } = require("./src/api/sp-api/na/writeInventoryLedgerReport");
 const cron = require("node-cron");
 const { writeOrderMetricsSg } = require("./src/api/sp-api/fe/sg/writeOrderMetrics");
 const { writeSalesAndTrafficReportByDate } = require("./src/api/sp-api/fe/sg/writeSalesAndTrafficReportByDate");
@@ -30,7 +29,6 @@ cron.schedule("0 18 * * *", async () => {
   writeOrderMetrics(process.env.SPREADSHEET_ID, "MX", "getOrderMetricsMX!A2:X");
   writeFinances(process.env.SPREADSHEET_ID, "getFinances!A3:Z");
   writeRefundsFromFinances(process.env.SPREADSHEET_ID, "refunds");
-  writeInventoryLedgerReport(process.env.SPREADSHEET_ID, "getInventoryLedger!A3:Z");
   writeReportData(
     process.env.SPREADSHEET_ID,
     "InvReport_US!A2:AB",

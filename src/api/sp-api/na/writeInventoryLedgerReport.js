@@ -1,10 +1,17 @@
 const { getInventoryLedgerReport } = require("./getInventoryLedgerReport.js");
 const { appendArrayDataToSheets } = require("../../../lib/appendArrayDataToSheets.js");
 const { checkIfUpdateNeeded } = require("../../../lib/checkIfUpdateNeeded.js");
+const { readSpreadsheetValue } = require("../../../lib/readSpreadsheetValue.js");
 
 const writeInventoryLedgerReport = async (spreadsheetId, range) => {
   console.log("writeInventoryhLedgerReport starts");
-  const amazonData = await getInventoryLedgerReport();
+  const rangeArr = await readSpreadsheetValue(
+    "1K5cauS1rAyywlo-lcThNyQAZUzuJuCqXCHxE-glXHiY",
+    "getInventoryLedger!B1:C1"
+  );
+  const start = rangeArr[0][0];
+  const end = rangeArr[0][1];
+  const amazonData = await getInventoryLedgerReport(start, end);
   if (amazonData == null) {
     console.log("WRITE LEDGER REPORT No data for today");
     return;
@@ -47,6 +54,8 @@ const writeInventoryLedgerReport = async (spreadsheetId, range) => {
     item.Location,
   ]);
   console.log("values is ", values);
+  values.sort((a, b) => new Date(a[0]) - new Date(b[0]));
+
   const newLastRowData = values.length > 0 ? values[values.length - 1][0] : null; // 更新データのA列に入る最終行のデータ
 
   if (await checkIfUpdateNeeded(newLastRowData, spreadsheetId, range)) {
@@ -57,7 +66,10 @@ const writeInventoryLedgerReport = async (spreadsheetId, range) => {
   console.log("writeInventoryhLedgerReport ends");
 };
 
-// writeInventoryLedgerReport(process.env.SPREADSHEET_ID, "getInventoryLedger!A3:Z");
+// writeInventoryLedgerReport(
+//   process.env.SPREADSHEET_ID,
+//   "getInventoryLedger!A3:J"
+// );
 
 module.exports = {
   writeInventoryLedgerReport,

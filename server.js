@@ -31,6 +31,7 @@ const { writeAsinsFromTitle } = require("./src/api/sp-api/fe/jp/writeAsinsFromTi
 const { writeAsinsFromTitleTranslate } = require("./src/api/sp-api/fe/jp/writeAsinsFromTitleTranslate.js");
 const { getMatch } = require("./src/lib/getMatch.js");
 const { writeCatalogItemFromSheetShopee } = require("./src/api/sp-api/fe/jp/writeCatalogItemFromSheetShopee.js");
+const { writeInventoryLedgerReport } = require("./src/api/sp-api/na/writeInventoryLedgerReport");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -301,6 +302,18 @@ app.get("/write/newlisting/au", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).send("An error occurred in writeNewListingAu.");
+  }
+});
+//Amazon NA inventoryledger Report button
+app.get("/write/na/inventoryledger", async (req, res) => {
+  try {
+    console.log(`writeInventoryLedgerReport starts`);
+
+    await writeInventoryLedgerReport(process.env.SPREADSHEET_ID, "getInventoryLedger!A3:J");
+    res.send("writeInventoryLedgerReport completed.");
+  } catch (error) {
+    console.log(error);
+    res.status(500).send("An error occurred in writeInventoryLedgerReport.");
   }
 });
 
