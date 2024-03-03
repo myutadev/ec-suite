@@ -22,7 +22,7 @@ const getSearchCatalogItems = async (keywordArray) => {
         keywords: keywordArray,
         marketplaceIds: ["A1VC38T7YXB528"], // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
         pageSize: 20,
-        includedData: ["summaries", "relationships"],
+        includedData: ["summaries", "relationships", "salesRanks"],
       },
       options: {
         version: "2022-04-01",

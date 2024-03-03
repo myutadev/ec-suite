@@ -41,8 +41,8 @@ const writeSalesAndTrafficReportByDateAu = async (spreadsheetId, range, start, e
 };
 
 // const test = async () => {
-//   const start = await getStartOfYesterday();
-//   const end = await getEndOfYesterday();
+//   const start = "2024-02-16T00:00:00";
+//   const end = "2024-03-01T23:59:59";
 //   console.log(start);
 //   console.log(end);
 //   writeSalesAndTrafficReportByDateAu(

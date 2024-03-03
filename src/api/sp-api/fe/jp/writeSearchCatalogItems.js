@@ -21,6 +21,10 @@ const writeSearchCatalogItems = async () => {
       item.summaries[0].itemName,
       item.summaries[0].websiteDisplayGroup,
       item.summaries[0]?.modelNumber ?? "",
+      item.salesRanks[0]?.classificationRanks?.[0]?.title ?? "no rank data",
+      item.salesRanks[0]?.classificationRanks?.[0]?.rank ?? "no rank data",
+      item.salesRanks[0]?.displayGroupRanks?.[0]?.title ?? "no rank data",
+      item.salesRanks[0]?.displayGroupRanks?.[0]?.rank ?? "no rank data",
     ]);
 
     try {
@@ -28,7 +32,6 @@ const writeSearchCatalogItems = async () => {
     } catch (error) {
       console.error("Error writing to sheet: ", error);
     }
-    
   });
 };
 

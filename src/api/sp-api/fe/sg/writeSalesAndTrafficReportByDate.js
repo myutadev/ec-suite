@@ -41,14 +41,21 @@ const writeSalesAndTrafficReportByDate = async (spreadsheetId, range, start, end
 };
 
 // const test = async () => {
-//   const start = await getStartOfYesterday();
-//   const end = await getEndOfYesterday();
+//   const start = "2024-02-16T00:00:00";
+//   const end = "2024-03-01T23:59:59";
 //   console.log(start);
 //   console.log(end);
 //   writeSalesAndTrafficReportByDate(process.env.SPREADSHEET_ID4, "AmaSG!A2:J", `${start}-07:00`, `${end}-07:00`, "SG");
 // };
 
+
 // test();
+
+//   "2024-01-08T00:00:00-07:00",
+//   "2024-01-08T23:59:59-07:00",
+
+
+
 
 module.exports = {
   writeSalesAndTrafficReportByDate,
