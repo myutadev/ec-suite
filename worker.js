@@ -15,6 +15,7 @@ const { writeSalesAndTrafficReportByDateAu } = require("./src/api/sp-api/fe/aus/
 const { writeProdCurPriceBySheet } = require("./src/api/sp-api/fe/sg/writeProdCurPriceBySheet");
 const { deleteSheetRange } = require("./src/lib/deleteSheetRange");
 const { copyAndPasteFromSheetToSheet } = require("./src/lib/copyAndPasteFromSheetToSheet");
+const axios = require("axios");
 
 console.log("worker.js is running");
 
@@ -112,19 +113,24 @@ cron.schedule("0 11 * * *", async () => {
   const end = await getEndOfYesterday();
 
   try {
-    writeOrderMetricsSg(process.env.SPREADSHEET_ID, "SG", "getOrderMetricsSG!A2:X"); // 不要かも しばらく運用して不要であれば削除
+    await writeOrderMetricsSg(process.env.SPREADSHEET_ID, "SG", "getOrderMetricsSG!A2:X"); // 不要かも しばらく運用して不要であれば削除
   } catch (error) {
-    notifyS;
-    lack(error);
+    notifySlack(error);
   }
   try {
-    writeSalesAndTrafficReportByDate(process.env.SPREADSHEET_ID4, "AmaSG!A2:J", `${start}-07:00`, `${end}-07:00`, "SG");
+    await writeSalesAndTrafficReportByDate(
+      process.env.SPREADSHEET_ID4,
+      "AmaSG!A2:J",
+      `${start}-07:00`,
+      `${end}-07:00`,
+      "SG"
+    );
   } catch (error) {
     notifySlack(error);
   }
 
   try {
-    writeSalesAndTrafficReportByDateAu(
+    await writeSalesAndTrafficReportByDateAu(
       process.env.SPREADSHEET_ID4,
       "AmaAUS!A2:J",
       `${start}-07:00`,
