@@ -18,35 +18,92 @@ const { copyAndPasteFromSheetToSheet } = require("./src/lib/copyAndPasteFromShee
 
 console.log("worker.js is running");
 
+//エラー通知用
+function notifySlack(error) {
+  const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
+  axios
+    .post(SLACK_WEBHOOK_URL, {
+      text: `An error occurred in EC-suite WORKER: ${error.message} \n stack trace:${error.stack}`,
+    })
+    .then(() => console.log("Notified Slack about the error."))
+    .catch(() => console.log("Error occurred while notifying Slack."));
+}
+
 cron.schedule("0 18 * * *", async () => {
   console.log("cron job at 18");
 
   const start = await getStartOfYesterday();
   const end = await getEndOfYesterday();
 
-  writeOrderMetrics(process.env.SPREADSHEET_ID, "CA", "getOrderMetricsCA!A2:X");
-  writeOrderMetrics(process.env.SPREADSHEET_ID, "US", "getOrderMetricsUS!A2:X");
-  writeOrderMetrics(process.env.SPREADSHEET_ID, "MX", "getOrderMetricsMX!A2:X");
-  writeFinances(process.env.SPREADSHEET_ID, "getFinances!A3:Z");
-  writeRefundsFromFinances(process.env.SPREADSHEET_ID, "refunds");
-  writeReportData(
-    process.env.SPREADSHEET_ID,
-    "InvReport_US!A2:AB",
-    "GET_FBA_INVENTORY_PLANNING_DATA",
-    `${start}-07:00`,
-    `${end}-07:00`,
-    "US"
-  );
-  writeReportData(
-    process.env.SPREADSHEET_ID,
-    "InvReport_CA!A2:AB",
-    "GET_FBA_INVENTORY_PLANNING_DATA",
-    `${start}-07:00`,
-    `${end}-07:00`,
-    "CA"
-  );
-  writeBusinessReportDaily(process.env.SPREADSHEET_ID, "BizReport_CA!A2:AH", "CA", `${start}-07:00`, `${end}-07:00`);
-  writeBusinessReportDaily(process.env.SPREADSHEET_ID, "BizReport_US!A2:AH", "US", `${start}-07:00`, `${end}-07:00`);
+  try {
+    await writeOrderMetrics(process.env.SPREADSHEET_ID, "CA", "getOrderMetricsCA!A2:X");
+    await writeOrderMetrics(process.env.SPREADSHEET_ID, "US", "getOrderMetricsUS!A2:X");
+    await writeOrderMetrics(process.env.SPREADSHEET_ID, "MX", "getOrderMetricsMX!A2:X");
+  } catch (error) {
+    notifySlack(error);
+  }
+
+  try {
+    await writeFinances(process.env.SPREADSHEET_ID, "getFinances!A3:Z");
+  } catch (error) {
+    notifySlack(error);
+  }
+
+  try {
+    await writeRefundsFromFinances(process.env.SPREADSHEET_ID, "refunds");
+  } catch (error) {
+    notifySlack(error);
+  }
+
+  try {
+    await writeReportData(
+      process.env.SPREADSHEET_ID,
+      "InvReport_US!A2:AB",
+      "GET_FBA_INVENTORY_PLANNING_DATA",
+      `${start}-07:00`,
+      `${end}-07:00`,
+      "US"
+    );
+  } catch (error) {
+    notifySlack(error);
+  }
+
+  try {
+    await writeReportData(
+      process.env.SPREADSHEET_ID,
+      "InvReport_CA!A2:AB",
+      "GET_FBA_INVENTORY_PLANNING_DATA",
+      `${start}-07:00`,
+      `${end}-07:00`,
+      "CA"
+    );
+  } catch (error) {
+    notifySlack(error);
+  }
+
+  try {
+    await writeBusinessReportDaily(
+      process.env.SPREADSHEET_ID,
+      "BizReport_CA!A2:AH",
+      "CA",
+      `${start}-07:00`,
+      `${end}-07:00`
+    );
+  } catch (error) {
+    notifySlack(error);
+  }
+
+  try {
+    await writeBusinessReportDaily(
+      process.env.SPREADSHEET_ID,
+      "BizReport_US!A2:AH",
+      "US",
+      `${start}-07:00`,
+      `${end}-07:00`
+    );
+  } catch (error) {
+    notifySlack(error);
+  }
 });
 
 cron.schedule("0 11 * * *", async () => {
@@ -54,43 +111,60 @@ cron.schedule("0 11 * * *", async () => {
   const start = await getStartOfYesterday();
   const end = await getEndOfYesterday();
 
-  writeOrderMetricsSg(process.env.SPREADSHEET_ID, "SG", "getOrderMetricsSG!A2:X"); // 不要かも しばらく運用して不要であれば削除
-  writeSalesAndTrafficReportByDate(process.env.SPREADSHEET_ID4, "AmaSG!A2:J", `${start}-07:00`, `${end}-07:00`, "SG");
-  writeSalesAndTrafficReportByDateAu(
-    process.env.SPREADSHEET_ID4,
-    "AmaAUS!A2:J",
-    `${start}-07:00`,
-    `${end}-07:00`,
-    "AU"
-  );
+  try {
+    writeOrderMetricsSg(process.env.SPREADSHEET_ID, "SG", "getOrderMetricsSG!A2:X"); // 不要かも しばらく運用して不要であれば削除
+  } catch (error) {
+    notifyS;
+    lack(error);
+  }
+  try {
+    writeSalesAndTrafficReportByDate(process.env.SPREADSHEET_ID4, "AmaSG!A2:J", `${start}-07:00`, `${end}-07:00`, "SG");
+  } catch (error) {
+    notifySlack(error);
+  }
+
+  try {
+    writeSalesAndTrafficReportByDateAu(
+      process.env.SPREADSHEET_ID4,
+      "AmaAUS!A2:J",
+      `${start}-07:00`,
+      `${end}-07:00`,
+      "AU"
+    );
+  } catch (error) {
+    notifySlack(error);
+  }
 });
 
 // 毎週木曜日日本時間夜11時に実行→JPのAPI戻るまで一旦更新なし
 
-cron.schedule("40 23 * * 0", async () => {
+cron.schedule("0 23 * * 4", async () => {
   console.log("start update prices");
-  // await copyAndPasteFromSheetToSheet(
-  //   process.env.SPREADSHEET_ID3,
-  //   "Prod_DB!A2:D",
-  //   process.env.SPREADSHEET_ID3,
-  //   "Fetch_manual!A2:D"
-  // );
-
-  // await deleteSheetRange(process.env.SPREADSHEET_ID3, "Fetch_manual!C2:C");
-
   try {
-    await writeProdCurPriceBySheet(
+    await copyAndPasteFromSheetToSheet(
       process.env.SPREADSHEET_ID3,
-      "Fetch_manual",
-      "D", // asinのある列
-      "C",
-      "B",
-      "E",
-      600
+      "Prod_DB!A2:D",
+      process.env.SPREADSHEET_ID3,
+      "Fetch_manual!A2:D"
     );
+
+    await deleteSheetRange(process.env.SPREADSHEET_ID3, "Fetch_manual!C2:C");
+
+    try {
+      await writeProdCurPriceBySheet(
+        process.env.SPREADSHEET_ID3,
+        "Fetch_manual",
+        "D", // asinのある列
+        "C",
+        "B",
+        "E",
+        600
+      );
+    } catch (error) {
+      console.error(error);
+    }
   } catch (error) {
-    console.error(error);
-    console.log("error occured while updating");
+    notifySlack(error);
   }
 });
 

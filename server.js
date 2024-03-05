@@ -32,6 +32,7 @@ const { writeAsinsFromTitleTranslate } = require("./src/api/sp-api/fe/jp/writeAs
 const { getMatch } = require("./src/lib/getMatch.js");
 const { writeCatalogItemFromSheetShopee } = require("./src/api/sp-api/fe/jp/writeCatalogItemFromSheetShopee.js");
 const { writeInventoryLedgerReport } = require("./src/api/sp-api/na/writeInventoryLedgerReport");
+const axios = require("axios");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -43,51 +44,55 @@ app.get("/", (req, res) => {
 });
 
 // 12/19 changed
-app.get("/write/bizreport", async (req, res) => {
+app.get("/write/bizreport", async (req, res, next) => {
   try {
     await writeBusinessReport();
     console.log(`writeBusinessReport started`);
     res.send("writeBusinessReport completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeBusinessReport.");
+    next(error);
+    // res.status(500).send("An error occurred in writeBusinessReport.");
   }
 });
 
 // 12/19 changed
-app.get("/write/catalog", async (req, res) => {
+app.get("/write/catalog", async (req, res, next) => {
   try {
     await writeGetCatalogItemToSheet(process.env.SPREADSHEET_ID, "NAfetchProdInfo");
     console.log(`writeGetCatalogItemToSheet started`);
     res.send("writeGetCatalogItemToSheet completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeGetCatalogItemToSheet.");
+    next(error);
+    // res.status(500).send("An error occurred in writeGetCatalogItemToSheet.");
   }
 });
 
 //12/19 changed
-app.get("/write/fnsku", async (req, res) => {
+app.get("/write/fnsku", async (req, res, next) => {
   try {
     await writeSkuToFnsku(process.env.SPREADSHEET_ID, "skuToFnsku");
     console.log(`writeSkuToFnsku`);
     res.send("writeSkuToFnsku completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred.");
+    next(error);
+    // res.status(500).send("An error occurred.");
   }
 });
 
 //Amazon JP need to check
 
-app.get("/main", async (req, res) => {
+app.get("/main", async (req, res, next) => {
   try {
     await writeCatalogItemFromSheet(process.env.SPREADSHEET_ID2, "fetchProdInfo", 20);
     console.log(`writeCatalogItemFromSheet started`);
     res.send("writeCatalogItemFromSheet completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeCatalogItemFromSheet.");
+    next(error);
+    // res.status(500).send("An error occurred in writeCatalogItemFromSheet.");
   }
 });
 
@@ -106,17 +111,18 @@ app.get("/main", async (req, res) => {
 
 //12/24 新しいシートに変更
 
-app.get("/write/activesg", async (req, res) => {
+app.get("/write/activesg", async (req, res, next) => {
   try {
     writeActiveInventoryReport(process.env.SPREADSHEET_ID3, "Sg_Selling!A3:F");
     console.log(`writeactivesg started`);
     res.send("writeactivesg completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeactivesg.");
+    next(error);
+    // res.status(500).send("An error occurred in writeactivesg.");
   }
 });
-app.get("/write/activeau", async (req, res) => {
+app.get("/write/activeau", async (req, res, next) => {
   try {
     writeActiveInventoryReportAu(process.env.SPREADSHEET_ID3, "Au_Selling!A3:F");
     console.log(`activeau started`);
@@ -129,7 +135,7 @@ app.get("/write/activeau", async (req, res) => {
 
 //Amazon JP end
 
-app.get("/write/prodprice/", async (req, res) => {
+app.get("/write/prodprice/", async (req, res, next) => {
   try {
     await writeProdCurPriceBySheet(
       process.env.SPREADSHEET_ID3,
@@ -145,11 +151,12 @@ app.get("/write/prodprice/", async (req, res) => {
     res.send("writeProdCurPriceBySheet completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeactivesg.");
+    next(error);
+    // res.status(500).send("An error occurred in writeactivesg.");
   }
 });
 
-app.get("/write/prodprice/manual", async (req, res) => {
+app.get("/write/prodprice/manual", async (req, res, next) => {
   try {
     await writeProdCurPriceBySheet(
       process.env.SPREADSHEET_ID3,
@@ -164,22 +171,24 @@ app.get("/write/prodprice/manual", async (req, res) => {
     res.send("writeProdCurPriceBySheet completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeactivesg.");
+    next(error);
+    // res.status(500).send("An error occurred in writeactivesg.");
   }
 });
 
-app.get("/write/shippingInfo", async (req, res) => {
+app.get("/write/shippingInfo", async (req, res, next) => {
   try {
     writeShippingInfo(process.env.SPREADSHEET_ID3, "Prod_DB");
     console.log(`writeShippingInfo started`);
     res.send("writeShippingInfo completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeShippingInfo.");
+    next(error);
+    // res.status(500).send("An error occurred in writeShippingInfo.");
   }
 });
 
-app.get("/write/inventoryupdateinfo", async (req, res) => {
+app.get("/write/inventoryupdateinfo", async (req, res, next) => {
   try {
     writeInventoryUpdateInfo(process.env.SPREADSHEET_ID3, "Config", "Sg_Selling", "Prod_DB");
     console.log(`writeInventoryUpdateInfo started`);
@@ -190,29 +199,31 @@ app.get("/write/inventoryupdateinfo", async (req, res) => {
   }
 });
 
-app.get("/write/inventoryupdateinfoau", async (req, res) => {
+app.get("/write/inventoryupdateinfoau", async (req, res, next) => {
   try {
     writeInventoryUpdateInfoAu(process.env.SPREADSHEET_ID3, "Config", "Au_Selling", "Prod_DB");
     console.log(`inventoryupdateinfoau started`);
     res.send("inventoryupdateinfoau completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in inventoryupdateinfoau.");
+    // res.status(500).send("An error occurred in inventoryupdateinfoau.");
+    next(error);
   }
 });
 
-app.get("/write/listingrestrictions/all", async (req, res) => {
+app.get("/write/listingrestrictions/all", async (req, res, next) => {
   try {
     writeListingsRestrictions(process.env.SPREADSHEET_ID3, "Sg_Listing", 2, "");
     console.log(`listingrestrictions/all started`);
     res.send("listingrestrictions/all completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in listingrestrictions/all.");
+    // res.status(500).send("An error occurred in listingrestrictions/all.");
+    next(error);
   }
 });
 
-app.get("/write/listingrestrictions/manual", async (req, res) => {
+app.get("/write/listingrestrictions/manual", async (req, res, next) => {
   try {
     const rangeData = await readSpreadsheetValue(process.env.SPREADSHEET_ID3, "Sg_Listing!Y1:Z1");
 
@@ -224,23 +235,25 @@ app.get("/write/listingrestrictions/manual", async (req, res) => {
     res.send("write/listingrestrictions/manual completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in write/listingrestrictions/manual.");
+    // res.status(500).send("An error occurred in write/listingrestrictions/manual.");
+    next(error);
   }
 });
 
 // australia
-app.get("/write/listingrestrictions/au/all", async (req, res) => {
+app.get("/write/listingrestrictions/au/all", async (req, res, next) => {
   try {
     writeListingsRestrictionsAu(process.env.SPREADSHEET_ID3, "Au_Listing", 2, "");
     console.log(`writeListingsRestrictionsAu started`);
     res.send("writeListingsRestrictionsAu completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeListingsRestrictionsAu.");
+    // res.status(500).send("An error occurred in writeListingsRestrictionsAu.");
+    next(error);
   }
 });
 
-app.get("/write/listingrestrictions/au/manual", async (req, res) => {
+app.get("/write/listingrestrictions/au/manual", async (req, res, next) => {
   try {
     const rangeData = await readSpreadsheetValue(process.env.SPREADSHEET_ID3, "Au_Listing!Y1:Z1");
 
@@ -252,11 +265,12 @@ app.get("/write/listingrestrictions/au/manual", async (req, res) => {
     res.send("writeListingsRestrictionsAu/manual completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeListingsRestrictionsAu/manual.");
+    next(error);
+    // res.status(500).send("An error occurred in writeListingsRestrictionsAu/manual.");
   }
 });
 
-app.get("/write/newlisting", async (req, res) => {
+app.get("/write/newlisting", async (req, res, next) => {
   try {
     console.log(`writeNewListing starts`);
 
@@ -264,11 +278,12 @@ app.get("/write/newlisting", async (req, res) => {
     res.send("writeNewListing completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeNewListing.");
+    next(error);
+    // res.status(500).send("An error occurred in writeNewListing.");
   }
 });
 
-app.get("/write/searchcatalogitems", async (req, res) => {
+app.get("/write/searchcatalogitems", async (req, res, next) => {
   try {
     console.log(`writeNewListing starts`);
 
@@ -276,11 +291,12 @@ app.get("/write/searchcatalogitems", async (req, res) => {
     res.send("writeSearchCatalogItems completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeSearchCatalogItems.");
+    next(error);
+    // res.status(500).send("An error occurred in writeSearchCatalogItems.");
   }
 });
 
-app.get("/write/searchcatalogitemsall", async (req, res) => {
+app.get("/write/searchcatalogitemsall", async (req, res, next) => {
   try {
     console.log(`writeNewListing starts`);
 
@@ -288,12 +304,13 @@ app.get("/write/searchcatalogitemsall", async (req, res) => {
     res.send("writeSearchCatalogItemsAll completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeSearchCatalogItemsAll.");
+    next(error);
+    // res.status(500).send("An error occurred in writeSearchCatalogItemsAll.");
   }
 });
 
 //Amazon AUS
-app.get("/write/newlisting/au", async (req, res) => {
+app.get("/write/newlisting/au", async (req, res, next) => {
   try {
     console.log(`writeNewListingAu starts`);
 
@@ -301,11 +318,12 @@ app.get("/write/newlisting/au", async (req, res) => {
     res.send("writeNewListingAu completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeNewListingAu.");
+    next(error);
+    // res.status(500).send("An error occurred in writeNewListingAu.");
   }
 });
 //Amazon NA inventoryledger Report button
-app.get("/write/na/inventoryledger", async (req, res) => {
+app.get("/write/na/inventoryledger", async (req, res, next) => {
   try {
     console.log(`writeInventoryLedgerReport starts`);
 
@@ -313,13 +331,14 @@ app.get("/write/na/inventoryledger", async (req, res) => {
     res.send("writeInventoryLedgerReport completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeInventoryLedgerReport.");
+    next(error);
+    // res.status(500).send("An error occurred in writeInventoryLedgerReport.");
   }
 });
 
 // prod DB
 
-app.get("/write/ngs", async (req, res) => {
+app.get("/write/ngs", async (req, res, next) => {
   try {
     console.log(`writeCheck Dengerous and NgWords starts`);
 
@@ -329,13 +348,14 @@ app.get("/write/ngs", async (req, res) => {
     res.send("writeCheck Dengerous and NgWords completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeNewListingAu.");
+    next(error);
+    // res.status(500).send("An error occurred in writeNewListingAu.");
   }
 });
 
 // shopee endpoint
 
-app.get("/write/spmy/newlisting", async (req, res) => {
+app.get("/write/spmy/newlisting", async (req, res, next) => {
   try {
     console.log(`writeNewListing starts`);
 
@@ -343,113 +363,122 @@ app.get("/write/spmy/newlisting", async (req, res) => {
     res.send("writeInventoryUpdateInfoSpMy completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeInventoryUpdateInfoSpMy.");
+    next(error);
+    // res.status(500).send("An error occurred in writeInventoryUpdateInfoSpMy.");
   }
 });
-app.get("/write/spsg/newlisting", async (req, res) => {
+app.get("/write/spsg/newlisting", async (req, res, next) => {
   try {
     console.log(`writeNewListing starts`);
     await writeInventoryUpdateInfoSpSg(process.env.SPREADSHEET_ID3, "Config_Sp", "Sp_Sg_Selling", "Prod_DB");
     res.send("writeInventoryUpdateInfoSpSg completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeInventoryUpdateInfoSpSg.");
+    next(error);
+    // res.status(500).send("An error occurred in writeInventoryUpdateInfoSpSg.");
   }
 });
 
 // keepa endpoint
 
-app.get("/write/keepa/rivalsellerasins", async (req, res) => {
+app.get("/write/keepa/rivalsellerasins", async (req, res, next) => {
   try {
     console.log(`writeRivalSellerAsins starts`);
     await writeRivalSellerAsins();
     res.send("writeRivalSellerAsins completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeRivalSellerAsins.");
+    next(error);
+    // res.status(500).send("An error occurred in writeRivalSellerAsins.");
   }
 });
 
 // DeepL Transration endpoint
 
-app.get("/write/deepl/transrate", async (req, res) => {
+app.get("/write/deepl/transrate", async (req, res, next) => {
   try {
     console.log(`writeTranslatedText starts`);
     await writeTranslatedText(process.env.SPREADSHEET_ID2, "asinsByName!A2:A", "asinsByName!B2:B");
     res.send("writeTranslatedText completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeTranslatedText.");
+    next(error);
+    // res.status(500).send("An error occurred in writeTranslatedText.");
   }
 });
 
 // Title -> ASINS
 
-app.get("/write/jp/titleasins", async (req, res) => {
+app.get("/write/jp/titleasins", async (req, res, next) => {
   try {
     console.log(`writeAsinsFromTitle starts`);
     await writeAsinsFromTitle(process.env.SPREADSHEET_ID2, "asinsByName!B2:B", "asinsByName!C2:H");
     res.send("writeAsinsFromTitle completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeAsinsFromTitle.");
+    next(error);
+    // res.status(500).send("An error occurred in writeAsinsFromTitle.");
   }
 });
 
 //deepL + title->Asins
 
-app.get("/write/jp/titleasinswithtranslate", async (req, res) => {
+app.get("/write/jp/titleasinswithtranslate", async (req, res, next) => {
   try {
     console.log(`writeAsinsFromTitleTranslate`);
     await writeAsinsFromTitleTranslate(process.env.SPREADSHEET_ID2, "asinsByName!A2:A", "asinsByName!B2:G");
     res.send("writeTranslatedText + asisFromTitle completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeTranslatedText + asisFromTitle.");
+    next(error);
+    // res.status(500).send("An error occurred in writeTranslatedText + asisFromTitle.");
   }
 });
 
 // DeepL Transration endpoint sample
 
-app.get("/write/deepl/transrate/sample", async (req, res) => {
+app.get("/write/deepl/transrate/sample", async (req, res, next) => {
   try {
     console.log(`writeTranslatedText starts`);
     await writeTranslatedText(process.env.SPREADSHEET_ID_sample, "asinsByName!A2:A", "asinsByName!B2:B");
     res.send("writeTranslatedText completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeTranslatedText.");
+    next(error);
+    // res.status(500).send("An error occurred in writeTranslatedText.");
   }
 });
 
 // Title -> ASINS sample
 
-app.get("/write/jp/titleasins/sample", async (req, res) => {
+app.get("/write/jp/titleasins/sample", async (req, res, next) => {
   try {
     console.log(`writeAsinsFromTitle starts`);
     await writeAsinsFromTitle(process.env.SPREADSHEET_ID_sample, "asinsByName!B2:B", "asinsByName!C2:H");
     res.send("writeAsinsFromTitle completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeAsinsFromTitle.");
+    next(error);
+    // res.status(500).send("An error occurred in writeAsinsFromTitle.");
   }
 });
 
 //deepL + title->Asins sample
 
-app.get("/write/jp/titleasinswithtranslate/sample", async (req, res) => {
+app.get("/write/jp/titleasinswithtranslate/sample", async (req, res, next) => {
   try {
     console.log(`writeAsinsFromTitleTranslate starts`);
     writeAsinsFromTitleTranslate(process.env.SPREADSHEET_ID_sample, "asinsByName!A2:A", "asinsByName!B2:G");
     res.send("writeAsinsFromTitleTranslate.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeTranslatedText + asisFromTitle.");
+    next(error);
+    // res.status(500).send("An error occurred in writeTranslatedText + asisFromTitle.");
   }
 });
 
 // bestMatch用APIエンドポイント
-app.post("/api/get/bestmatch", async (req, res) => {
+app.post("/api/get/bestmatch", async (req, res, next) => {
   console.log(res.body);
   const { targetString, compareStrings } = req.body;
   if (!targetString || !compareStrings) {
@@ -460,19 +489,21 @@ app.post("/api/get/bestmatch", async (req, res) => {
     const result = await getMatch(targetString, compareStrings);
     res.json({ result });
   } catch (error) {
+    next(error);
     res.status(500).send({ error: error.message });
   }
 });
 
 // fetch_shopee_data
-app.get("/write/jp/shopee/catalog", async (req, res) => {
+app.get("/write/jp/shopee/catalog", async (req, res, next) => {
   try {
     console.log(`writeCatalogItemFromSheetShopee starts`);
     writeCatalogItemFromSheetShopee(process.env.SPREADSHEET_ID6, "fetch_shopee_data", 50);
     res.send("writeCatalogItemFromSheetShopee completed.");
   } catch (error) {
     console.log(error);
-    res.status(500).send("An error occurred in writeCatalogItemFromSheetShopee.");
+    next(error);
+    // res.status(500).send("An error occurred in writeCatalogItemFromSheetShopee.");
   }
 });
 
@@ -498,6 +529,34 @@ app.get("/write/jp/shopee/catalog", async (req, res) => {
 //     res.status(500).send("An error occurred in requestapproval aus.");
 //   }
 // });
+
+//エラーをSlackに通知する関数
+
+app.get("/error", async (req, res, next) => {
+  try {
+    await writeCatalogItemFromSheetShopee(process.env.SPREADSHEET_ID61, "fetch_shopee_data", 50);
+    res.send("writeCatalogItemFromSheetShopee completed.");
+  } catch (error) {
+    next(error);
+  }
+});
+
+function notifySlack(error) {
+  const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
+  axios
+    .post(SLACK_WEBHOOK_URL, {
+      text: `An error occurred in EC-suite: ${error.message} \n stack trace:${error.stack}`,
+    })
+    .then(() => console.log("Notified Slack about the error."))
+    .catch(() => console.log("Error occurred while notifying Slack."));
+}
+//ミドルウェアの設定
+app.use((error, req, res, next) => {
+  //notify Slack
+  notifySlack(error);
+
+  res.status(500).send("An error occurred on the server");
+});
 
 app.listen(port, () => {
   console.log(`App is running on port ${port}`);
