@@ -33,7 +33,11 @@ const writeActiveInventoryReport = async (spreadsheetId, range) => {
   ]);
   console.log(values);
   // updateData(range,values); // かえる
-  updateArrayDataToSheets(spreadsheetId, range, values);
+  try {
+    await updateArrayDataToSheets(spreadsheetId, range, values);
+  } catch (error) {
+    throw error;
+  }
   console.log("writeInventoryhLedgerReport ends");
 };
 // writeActiveInventoryReport(process.env.SPREADSHEET_ID3, "Sg_Selling!A3:F");

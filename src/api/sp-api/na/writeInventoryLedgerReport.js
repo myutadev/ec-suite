@@ -59,7 +59,11 @@ const writeInventoryLedgerReport = async (spreadsheetId, range) => {
   const newLastRowData = values.length > 0 ? values[values.length - 1][0] : null; // 更新データのA列に入る最終行のデータ
 
   if (await checkIfUpdateNeeded(newLastRowData, spreadsheetId, range)) {
-    appendArrayDataToSheets(spreadsheetId, range, values);
+    try {
+      await appendArrayDataToSheets(spreadsheetId, range, values);
+    } catch (error) {
+      throw error;
+    }
   } else {
     console.log("WRITE LEDGER REPORT / data had been updated before");
   }

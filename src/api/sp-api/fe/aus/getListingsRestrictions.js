@@ -39,6 +39,7 @@ const getListingsRestrictionsAu = async (asin) => {
     return result;
   } catch (e) {
     console.log(e);
+    throw e;
   }
 };
 

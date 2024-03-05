@@ -18,8 +18,11 @@ const writeCheckDengerousProduct = async (spreadsheetId, sheetName, start, ngWor
   // const checkResArr = prodNames.map((name) => [ngRegex.test(name)]);
 
   console.log(checkResArr);
-
-  updateArrayDataToSheets(spreadsheetId, writeRange, checkResArr);
+  try {
+    updateArrayDataToSheets(spreadsheetId, writeRange, checkResArr);
+  } catch (error) {
+    throw error;
+  }
 };
 
 // writeCheckDengerousProduct(process.env.SPREADSHEET_ID3, "Prod_DB", 2, "Ama_NG_Brand&ASIN!D2:D");

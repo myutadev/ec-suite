@@ -33,6 +33,7 @@ const deleteSheetRange = async (sheetId, range) => {
     await sheets.spreadsheets.values.clear(readRequest);
   } catch (err) {
     console.error(err);
+    throw err;
   }
 };
 module.exports = {

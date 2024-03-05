@@ -163,7 +163,11 @@ const writeInventoryUpdateInfoSpMy = async (spreadsheetId, configSheet, curSelli
 
   const writeRange = `${curSellingSheet}!M2:X`;
 
-  updateArrayDataToSheets(spreadsheetId, writeRange, newPriceInventoryArr);
+  try {
+    await updateArrayDataToSheets(spreadsheetId, writeRange, newPriceInventoryArr);
+  } catch (error) {
+    throw error;
+  }
 };
 
 // writeInventoryUpdateInfoSpMy(

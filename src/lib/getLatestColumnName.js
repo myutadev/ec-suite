@@ -49,7 +49,7 @@ const getLatestColumn = async (sheetId, sheetName) => {
     return response.data.values[0].length + 1; // 最後の使用列の番号+1を返す
   } catch (error) {
     console.error("Error reading from sheet: ", error);
-    return null;
+    throw error;
   }
 };
 

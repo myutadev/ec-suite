@@ -1,8 +1,6 @@
 const { google } = require("googleapis");
 const { getCatalogItemFromSheet } = require("./fetchGetCatalogItem");
-const {
-  readSpreadsheetValue,
-} = require("../../../lib/readSpreadsheetValue.js");
+const { readSpreadsheetValue } = require("../../../lib/readSpreadsheetValue.js");
 
 require("dotenv").config();
 
@@ -28,15 +26,11 @@ const sheets = google.sheets({
   auth,
 });
 
-const writeGetCatalogItemToSheet = async (spreadsheetId,sheetName) => {
-
+const writeGetCatalogItemToSheet = async (spreadsheetId, sheetName) => {
   // マーケットプレイスの読み込み
   const readRangeForMarketplace = `${sheetName}!A1:A1`;
 
-  const marketPlaceArray2d = await readSpreadsheetValue(
-    spreadsheetId,
-    readRangeForMarketplace
-  );
+  const marketPlaceArray2d = await readSpreadsheetValue(spreadsheetId, readRangeForMarketplace);
   const marketPlace = marketPlaceArray2d[0][0];
 
   const readRange = `${sheetName}!A3:A`; // データ取得の範囲を設定
@@ -45,11 +39,7 @@ const writeGetCatalogItemToSheet = async (spreadsheetId,sheetName) => {
   const range = `${sheetName}!B3:AH`;
 
   let values = [];
-  values = await getCatalogItemFromSheet(
-    spreadsheetId,
-    readRange,
-    marketPlace
-  );
+  values = await getCatalogItemFromSheet(spreadsheetId, readRange, marketPlace);
   console.log("Fetched values: ", values);
 
   const request = {
@@ -62,9 +52,10 @@ const writeGetCatalogItemToSheet = async (spreadsheetId,sheetName) => {
   };
 
   try {
-    sheets.spreadsheets.values.update(request);
+    await sheets.spreadsheets.values.update(request);
   } catch (error) {
     console.error("Error writing to sheet: ", error);
+    throw error;
   }
 };
 
@@ -73,4 +64,4 @@ module.exports = {
 };
 
 // writeValue();
-  // writeGetCatalogItemToSheet(process.env.SPREADSHEET_ID,"NAfetchProdInfo")
+// writeGetCatalogItemToSheet(process.env.SPREADSHEET_ID,"NAfetchProdInfo")

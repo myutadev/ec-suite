@@ -34,6 +34,7 @@ const getSearchCatalogItems = async (keywordArray) => {
     return resSearch;
   } catch (e) {
     console.log(e);
+    throw e;
   }
 };
 

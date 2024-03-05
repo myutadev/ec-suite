@@ -61,10 +61,15 @@ const writeBusinessReportDaily = async (spreadsheetId, range, marketPlace, start
     // process.exit();
 
     //更新先のシート情報
-    appendArrayDataToSheets(spreadsheetId, range, values);
+    try {
+      await appendArrayDataToSheets(spreadsheetId, range, values);
+    } catch (error) {
+      throw error;
+    }
     console.log("writeInventoryhLedgerReport ends");
   } catch (err) {
     console.error(err);
+    throw err;
   }
 };
 

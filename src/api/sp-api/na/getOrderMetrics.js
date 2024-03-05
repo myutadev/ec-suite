@@ -11,8 +11,8 @@ const marketPlaceId = {
 const getOrderMetrics = async (marketPlace) => {
   //const getShipments =
   let res;
-  const start = `${getStartOfYesterday()}-07:00`// `${getStartOfYesterday()}-07:00`
-  const end = `${getEndOfYesterday()}-07:00` //`${getEndOfYesterday()}-07:00`
+  const start = `${getStartOfYesterday()}-07:00`; // `${getStartOfYesterday()}-07:00`
+  const end = `${getEndOfYesterday()}-07:00`; //`${getEndOfYesterday()}-07:00`
   // const start = `2024-02-07T00:00:00-07:00`// `${getStartOfYesterday()}-07:00`
   // const end = `2024-02-08T00:00:00-07:00` //`${getEndOfYesterday()}-07:00`
   let yesterday = `${start}--${end}`;
@@ -42,6 +42,7 @@ const getOrderMetrics = async (marketPlace) => {
     console.log(res);
   } catch (e) {
     console.log(e);
+    throw e;
   }
   return res;
 };

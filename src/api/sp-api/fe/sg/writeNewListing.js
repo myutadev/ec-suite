@@ -74,8 +74,17 @@ const writeNewListing = async (
 
   // console.log(newListingSheet);
   console.log(resultArr);
-  batchUpdateArrayDataToSheets(spreadsheetId, updateRanges, updateData);
-  appendArrayDataToSheets(spreadsheetId, `${newListingSheet}!A2:V`, resultArr);
+  try {
+    await batchUpdateArrayDataToSheets(spreadsheetId, updateRanges, updateData);
+  } catch (error) {
+    throw error;
+  }
+
+  try {
+    appendArrayDataToSheets(spreadsheetId, `${newListingSheet}!A2:V`, resultArr);
+  } catch (error) {
+    throw error;
+  }
 };
 
 // writeNewListing(process.env.SPREADSHEET_ID3, "Config", "Sg_Listing", "Prod_DB");

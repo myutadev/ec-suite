@@ -32,6 +32,7 @@ const getFinances = async () => {
     });
   } catch (e) {
     console.log(e);
+    throw e;
   }
   // console.log(res);
   return res;

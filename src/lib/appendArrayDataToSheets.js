@@ -40,6 +40,7 @@ const appendArrayDataToSheets = async (spreadsheetId, range, values) => {
     console.log("appended data successfully");
   } catch (error) {
     console.error("Error writing to sheet: ", error);
+    throw error;
   }
 };
 // writeArrayDataToSheets(process.env.SPREADSHEET_ID,'SGCurSelling!A2:F',[[1,2,3,4,5],[6,7,8,9]]);

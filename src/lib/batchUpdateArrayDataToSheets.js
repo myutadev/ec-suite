@@ -39,6 +39,7 @@ async function batchUpdateArrayDataToSheets(spreadsheetId, ranges, data) {
     });
   } catch (error) {
     console.error("Error during batch update: ", error);
+    throw error;
   }
 }
 module.exports = {

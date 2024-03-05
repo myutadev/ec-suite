@@ -44,6 +44,7 @@ const getOrderMetricSg = async (marketPlace) => {
     console.log(res);
   } catch (e) {
     console.log(e);
+    throw e;
   }
   return res;
 };

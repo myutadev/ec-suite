@@ -168,6 +168,7 @@ cron.schedule("0 23 * * 4", async () => {
       );
     } catch (error) {
       console.error(error);
+      throw error;
     }
   } catch (error) {
     notifySlack(error);

@@ -30,7 +30,11 @@ const writeListingsRestrictions = async (spreadsheetId, sheetName, start, end) =
 
   console.log(results);
 
-  updateArrayDataToSheets(spreadsheetId, writeRange, results);
+  try {
+    await updateArrayDataToSheets(spreadsheetId, writeRange, results);
+  } catch (error) {
+    throw error;
+  }
 };
 
 // writeListingsRestrictions(process.env.SPREADSHEET_ID3, "Sg_Listing", 433, "");

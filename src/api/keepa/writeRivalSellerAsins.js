@@ -22,9 +22,10 @@ const writeRivalSellerAsins = async () => {
   const values = asinArr.map((item) => [item]);
 
   try {
-    appendArrayDataToSheets(spreadsheetId, rangeForWrite, values);
+    await appendArrayDataToSheets(spreadsheetId, rangeForWrite, values);
   } catch (error) {
     console.error("Error writing to sheet: ", error);
+    throw error;
   }
 };
 

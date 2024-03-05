@@ -23,10 +23,11 @@ const writeReportData = async (spreadsheetId, range, reportName, start, end, mar
     });
 
     //更新先のシート情報
-    appendArrayDataToSheets(spreadsheetId, range, values);
+    await appendArrayDataToSheets(spreadsheetId, range, values);
     console.log("writeInventoryhLedgerReport ends");
   } catch (err) {
     console.error(err);
+    throw err;
   }
 };
 

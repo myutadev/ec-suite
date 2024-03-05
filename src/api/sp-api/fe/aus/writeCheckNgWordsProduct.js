@@ -18,11 +18,14 @@ const writeCheckNgWordsProduct = async (spreadsheetId, sheetName, start, ngWords
   const checkResArr = prodNames.map((name) => [ngRegex.test(name)]);
 
   console.log(checkResArr);
-
-  updateArrayDataToSheets(spreadsheetId, writeRange, checkResArr);
+  try {
+    await updateArrayDataToSheets(spreadsheetId, writeRange, checkResArr);
+  } catch (error) {
+    await error;
+  }
 };
 
-writeCheckNgWordsProduct(process.env.SPREADSHEET_ID3, "Prod_DB", 2,  "Ama_NG_Brand&ASIN!B2:B");
+// writeCheckNgWordsProduct(process.env.SPREADSHEET_ID3, "Prod_DB", 2,  "Ama_NG_Brand&ASIN!B2:B");
 
 module.exports = {
   writeCheckNgWordsProduct,

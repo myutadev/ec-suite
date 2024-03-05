@@ -39,6 +39,7 @@ const updateArrayDataToSheets = async (spreadsheetId, range, values) => {
     await sheets.spreadsheets.values.update(request);
   } catch (error) {
     console.error("Error writing to sheet: ", error);
+    throw error;
   }
 };
 // writeArrayDataToSheets(process.env.SPREADSHEET_ID_2, "Ad_Sp!A5:Z", testArray);

@@ -33,10 +33,12 @@ const writeSalesAndTrafficReportByDate = async (spreadsheetId, range, start, end
     });
 
     //更新先のシート情報
-    appendArrayDataToSheets(spreadsheetId, range, values);
+
+    await appendArrayDataToSheets(spreadsheetId, range, values);
     console.log("writeInventoryhLedgerReport ends");
   } catch (err) {
     console.error(err);
+    throw err;
   }
 };
 
@@ -48,14 +50,10 @@ const writeSalesAndTrafficReportByDate = async (spreadsheetId, range, start, end
 //   writeSalesAndTrafficReportByDate(process.env.SPREADSHEET_ID4, "AmaSG!A2:J", `${start}-07:00`, `${end}-07:00`, "SG");
 // };
 
-
 // test();
 
 //   "2024-01-08T00:00:00-07:00",
 //   "2024-01-08T23:59:59-07:00",
-
-
-
 
 module.exports = {
   writeSalesAndTrafficReportByDate,

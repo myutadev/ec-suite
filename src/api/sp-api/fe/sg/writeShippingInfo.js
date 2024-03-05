@@ -45,8 +45,11 @@ const writeShippingInfo = async (spreadsheetId, sheetName) => {
     const curInfoArr = [shippingMethod, packagedWeight, sWeight, longest];
     results.push(curInfoArr);
   });
-
-  updateArrayDataToSheets(spreadsheetId, writeRange, results);
+  try {
+    await updateArrayDataToSheets(spreadsheetId, writeRange, results);
+  } catch (error) {
+    throw error;
+  }
 
   // console.log(results);
 };

@@ -53,6 +53,7 @@ const writeDailyDataHorizontal = async (sheetId, sheetName, values) => {
     sheets.spreadsheets.values.update(request);
   } catch (error) {
     console.error("Error writing to sheet: ", error);
+    throw error;
   }
 };
 

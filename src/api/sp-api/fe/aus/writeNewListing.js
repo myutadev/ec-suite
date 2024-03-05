@@ -74,8 +74,18 @@ const writeNewListingAu = async (
 
   // console.log(newListingSheet);
   // console.log(resultArr);
-  batchUpdateArrayDataToSheets(spreadsheetId, updateRanges, updateData);
-  appendArrayDataToSheets(spreadsheetId, `${newListingSheet}!A2:V`, resultArr);
+  try {
+    await batchUpdateArrayDataToSheets(spreadsheetId, updateRanges, updateData);
+  } catch (error) {
+    console.log("error occurred at batchUpdateArrayDataToSheets");
+    throw error;
+  }
+  try {
+    await appendArrayDataToSheets(spreadsheetId, `${newListingSheet}!A2:V`, resultArr);
+  } catch (error) {
+    console.log("error occurred at appendArrayDataToSheets");
+    throw error;
+  }
 };
 
 // writeNewListingAu(process.env.SPREADSHEET_ID3, "Config", "Au_Listing", "Prod_DB");

@@ -38,8 +38,9 @@ const readSpreadsheetValue = async (spreadsheetId, range) => {
     const response = await sheets.spreadsheets.values.get(request);
     const sheetValues = response.data.values;
     return sheetValues;
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error(error);
+    throw error;
   }
 };
 

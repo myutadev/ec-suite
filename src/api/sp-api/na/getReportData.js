@@ -44,6 +44,7 @@ const getReportData = async (reportName, start, end, marketPlace) => {
     return formattedRes;
   } catch (e) {
     console.log(e);
+    throw e;
   }
   console.log("Function end!");
 };

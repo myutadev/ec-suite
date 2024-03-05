@@ -33,6 +33,7 @@ const getActiveInventoryReport = async () => {
     console.log(res);
   } catch (e) {
     console.log(e);
+    throw e;
   }
   console.log("Function end!");
   return res;

@@ -20,9 +20,10 @@ const writeTranslatedText = async (spreadsheetId, readRange, writeRange) => {
 
   try {
     // appendArrayDataToSheets(spreadsheetId, writeRange, values);
-    updateArrayDataToSheets(spreadsheetId, writeRange, values);
+    await updateArrayDataToSheets(spreadsheetId, writeRange, values);
   } catch (error) {
     console.error("Error writing to sheet: ", error);
+    throw error;
   }
 };
 

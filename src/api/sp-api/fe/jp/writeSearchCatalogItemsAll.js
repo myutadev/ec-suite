@@ -65,6 +65,7 @@ const writeSearchCatalogItemsAll = async () => {
       appendArrayDataToSheets(spreadsheetId, rangeForWrite, resultArr);
     } catch (error) {
       console.error("Error writing to sheet: ", error);
+      throw error;
     }
   });
 };

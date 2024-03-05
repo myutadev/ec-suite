@@ -30,6 +30,7 @@ const writeAsinsFromTitleTranslate = async (spreadsheetId, readRange, writeRange
     updateArrayDataToSheets(spreadsheetId, writeRange, values);
   } catch (error) {
     console.error("Error writing to sheet: ", error);
+    throw error;
   }
 };
 

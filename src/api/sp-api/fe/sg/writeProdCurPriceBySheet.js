@@ -45,7 +45,11 @@ const writeProdCurPriceBySheet = async (
         priceInfoArr.push([], [result.reason.message]);
       }
     });
-    updateArrayDataToSheets(spreadsheetId, updateRange, priceInfoArr);
+    try {
+      await updateArrayDataToSheets(spreadsheetId, updateRange, priceInfoArr);
+    } catch (error) {
+      throw error;
+    }
     updateStartRow += batchSize;
     console.log(`batch ${i} end`);
   }

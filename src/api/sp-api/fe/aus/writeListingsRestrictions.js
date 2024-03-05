@@ -29,8 +29,11 @@ const writeListingsRestrictionsAu = async (spreadsheetId, sheetName, start, end)
   // );
 
   // console.log(results);
-
-  updateArrayDataToSheets(spreadsheetId, writeRange, results);
+  try {
+    await updateArrayDataToSheets(spreadsheetId, writeRange, results);
+  } catch (error) {
+    throw error;
+  }
 };
 
 // writeListingsRestrictionsAu(process.env.SPREADSHEET_ID3, "Au_Listing", 11, 100);

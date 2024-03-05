@@ -39,6 +39,7 @@ const copyAndPasteFromSheetToSheet = async (copySheetId, copyRange, pasteSheetId
     console.log(values);
   } catch (err) {
     console.error(err);
+    throw err;
   }
 
   const request = {
@@ -54,6 +55,7 @@ const copyAndPasteFromSheetToSheet = async (copySheetId, copyRange, pasteSheetId
     await sheets.spreadsheets.values.update(request);
   } catch (error) {
     console.error("Error writing to sheet: ", error);
+    throw error;
   }
 };
 module.exports = {

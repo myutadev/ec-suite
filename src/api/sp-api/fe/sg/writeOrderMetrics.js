@@ -22,7 +22,11 @@ const writeOrderMetricsSg = async (spreadsheetId, marketPlace, range) => {
   const newLastRowData = values[values.length - 1][0]; // 更新データのA列に入る最終行のデータ
 
   if (await checkIfUpdateNeeded(newLastRowData, spreadsheetId, range)) {
-    appendArrayDataToSheets(spreadsheetId, range, values);
+    try {
+      await appendArrayDataToSheets(spreadsheetId, range, values);
+    } catch (error) {
+      throw error;
+    }
   } else {
     console.log("ORDER METRICS / data had been updated before");
   }

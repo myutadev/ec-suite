@@ -44,6 +44,7 @@ const getJsonReportData = async (reportName, start, end, marketPlace) => {
     return jsonData;
   } catch (e) {
     console.log(e);
+    throw e;
   }
   console.log("Function end!");
 };

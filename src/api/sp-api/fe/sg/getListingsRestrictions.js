@@ -9,10 +9,8 @@ const getListingsRestrictions = async (asin) => {
       region: "fe", // The region to use for the SP-API endpoints ("eu", "na" or "fe")
       refresh_token: process.env.refresh_token_SG, // The refresh token of your app user
       credentials: {
-        SELLING_PARTNER_APP_CLIENT_ID:
-          process.env.SELLING_PARTNER_APP_CLIENT_ID_SG,
-        SELLING_PARTNER_APP_CLIENT_SECRET:
-          process.env.SELLING_PARTNER_APP_CLIENT_SECRET_SG,
+        SELLING_PARTNER_APP_CLIENT_ID: process.env.SELLING_PARTNER_APP_CLIENT_ID_SG,
+        SELLING_PARTNER_APP_CLIENT_SECRET: process.env.SELLING_PARTNER_APP_CLIENT_SECRET_SG,
         AWS_ACCESS_KEY_ID: process.env.AWS_ACCESS_KEY_ID,
         AWS_SECRET_ACCESS_KEY: process.env.AWS_SECRET_ACCESS_KEY,
         AWS_SELLING_PARTNER_ROLE: process.env.AWS_SELLING_PARTNER_ROLE,
@@ -32,10 +30,7 @@ const getListingsRestrictions = async (asin) => {
 
     let result;
 
-    if (
-      res.restrictions[0].reasons[0].message ==
-      "ASIN does not exist in this marketplace."
-    ) {
+    if (res.restrictions[0].reasons[0].message == "ASIN does not exist in this marketplace.") {
       result = "No page";
     } else {
       result = res.restrictions[0].reasons[0].reasonCode;
@@ -43,6 +38,7 @@ const getListingsRestrictions = async (asin) => {
     return result;
   } catch (e) {
     console.log(e);
+    throw e;
   }
 };
 
