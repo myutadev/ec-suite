@@ -5,38 +5,76 @@ const { getTranslatedText } = require("../../../deepL/getTranslatedText.js");
 
 require("dotenv").config();
 
-const writeAsinsFromTitleTranslate = async (spreadsheetId, readRange, writeRange) => {
-  const keywordArr2d = await readSpreadsheetValue(spreadsheetId, readRange);
-  const keywordArr = keywordArr2d.map((item) => item[0]);
+const writeAsinsFromTitleTranslate = async (spreadsheetId, sheetName, batchSize) => {
+  const readSpreadSheetData = await readSpreadsheetValue(spreadsheetId, `${sheetName}!B1:B`);
+  const readRow = readSpreadSheetData.length + 1;
+  const readRange = `${sheetName}!A${readRow}:A`;
+  const sheetValues2d = await readSpreadsheetValue(spreadsheetId, readRange);
+  const sheetValues = sheetValues2d.flat();
+  let updateStartRow = readRow;
 
-  const values = [];
+  //batch処理開始
 
-  for (keyword of keywordArr) {
-    const result = await getTranslatedText(keyword);
-    const jaText = result[0].text;
-    console.log("jaText", jaText);
+  for (let i = 0; i < sheetValues.length; i += batchSize) {
+    //batchの行ずつ翻訳
 
-    const bestMatchAsins = await getAsinsFromTitle([jaText]);
-    bestMatchAsins.unshift(jaText);
-    values.push(bestMatchAsins);
-    console.log("bestMatchAsins is", bestMatchAsins);
-  }
+    const translatedArr = [];
+    let updateEndRow = updateStartRow + batchSize - 1;
+    let updateRange = `${sheetName}!B${updateStartRow}:G${updateEndRow}`;
+    const batch = sheetValues.slice(i, i + batchSize);
+    const batchResults = await Promise.allSettled(batch.map((title) => getTranslatedText(title)));
+    batchResults.forEach((result) => {
+      if (result.status === "fulfilled") {
+        translatedArr.push([result.value[0].text]);
+      } else {
+        translatedArr.push([], [result.reason.message]);
+      }
+    });
 
-  console.log(values);
-  // process.exit();
+    //翻訳後の配列を受取、AmazonAPIへリクエスト
+    const asinsArr = [];
 
-  try {
-    // appendArrayDataToSheets(spreadsheetId, writeRange, values);
-    updateArrayDataToSheets(spreadsheetId, writeRange, values);
-  } catch (error) {
-    console.error("Error writing to sheet: ", error);
-    throw error;
+    const batchSpApiResult = await Promise.allSettled(translatedArr.map((keyword) => getAsinsFromTitle(keyword)));
+    batchSpApiResult.forEach((result) => {
+      if (result.status === "fulfilled") {
+        asinsArr.push(result.value);
+      } else {
+        asinsArr.push([]);
+        console.log("status rejected");
+      }
+    });
+
+    // ex tr=[[word],[wordq],[dsf]] , asins[[dsa,dsa,fas,fas,fa],[sda,fsd,fsa,fsa,afa]]
+
+    const resultArr = [];
+    console.log("translated arr length", translatedArr.length);
+
+    for (let i = 0; i < translatedArr.length; i++) {
+      const combinedArr = [];
+      combinedArr.push(translatedArr[i][0]);
+
+      // combinedArr.push(asinsArr[i]);
+      //combinedArr should be like [[estima],[asin1,asin2,3,4,5]]
+      asinsArr[i].forEach((asin) => combinedArr.push(asin));
+      console.log("combinedArr", combinedArr);
+      resultArr.push(combinedArr);
+    }
+
+    try {
+      await updateArrayDataToSheets(spreadsheetId, updateRange, resultArr);
+    } catch (error) {
+      console.error("Error writing to sheet: ", error);
+      throw error;
+    }
+    updateStartRow += batchSize;
+    console.log(`batch ${i} end`);
   }
 };
+
+// writeAsinsFromTitleTranslate(process.env.SPREADSHEET_ID2, "asinsByName", 10);
+
 
 module.exports = {
   writeAsinsFromTitleTranslate,
 };
 
-// writeAsinsFromTitleTranslate(process.env.SPREADSHEET_ID2, "asinsByName!A2:A", "asinsByName!B2:G");
-// writeAsinsFromTitleTranslate(process.env.SPREADSHEET_ID_sample, "asinsByName!A2:A", "asinsByName!B2:G");

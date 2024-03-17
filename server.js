@@ -426,7 +426,7 @@ app.get("/write/jp/titleasins", async (req, res, next) => {
 app.get("/write/jp/titleasinswithtranslate", async (req, res, next) => {
   try {
     console.log(`writeAsinsFromTitleTranslate`);
-    await writeAsinsFromTitleTranslate(process.env.SPREADSHEET_ID2, "asinsByName!A2:A", "asinsByName!B2:G");
+    await writeAsinsFromTitleTranslate(process.env.SPREADSHEET_ID2, "asinsByName", 10);
     res.send("writeTranslatedText + asisFromTitle completed.");
   } catch (error) {
     console.log(error);
@@ -468,7 +468,7 @@ app.get("/write/jp/titleasins/sample", async (req, res, next) => {
 app.get("/write/jp/titleasinswithtranslate/sample", async (req, res, next) => {
   try {
     console.log(`writeAsinsFromTitleTranslate starts`);
-    writeAsinsFromTitleTranslate(process.env.SPREADSHEET_ID_sample, "asinsByName!A2:A", "asinsByName!B2:G");
+    writeAsinsFromTitleTranslate(process.env.SPREADSHEET_ID_sample, "asinsByName", 10);
     res.send("writeAsinsFromTitleTranslate.");
   } catch (error) {
     console.log(error);
