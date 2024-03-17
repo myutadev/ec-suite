@@ -398,7 +398,7 @@ app.get("/write/keepa/rivalsellerasins", async (req, res, next) => {
 app.get("/write/deepl/transrate", async (req, res, next) => {
   try {
     console.log(`writeTranslatedText starts`);
-    await writeTranslatedText(process.env.SPREADSHEET_ID2, "asinsByName!A2:A", "asinsByName!B2:B");
+    await writeTranslatedText(process.env.SPREADSHEET_ID2, "asinsByName", 10);
     res.send("writeTranslatedText completed.");
   } catch (error) {
     console.log(error);
@@ -412,7 +412,7 @@ app.get("/write/deepl/transrate", async (req, res, next) => {
 app.get("/write/jp/titleasins", async (req, res, next) => {
   try {
     console.log(`writeAsinsFromTitle starts`);
-    await writeAsinsFromTitle(process.env.SPREADSHEET_ID2, "asinsByName!B2:B", "asinsByName!C2:H");
+    await writeAsinsFromTitle(process.env.SPREADSHEET_ID2, "asinsByName", 10);
     res.send("writeAsinsFromTitle completed.");
   } catch (error) {
     console.log(error);
@@ -440,7 +440,7 @@ app.get("/write/jp/titleasinswithtranslate", async (req, res, next) => {
 app.get("/write/deepl/transrate/sample", async (req, res, next) => {
   try {
     console.log(`writeTranslatedText starts`);
-    await writeTranslatedText(process.env.SPREADSHEET_ID_sample, "asinsByName!A2:A", "asinsByName!B2:B");
+    await writeTranslatedText(process.env.SPREADSHEET_ID_sample, "asinsByName", 10);
     res.send("writeTranslatedText completed.");
   } catch (error) {
     console.log(error);
@@ -454,7 +454,7 @@ app.get("/write/deepl/transrate/sample", async (req, res, next) => {
 app.get("/write/jp/titleasins/sample", async (req, res, next) => {
   try {
     console.log(`writeAsinsFromTitle starts`);
-    await writeAsinsFromTitle(process.env.SPREADSHEET_ID_sample, "asinsByName!B2:B", "asinsByName!C2:H");
+    await writeAsinsFromTitle(process.env.SPREADSHEET_ID_sample, "asinsByName", 10);
     res.send("writeAsinsFromTitle completed.");
   } catch (error) {
     console.log(error);
