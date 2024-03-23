@@ -8,7 +8,7 @@ const marketPlaceId = {
   MX: "A1AM78C64UM0Y8",
 };
 
-const getFbaInventorySummaries = async (marketPlace) => {
+const getFbaInventorySummaries = async (marketPlace, skuArray) => {
   let res;
   // console.log('skuArray',skuArray)
   try {
@@ -29,20 +29,20 @@ const getFbaInventorySummaries = async (marketPlace) => {
       query: {
         granularityType: "Marketplace",
         granularityId: marketPlaceId[marketPlace],
-        // sellerSkus:skuArray,
+        sellerSkus: skuArray,
         marketplaceIds: [marketPlaceId[marketPlace]],
       },
     });
-    console.log(res);
+    console.log(res.inventorySummaries);
   } catch (e) {
     console.log(e);
     throw e;
   }
-  return res;
+  return res.inventorySummaries;
 };
 
 // getFbaInventorySummaries('CA',[`CA20001-220305-B07FBJ5SQJ-74.85-89.81`,`CA3973-221002-B07DVPWQ23-72.46`])
-// getFbaInventorySummaries('CA')
+// getFbaInventorySummaries("CA", ["CA67733-240323-B01BF6S1GC-40.17","CA52844-240117-B01486909S-11.92"]);
 
 module.exports = {
   getFbaInventorySummaries,
