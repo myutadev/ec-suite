@@ -40,7 +40,7 @@ const port = process.env.PORT || 3000;
 app.use(express.json());
 
 app.get("/", (req, res) => {
-  res.send("<h2>ec-suite v1.1</h2>");
+  res.send("<h2>ec-suite v1.2</h2>");
 });
 
 // 12/19 changed
