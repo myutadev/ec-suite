@@ -145,7 +145,7 @@ cron.schedule("0 11 * * *", async () => {
 // 毎週木曜日日本時間夜11時に実行
 //cron.schedule("0 23 * * 4", async () => {
 
-cron.schedule("45 11 * * 2", async () => {
+cron.schedule("0 23 * * 4", async () => {
   console.log("start update prices");
   try {
     await copyAndPasteFromSheetToSheet(
