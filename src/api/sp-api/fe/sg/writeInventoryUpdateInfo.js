@@ -39,6 +39,7 @@ const writeInventoryUpdateInfo = async (spreadsheetId, configSheet, curSellingSh
       ["price"]: arr[1],
       ["method"]: arr[4],
       ["weight"]: arr[5],
+      ["vWeight"]: arr[6], // 三辺 / 5000の値 * 1000して重さと比較する必要がある
     };
     return acc;
   }, {});
@@ -65,8 +66,8 @@ const writeInventoryUpdateInfo = async (spreadsheetId, configSheet, curSellingSh
   //   B09XHNKYL8: { price: "2227", method: "smallPacket", weight: "360" },
   //   B000S7NB2Y: { price: "6920", method: "EMS", weight: "9200" },
   // };
-
   curSellingArr.forEach((item) => {
+    let asin2 = item[0]
     try {
       const asin = item[0];
       // console.log(asin);
@@ -97,26 +98,34 @@ const writeInventoryUpdateInfo = async (spreadsheetId, configSheet, curSellingSh
 
       // 条件2 Priceあるなら出品価格計算
       //出品価格は 原価(商品代金(税込み)+出荷手数料+国際送料) / SGD to JPY rate にさらに 1-手数料 - 利益率で割る
-      //国際送料の算出
-      const shippingWeight = dbDataAsinObj[asin].weight;
+      //ここにロジックを追加→weight と vweightを比較して重い方を採用
+      const shippingWeight =
+        parseFloat(dbDataAsinObj[asin].weight) >= parseFloat(dbDataAsinObj[asin].vWeight * 1000)
+          ? parseFloat(dbDataAsinObj[asin].weight)
+          : parseFloat(dbDataAsinObj[asin].vWeight * 1000);
       const shippingMethod = dbDataAsinObj[asin].method;
+      // console.log("shipping Method", shippingMethod);
       const newPrice = parseFloat(dbDataAsinObj[asin].price);
       let ceiledShippingWeight;
-      // console.log("shippingWeight", shippingWeight);
 
+      // 30000を超えたときの処理追加
       if (shippingWeight <= 2000) {
         ceiledShippingWeight = Math.ceil(shippingWeight / 100) * 100;
       } else if (shippingWeight <= 6000) {
         ceiledShippingWeight = Math.ceil(shippingWeight / 500) * 500;
+      } else if (shippingWeight >= 30000) {
+        ceiledShippingWeight = 30000;
       } else {
         ceiledShippingWeight = Math.ceil(shippingWeight / 1000) * 1000;
       }
+      // console.log("ceiled shipping weight", ceiledShippingWeight);
+
       // console.log("ceiledShippingWeight", ceiledShippingWeight);
       // console.log(
       //   "shippingFeeObj[ceiledShippingWeight]",
       //   shippingFeeObj[ceiledShippingWeight]
       // );
-
+      
       const shippingFee = parseFloat(shippingFeeObj[ceiledShippingWeight][shippingMethod]);
 
       const totalCost = shippingFee + otherFees + newPrice;
@@ -147,6 +156,7 @@ const writeInventoryUpdateInfo = async (spreadsheetId, configSheet, curSellingSh
       // console.log("sgdTotalCost is", sgdTotalCost);
       // console.log("newListingPrice is", newListingPrice);
     } catch (e) {
+      console.log('asin is', asin2)
       console.error(e);
     }
   });
@@ -159,17 +169,14 @@ const writeInventoryUpdateInfo = async (spreadsheetId, configSheet, curSellingSh
 
   try {
     await updateArrayDataToSheets(spreadsheetId, writeRange, newPriceInventoryArr);
+    console.log(" updated");
   } catch (error) {
+    console.log("not updated");
     throw error;
   }
 };
 
-// writeInventoryUpdateInfo(
-//   process.env.SPREADSHEET_ID3,
-//   "Config",
-//   "Sg_Selling",
-//   "Prod_DB"
-// );
+// writeInventoryUpdateInfo(process.env.SPREADSHEET_ID3, "Config", "Sg_Selling", "Prod_DB");
 
 module.exports = {
   writeInventoryUpdateInfo,

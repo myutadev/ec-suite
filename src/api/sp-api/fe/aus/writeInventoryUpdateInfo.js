@@ -14,7 +14,7 @@ const writeInventoryUpdateInfoAu = async (spreadsheetId, configSheet, curSelling
   const profitRate = parseFloat(rates[0][0]);
   const amazonFeeRate = parseFloat(rates[0][1]);
   const sgdToJpy = parseFloat(rates[0][2]);
-  const otherFees = parseFloat(rates[0][3]); //国内の作業手数料300円を原価に加算
+  const otherFees = parseFloat(rates[0][3]); //国内の作業手数料300円+国内発送200円を原価に加算
 
   const shippingFeeObj = {};
 
@@ -39,6 +39,7 @@ const writeInventoryUpdateInfoAu = async (spreadsheetId, configSheet, curSelling
       ["price"]: arr[1],
       ["method"]: arr[4],
       ["weight"]: arr[5],
+      ["vWeight"]: arr[6], // 三辺 / 5000の値 * 1000して重さと比較する必要がある
     };
     return acc;
   }, {});
@@ -98,24 +99,27 @@ const writeInventoryUpdateInfoAu = async (spreadsheetId, configSheet, curSelling
       // 条件2 Priceあるなら出品価格計算
       //出品価格は 原価(商品代金(税込み)+出荷手数料+国際送料) / SGD to JPY rate にさらに 1-手数料 - 利益率で割る
       //国際送料の算出
-      const shippingWeight = dbDataAsinObj[asin].weight;
-      const shippingMethod = dbDataAsinObj[asin].method;
+
+      //ここにロジックを追加→weight と vweightを比較して重い方を採用
+      const shippingWeight =
+        parseFloat(dbDataAsinObj[asin].weight) >= parseFloat(dbDataAsinObj[asin].vWeight * 1000)
+          ? parseFloat(dbDataAsinObj[asin].weight)
+          : parseFloat(dbDataAsinObj[asin].vWeight * 1000);
+      const shippingMethod = dbDataAsinObj[asin].method; // 202404- ECMSにすることでこのロジックは不要になったが、将来戻せるように残しておく
       const newPrice = parseFloat(dbDataAsinObj[asin].price);
       let ceiledShippingWeight;
-      // console.log("shippingWeight", shippingWeight);
+
+      // 30000を超えたときの処理追加
 
       if (shippingWeight <= 2000) {
         ceiledShippingWeight = Math.ceil(shippingWeight / 100) * 100;
       } else if (shippingWeight <= 6000) {
         ceiledShippingWeight = Math.ceil(shippingWeight / 500) * 500;
+      } else if (shippingWeight >= 30000) {
+        ceiledShippingWeight = 30000;
       } else {
         ceiledShippingWeight = Math.ceil(shippingWeight / 1000) * 1000;
       }
-      // console.log("ceiledShippingWeight", ceiledShippingWeight);
-      // console.log(
-      //   "shippingFeeObj[ceiledShippingWeight]",
-      //   shippingFeeObj[ceiledShippingWeight]
-      // );
 
       const shippingFee = parseFloat(shippingFeeObj[ceiledShippingWeight][shippingMethod]);
 
@@ -163,12 +167,7 @@ const writeInventoryUpdateInfoAu = async (spreadsheetId, configSheet, curSelling
   }
 };
 
-// writeInventoryUpdateInfoAu(
-//   process.env.SPREADSHEET_ID3,
-//   "Config",
-//   "Au_Selling",
-//   "Prod_DB"
-// );
+// writeInventoryUpdateInfoAu(process.env.SPREADSHEET_ID3, "Config", "Au_Selling", "Prod_DB");
 
 module.exports = {
   writeInventoryUpdateInfoAu,

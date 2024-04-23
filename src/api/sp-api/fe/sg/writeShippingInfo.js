@@ -30,12 +30,13 @@ const writeShippingInfo = async (spreadsheetId, sheetName) => {
     }
 
     const longest = Math.max(length, width, height);
-    const sWeight = Math.floor(((length * width * height) / 6000) * 100) / 100;
-    const total = length + width + height;
+    //梱包のことを考えて各辺5cm 5cm 3cm増やす
+    const sWeight = Math.floor((((length+5) * (width+5) * (height+3)) / 5000) * 100) / 100;
+    const total = (length+5) + (width+5) + (height+3);
     const packagedWeight = weight + 200;
 
     //SIZEオーバーチェック
-    if (longest >= 147 || total >= 290 || packagedWeight >= 27000) {
+    if (longest >= 100 || total >= 250 || packagedWeight >= 27000) {
       results.push(["size over"]);
       return;
     }
