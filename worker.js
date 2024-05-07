@@ -12,7 +12,7 @@ const { getStartOfYesterday, getEndOfYesterday } = require("./src/lib/getYesterd
 const { writeReportData } = require("./src/api/sp-api/na/writeReportData");
 const { writeBusinessReportDaily } = require("./src/api/sp-api/na/writeBusinessReportDaily");
 const { writeSalesAndTrafficReportByDateAu } = require("./src/api/sp-api/fe/aus/writeSalesAndTrafficReportByDateAu");
-const { writeProdCurPriceBySheet } = require("./src/api/sp-api/fe/sg/writeProdCurPriceBySheet");
+const { writeProdCurPriceBySheetBatch } = require("./src/api/sp-api/fe/sg/writeProdCurPriceBySheetBatch");
 const { deleteSheetRange } = require("./src/lib/deleteSheetRange");
 const { copyAndPasteFromSheetToSheet } = require("./src/lib/copyAndPasteFromSheetToSheet");
 const axios = require("axios");
@@ -158,14 +158,14 @@ cron.schedule("0 23 * * 4", async () => {
     await deleteSheetRange(process.env.SPREADSHEET_ID3, "Fetch_manual!C2:C");
 
     try {
-      await writeProdCurPriceBySheet(
+      writeProdCurPriceBySheetBatch(
         process.env.SPREADSHEET_ID3,
         "Fetch_manual",
         "D", // asinのある列
-        "C",
-        "B",
-        "E",
-        600
+        "C", // update check
+        "B", // update start
+        "E", // update end
+        20
       );
     } catch (error) {
       console.error(error);

@@ -33,6 +33,7 @@ const { getMatch } = require("./src/lib/getMatch.js");
 const { writeCatalogItemFromSheetShopee } = require("./src/api/sp-api/fe/jp/writeCatalogItemFromSheetShopee.js");
 const { writeInventoryLedgerReport } = require("./src/api/sp-api/na/writeInventoryLedgerReport");
 const axios = require("axios");
+const { writeProdCurPriceBySheetBatch } = require("./src/api/sp-api/fe/sg/writeProdCurPriceBySheetBatch.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -158,17 +159,18 @@ app.get("/write/prodprice/", async (req, res, next) => {
 
 app.get("/write/prodprice/manual", async (req, res, next) => {
   try {
-    await writeProdCurPriceBySheet(
+    // 240507 batchに変更
+    writeProdCurPriceBySheetBatch(
       process.env.SPREADSHEET_ID3,
       "Fetch_manual",
       "D", // asinのある列
-      "C",
-      "B",
-      "E",
-      600
+      "C", // update check
+      "B", // update start
+      "E", // update end
+      20
     );
-    console.log(`writeProdCurPriceBySheet started`);
-    res.send("writeProdCurPriceBySheet completed.");
+    console.log(`writeProdCurPriceBySheetBatch started`);
+    res.send("writeProdCurPriceBySheetBatch completed.");
   } catch (error) {
     console.log(error);
     next(error);

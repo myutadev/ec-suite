@@ -29,9 +29,8 @@ const getItemOffers = async (asin) => {
         Asin: asin,
       },
     });
-    // console.log("this is res", res);
     // console.log("this is res?.Offers[0]", res?.Offers[0].ListingPrice.Amount);
-    // console.log("resis", res);
+    console.log("res is", res);
 
     const resultObj = {
       [res.ASIN]: {
@@ -85,4 +84,4 @@ module.exports = {
   getItemOffers,
 };
 
-// getItemOffers("B00FF2PUTY");
+// getItemOffers("B000OQA3N4");
