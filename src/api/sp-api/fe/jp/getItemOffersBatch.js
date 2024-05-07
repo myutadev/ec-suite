@@ -19,7 +19,7 @@ const getItemOffersBatch = async (asinArr) => {
       },
     });
 
-    console.log("request Arr is ", requestArr);
+    // console.log("request Arr is ", requestArr);
 
     const response = await sellingPartner.callAPI({
       body: {
@@ -29,47 +29,67 @@ const getItemOffersBatch = async (asinArr) => {
       method: "POST",
     });
 
+    // console.log("response is", response.responses);
+
     const resultObjArr = response.responses.map((responseObj) => {
-      const res = responseObj.body.payload;
+      //error handling
 
-      const curResObj = {
-        [res.ASIN]: {
-          update: moment().tz("Asia/Tokyo").format(),
-          Shipping: [
-            res?.Offers[0] ? res?.Offers[0].Shipping.Amount ?? "" : "",
-            res?.Offers[1] ? res?.Offers[1].Shipping.Amount ?? "" : "",
-          ],
-          LowestPrice: [
-            res?.Offers[0] ? res?.Offers[0].ListingPrice.Amount ?? "" : "",
-            res?.Offers[1] ? res?.Offers[1].ListingPrice.Amount ?? "" : "",
-          ],
-          BuyBoxPrices: Array.isArray(res.Summary.BuyBoxPrices)
-            ? res.Summary.BuyBoxPrices[0]?.LandedPrice?.Amount ?? ""
-            : "",
-          TotalOfferCount: res?.Summary?.TotalOfferCount ?? "",
-          Condition: res?.Offers[0]?.SubCondition ?? "",
-          ShipsFromCountry: [
-            res?.Offers[0] ? res?.Offers[0].ShipsFrom?.Country ?? "" : "",
-            res?.Offers[1] ? res?.Offers[1].ShipsFrom?.Country ?? "" : "",
-          ],
-          AvailabilityType: [
-            res?.Offers[0] ? res?.Offers[0].ShippingTime?.availabilityType ?? "" : "",
-            res?.Offers[1] ? res?.Offers[1].ShippingTime?.availabilityType ?? "" : "",
-          ],
-          MaximumHours: [
-            res?.Offers[0] ? res?.Offers[0].ShippingTime?.maximumHours ?? "" : "",
-            res?.Offers[1] ? res?.Offers[1].ShippingTime?.maximumHours ?? "" : "",
-          ],
-        },
-      };
+      if (responseObj.status.statusCode == 400) {
+        console.log("error 400");
+        console.log(responseObj.request.Asin);
+        return {
+          [responseObj.request.Asin]: {
+            update: moment().tz("Asia/Tokyo").format(),
+            error: "the page doesn't exist",
+          },
+        };
+      } else {
+        const res = responseObj.body.payload;
+        const curResObj = {
+          [res.ASIN]: {
+            update: moment().tz("Asia/Tokyo").format(),
+            Shipping: [
+              res?.Offers[0] ? res?.Offers[0].Shipping.Amount ?? "" : "",
+              res?.Offers[1] ? res?.Offers[1].Shipping.Amount ?? "" : "",
+            ],
+            LowestPrice: [
+              res?.Offers[0] ? res?.Offers[0].ListingPrice.Amount ?? "" : "",
+              res?.Offers[1] ? res?.Offers[1].ListingPrice.Amount ?? "" : "",
+            ],
+            BuyBoxPrices: Array.isArray(res.Summary.BuyBoxPrices)
+              ? res.Summary.BuyBoxPrices[0]?.LandedPrice?.Amount ?? ""
+              : "",
+            TotalOfferCount: res?.Summary?.TotalOfferCount ?? "",
+            Condition: res?.Offers[0]?.SubCondition ?? "",
+            ShipsFromCountry: [
+              res?.Offers[0] ? res?.Offers[0].ShipsFrom?.Country ?? "" : "",
+              res?.Offers[1] ? res?.Offers[1].ShipsFrom?.Country ?? "" : "",
+            ],
+            AvailabilityType: [
+              res?.Offers[0] ? res?.Offers[0].ShippingTime?.availabilityType ?? "" : "",
+              res?.Offers[1] ? res?.Offers[1].ShippingTime?.availabilityType ?? "" : "",
+            ],
+            MaximumHours: [
+              res?.Offers[0] ? res?.Offers[0].ShippingTime?.maximumHours ?? "" : "",
+              res?.Offers[1] ? res?.Offers[1].ShippingTime?.maximumHours ?? "" : "",
+            ],
+          },
+        };
 
-      return curResObj;
+        return curResObj;
+      }
     });
 
-    // console.log("resultObjArr", resultObjArr);
+    console.log("resultObjArr", resultObjArr);
     return resultObjArr;
-  } catch (e) {
-    console.log(e.code);
+  } catch {
+    console.log("unknown error");
+    // return {
+    //   [asin]: {
+    //     update: moment().tz("Asia/Tokyo").format(),
+    //     error: e.code,
+    //   },
+    // };
   }
 };
 
@@ -77,4 +97,6 @@ module.exports = {
   getItemOffersBatch,
 };
 
-// getItemOffersBatch(["B000OQA3N4", "B00601CABA"]);
+// getItemOffersBatch(["B0B5M4LFNK", "B00601CABA"]);
+// getItemOffersBatch(["B00601CABA"]);
+// getItemOffersBatch(["B00601CABA", "B0B5M4LFNK"]);

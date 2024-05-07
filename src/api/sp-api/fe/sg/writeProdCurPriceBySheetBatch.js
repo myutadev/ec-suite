@@ -30,12 +30,17 @@ const writeProdCurPriceBySheetBatch = async (
     let updateRange = `${sheetName}!${updateStartCol}${updateStartRow}:${updateEndCol}${updateEndRow}`;
 
     const batch = asinArr.slice(i, i + batchSize);
-    console.log(batch);
 
     const curItemOffersObjArr = await getItemOffersBatch(batch);
 
     const promises = curItemOffersObjArr.map(async (obj) => {
-      return getAvailablePriceArr(obj, Object.keys(obj)[0]);
+      console.log("cur obj is", obj);
+      try {
+        console.log("obj is", obj);
+        return getAvailablePriceArr(obj, Object.keys(obj)[0]);
+      } catch (e) {
+        return;
+      }
     });
 
     await Promise.allSettled(promises).then((results) =>
@@ -66,10 +71,9 @@ const writeProdCurPriceBySheetBatch = async (
 module.exports = {
   writeProdCurPriceBySheetBatch,
 };
-
 // writeProdCurPriceBySheetBatch(
 //   process.env.SPREADSHEET_ID3,
-//   "Fetch_manual2",
+//   "Fetch_manual",
 //   "D", // asinのある列
 //   "C", // update check
 //   "B", // update start
