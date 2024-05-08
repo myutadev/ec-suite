@@ -61,7 +61,7 @@ const writeProdCurPriceBySheetBatch = async (
     }
 
     // 10秒に1回のペースに制御 : だいたい7000にすると10秒に1回くらいになった
-    await new Promise((resolve) => setTimeout(resolve, 7000));
+    await new Promise((resolve) => setTimeout(resolve, 10000));
 
     updateStartRow += batchSize;
     console.log(`batch ${i} end`);
@@ -71,9 +71,10 @@ const writeProdCurPriceBySheetBatch = async (
 module.exports = {
   writeProdCurPriceBySheetBatch,
 };
+
 // writeProdCurPriceBySheetBatch(
 //   process.env.SPREADSHEET_ID3,
-//   "Fetch_manual",
+//   "Fetch_manual2",
 //   "D", // asinのある列
 //   "C", // update check
 //   "B", // update start
