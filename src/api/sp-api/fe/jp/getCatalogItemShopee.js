@@ -171,7 +171,6 @@ const getCatalogItemShopee = async (asin) => {
       resultArray.push("");
       resultArray.push("");
       resultArray.push("");
-
     } else {
       const parentAsinRes = await sellingPartner.callAPI({
         operation: "getCatalogItem",
@@ -197,8 +196,13 @@ const getCatalogItemShopee = async (asin) => {
       }
       resultArray.push(attributionsArr[0]);
       resultArray.push(resCatalog.attributes[attributionsArr[0]][0].value);
+
       // attributionsが2種類のときと3種類のときで処理を分ける。3種類なら 後ろの2つは連結させる
       switch (attributionsArr.length) {
+        case 1:
+          resultArray.push("");
+          resultArray.push("");
+          break;
         case 2:
           resultArray.push(attributionsArr[1]);
           resultArray.push(resCatalog.attributes[attributionsArr[1]][0].value);
