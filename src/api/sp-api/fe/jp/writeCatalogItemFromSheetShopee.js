@@ -15,7 +15,7 @@ const writeCatalogItemFromSheetShopee = async (spreadsheetId, sheetName, batchSi
   for (let i = 0; i < asinArr.length; i += batchSize) {
     const priceInfoArr = [];
     let updateEndRow = updateStartRow + batchSize - 1;
-    let updateRange = `${sheetName}!B${updateStartRow}:AO${updateEndRow}`;
+    let updateRange = `${sheetName}!B${updateStartRow}:AS${updateEndRow}`;
     const batch = asinArr.slice(i, i + batchSize);
     const batchResults = await Promise.allSettled(batch.map((asin) => getCatalogItemShopee(asin)));
     batchResults.forEach((result) => {

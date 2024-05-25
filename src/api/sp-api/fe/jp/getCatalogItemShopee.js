@@ -44,7 +44,15 @@ const getCatalogItemShopee = async (asin) => {
       },
       query: {
         marketplaceIds: ["A1VC38T7YXB528"], // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
-        includedData: ["attributes", "images", "identifiers", "summaries", "salesRanks", "relationships"],
+        includedData: [
+          "attributes",
+          "images",
+          "identifiers",
+          "summaries",
+          "salesRanks",
+          "relationships",
+          "classifications",
+        ],
       },
       options: {
         version: "2022-04-01",
@@ -53,7 +61,6 @@ const getCatalogItemShopee = async (asin) => {
 
     console.log("resCatalog is", resCatalog);
     console.log("attributes is", resCatalog.attributes);
-
 
     // 共通項目
     resultArray.push(resCatalog.attributes?.item_name[0]?.value ?? "no name");
@@ -160,6 +167,11 @@ const getCatalogItemShopee = async (asin) => {
     resultArray.push(category2);
 
     if (!parentAsin) {
+      resultArray.push("");
+      resultArray.push("");
+      resultArray.push("");
+      resultArray.push("");
+
     } else {
       const parentAsinRes = await sellingPartner.callAPI({
         operation: "getCatalogItem",
@@ -210,7 +222,9 @@ const getCatalogItemShopee = async (asin) => {
           break;
       }
     }
+    //AmazonClasification ID
 
+    resultArray.push(resCatalog.classifications[0].classifications[0]?.classificationId ?? "");
 
     return resultArray;
   } catch (e) {
@@ -219,7 +233,7 @@ const getCatalogItemShopee = async (asin) => {
   }
 };
 
-// 
+//
 // getCatalogItem("B08GFH65D5"); // iwaki
 
 module.exports = {
