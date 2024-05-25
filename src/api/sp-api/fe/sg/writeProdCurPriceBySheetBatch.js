@@ -74,7 +74,7 @@ module.exports = {
 
 // writeProdCurPriceBySheetBatch(
 //   process.env.SPREADSHEET_ID3,
-//   "Fetch_manual2",
+//   "Fetch_manual",
 //   "D", // asinのある列
 //   "C", // update check
 //   "B", // update start

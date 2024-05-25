@@ -43,8 +43,8 @@ const writeSalesAndTrafficReportByDate = async (spreadsheetId, range, start, end
 };
 
 // const test = async () => {
-//   const start = "2024-02-16T00:00:00";
-//   const end = "2024-03-01T23:59:59";
+//   const start = "2024-05-08T00:00:00";
+//   const end = "2024-05-09T23:59:59";
 //   console.log(start);
 //   console.log(end);
 //   writeSalesAndTrafficReportByDate(process.env.SPREADSHEET_ID4, "AmaSG!A2:J", `${start}-07:00`, `${end}-07:00`, "SG");
