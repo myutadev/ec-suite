@@ -41,28 +41,21 @@ const getCatalogItem = async (asin) => {
       },
       query: {
         marketplaceIds: ["A1VC38T7YXB528"], // Ca A2EUQ1WTGCTBG2 / US ATVPDKIKX0DER // MX A1AM78C64UM0Y8
-        includedData: ["attributes", "images", "identifiers", "summaries", "salesRanks", "relationships"],
+        includedData: [
+          "attributes",
+          "images",
+          "identifiers",
+          "summaries",
+          "salesRanks",
+          "relationships",
+          "classifications",
+        ],
       },
       options: {
         version: "2022-04-01",
       },
     });
-    console.log("resCatalog is", resCatalog);
-    // console.log("attributes is", resCatalog.attributes);
-    // console.log("resCatalog displayName is", resCatalog.summaries[0].browseClassification.displayName);
-    // console.log("websiteDisplayGroup displayName is", resCatalog.summaries[0].websiteDisplayGroup);
-    // console.log("color displayName is", resCatalog.attributes?.color?.[0].value ?? "");
-    // console.log("size displayName is", resCatalog.attributes?.size?.[0].value ?? "");
-    // console.log("style displayName is", resCatalog.attributes?.style?.[0].value ?? "");
-    // console.log("pattern displayName is", resCatalog.attributes?.pattern?.[0].value ?? "");
-
-    // console.log("vendorDetails is", resCatalog.vendorDetails[0]);
-    // console.log("relationships is", resCatalog.relationships[0].parentAsins);
-    // console.log("relationships is", resCatalog.relationships[0]);
-    // console.log("parentAsins is", resCatalog.relationships[0].relationships[0]?.parentAsins ?? "");
-    // console.log("relationships[0].relationships is", resCatalog.relationships[0].relationships);
-    // console.log("variationTheme is", resCatalog.relationships[0]?.variationTheme ?? "");
-
+    // console.log("resCatalog is", resCatalog);
 
     resultArray.push(resCatalog.attributes?.item_name[0]?.value ?? "no name");
     resultArray.push(resCatalog.summaries[0].brand),
@@ -163,6 +156,8 @@ const getCatalogItem = async (asin) => {
     resultArray.push(resCatalog.images[0]?.images[12]?.link ?? "");
     resultArray.push(resCatalog.images[0]?.images[15]?.link ?? "");
     resultArray.push(resCatalog.images[0]?.images[18]?.link ?? "");
+    resultArray.push(resCatalog.classifications[0].classifications[0]?.classificationId ?? "");
+
     // console.log(`result array is `,resultArray);
 
     // await apiDataArray.push(resultArray);
@@ -173,8 +168,6 @@ const getCatalogItem = async (asin) => {
     return resultArray;
   }
 };
-
-
 
 // getCatalogItem("B0CHQDF4K3"); // iwaki
 // getCatalogItem("B0BGXYCQD8"); // iwaki

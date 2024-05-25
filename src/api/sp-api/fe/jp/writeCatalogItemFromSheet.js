@@ -4,7 +4,7 @@ const { updateArrayDataToSheets } = require("../../../../lib/updateArrayDataToSh
 require("dotenv").config();
 
 const writeCatalogItemFromSheet = async (spreadsheetId, sheetName, batchSize) => {
-  const readSpreadSheetData = await readSpreadsheetValue(spreadsheetId, `${sheetName}!B1:AH`);
+  const readSpreadSheetData = await readSpreadsheetValue(spreadsheetId, `${sheetName}!B1:AI`);
   const readRow = readSpreadSheetData.length + 1;
   const readRange = `${sheetName}!A${readRow}:A`;
   const sheetValues = await readSpreadsheetValue(spreadsheetId, readRange);
@@ -15,7 +15,7 @@ const writeCatalogItemFromSheet = async (spreadsheetId, sheetName, batchSize) =>
   for (let i = 0; i < asinArr.length; i += batchSize) {
     const priceInfoArr = [];
     let updateEndRow = updateStartRow + batchSize - 1;
-    let updateRange = `${sheetName}!B${updateStartRow}:AH${updateEndRow}`;
+    let updateRange = `${sheetName}!B${updateStartRow}:AI${updateEndRow}`;
     const batch = asinArr.slice(i, i + batchSize);
     const batchResults = await Promise.allSettled(batch.map((asin) => getCatalogItem(asin)));
     batchResults.forEach((result) => {
@@ -31,7 +31,7 @@ const writeCatalogItemFromSheet = async (spreadsheetId, sheetName, batchSize) =>
   }
 };
 
-// writeCatalogItemFromSheet(process.env.SPREADSHEET_ID2, "fetchProdInfo(Yuta)", 100);
+// writeCatalogItemFromSheet(process.env.SPREADSHEET_ID2, "fetchProdInfo", 100);
 
 module.exports = {
   writeCatalogItemFromSheet,
