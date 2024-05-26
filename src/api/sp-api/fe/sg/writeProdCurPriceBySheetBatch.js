@@ -1,4 +1,5 @@
 require("dotenv").config();
+const { notifySlack } = require("../../../../lib/notifySlack.js");
 const { readSpreadsheetValue } = require("../../../../lib/readSpreadsheetValue.js");
 const { updateArrayDataToSheets } = require("../../../../lib/updateArrayDataToSheets.js");
 const { getItemOffersBatch } = require("../jp/getItemOffersBatch.js");
@@ -39,6 +40,7 @@ const writeProdCurPriceBySheetBatch = async (
         console.log("obj is", obj);
         return getAvailablePriceArr(obj, Object.keys(obj)[0]);
       } catch (e) {
+        notifySlack(e);
         return;
       }
     });
@@ -57,6 +59,7 @@ const writeProdCurPriceBySheetBatch = async (
     try {
       await updateArrayDataToSheets(spreadsheetId, updateRange, priceInfoArr);
     } catch (error) {
+      notifySlack(error);
       throw error;
     }
 

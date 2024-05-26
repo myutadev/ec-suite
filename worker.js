@@ -16,19 +16,22 @@ const { writeProdCurPriceBySheetBatch } = require("./src/api/sp-api/fe/sg/writeP
 const { deleteSheetRange } = require("./src/lib/deleteSheetRange");
 const { copyAndPasteFromSheetToSheet } = require("./src/lib/copyAndPasteFromSheetToSheet");
 const axios = require("axios");
+const { notifySlack } = require("./src/lib/notifySlack");
 
 console.log("worker.js is running");
 
 //エラー通知用
-function notifySlack(error) {
-  const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
-  axios
-    .post(SLACK_WEBHOOK_URL, {
-      text: `An error occurred in EC-suite WORKER: ${error.message} \n stack trace:${error.stack}`,
-    })
-    .then(() => console.log("Notified Slack about the error."))
-    .catch(() => console.log("Error occurred while notifying Slack."));
-}
+// function notifySlack(error) {
+//   const SLACK_WEBHOOK_URL = process.env.SLACK_WEBHOOK_URL;
+//   axios
+//     .post(SLACK_WEBHOOK_URL, {
+//       text: `An error occurred in EC-suite WORKER: ${error.message} \n stack trace:${error.stack}`,
+//     })
+//     .then(() => console.log("Notified Slack about the error."))
+//     .catch(() => console.log("Error occurred while notifying Slack."));
+// }
+
+
 
 cron.schedule("0 18 * * *", async () => {
   console.log("cron job at 18");
@@ -37,11 +40,29 @@ cron.schedule("0 18 * * *", async () => {
   const end = await getEndOfYesterday();
 
   try {
-    await writeOrderMetrics(process.env.SPREADSHEET_ID, "CA", "getOrderMetricsCA!A2:X");
-    await writeOrderMetrics(process.env.SPREADSHEET_ID, "US", "getOrderMetricsUS!A2:X");
-    await writeOrderMetrics(process.env.SPREADSHEET_ID, "MX", "getOrderMetricsMX!A2:X");
+    await writeOrderMetrics(
+      process.env.SPREADSHEET_ID,
+      "CA",
+      "getOrderMetricsCA!A2:X",
+      `${start}-07:00`,
+      `${end}-07:00`
+    );
+    await writeOrderMetrics(
+      process.env.SPREADSHEET_ID,
+      "US",
+      "getOrderMetricsUS!A2:X",
+      `${start}-07:00`,
+      `${end}-07:00`
+    );
+    await writeOrderMetrics(
+      process.env.SPREADSHEET_ID,
+      "MX",
+      "getOrderMetricsMX!A2:X",
+      `${start}-07:00`,
+      `${end}-07:00`
+    );
   } catch (error) {
-    notifySlack(error);
+    notif(error);
   }
 
   try {
