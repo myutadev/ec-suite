@@ -17,3 +17,10 @@ scraper/
 getMarketPlaceOffer.js
 src/api/shopee/my
 getCatalogItem2.js
+
+//開発中 au - 価格更新機能
+src/api/sp-api/fe/aus/getListingItemType.js
+src/api/sp-api/fe/aus/patchListingsItemInventory.js
+src/api/sp-api/fe/aus/patchListingsItemPrice.js
+src/api/sp-api/fe/aus/updateItemsPriceAndInventory.js
+src/api/sp-api/fe/aus/patchListingsItemPriceInventory.js
