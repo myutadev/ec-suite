@@ -70,6 +70,19 @@ app.get("/write/catalog", async (req, res, next) => {
   }
 });
 
+// 240829 added
+app.get("/write/catalog/sg", async (req, res, next) => {
+  try {
+    await writeGetCatalogItemToSheetSg(process.env.SPREADSHEET_ID, "SGfetchProdInfo");
+    console.log(`writeGetCatalogItemToSheetSg started`);
+    res.send("writeGetCatalogItemToSheetSg completed.");
+  } catch (error) {
+    console.log(error);
+    next(error);
+    // res.status(500).send("An error occurred in writeGetCatalogItemToSheet.");
+  }
+});
+
 //12/19 changed
 app.get("/write/fnsku", async (req, res, next) => {
   try {
