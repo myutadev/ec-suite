@@ -34,6 +34,7 @@ const { writeCatalogItemFromSheetShopee } = require("./src/api/sp-api/fe/jp/writ
 const { writeInventoryLedgerReport } = require("./src/api/sp-api/na/writeInventoryLedgerReport");
 const axios = require("axios");
 const { writeProdCurPriceBySheetBatch } = require("./src/api/sp-api/fe/sg/writeProdCurPriceBySheetBatch.js");
+const { writeGetCatalogItemToSheetSg } = require("./src/api/sp-api/fe/sg/writeGetCatalogItemToSheet.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
