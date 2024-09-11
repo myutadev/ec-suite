@@ -35,6 +35,7 @@ const { writeInventoryLedgerReport } = require("./src/api/sp-api/na/writeInvento
 const axios = require("axios");
 const { writeProdCurPriceBySheetBatch } = require("./src/api/sp-api/fe/sg/writeProdCurPriceBySheetBatch.js");
 const { writeGetCatalogItemToSheetSg } = require("./src/api/sp-api/fe/sg/writeGetCatalogItemToSheet.js");
+const { writeGetCatalogItemToSheetAu } = require("./src/api/sp-api/fe/aus/writeGetCatalogItemToSheet.js");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -77,6 +78,19 @@ app.get("/write/catalog/sg", async (req, res, next) => {
     await writeGetCatalogItemToSheetSg(process.env.SPREADSHEET_ID, "SGfetchProdInfo");
     console.log(`writeGetCatalogItemToSheetSg started`);
     res.send("writeGetCatalogItemToSheetSg completed.");
+  } catch (error) {
+    console.log(error);
+    next(error);
+    // res.status(500).send("An error occurred in writeGetCatalogItemToSheet.");
+  }
+});
+
+// 240911 added
+app.get("/write/catalog/au", async (req, res, next) => {
+  try {
+    await writeGetCatalogItemToSheetAu(process.env.SPREADSHEET_ID, "AUfetchProdInfo");
+    console.log(`writeGetCatalogItemToSheetAu started`);
+    res.send("writeGetCatalogItemToSheetAu completed.");
   } catch (error) {
     console.log(error);
     next(error);
