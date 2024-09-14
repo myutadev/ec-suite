@@ -1,5 +1,4 @@
 const SellingPartnerAPI = require("amazon-sp-api");
-const { getStartOfYesterday, getEndOfYesterday } = require("../../../lib/getYesterday");
 require("dotenv").config();
 
 const marketPlaceId = {
@@ -8,13 +7,9 @@ const marketPlaceId = {
   MX: "A1AM78C64UM0Y8",
 };
 
-const getOrderMetrics = async (marketPlace) => {
+const getOrderMetrics = async (marketPlace,start,end) => {
   //const getShipments =
   let res;
-  const start = `${getStartOfYesterday()}-07:00`; // `${getStartOfYesterday()}-07:00`
-  const end = `${getEndOfYesterday()}-07:00`; //`${getEndOfYesterday()}-07:00`
-  // const start = `2024-02-07T00:00:00-07:00`// `${getStartOfYesterday()}-07:00`
-  // const end = `2024-02-08T00:00:00-07:00` //`${getEndOfYesterday()}-07:00`
   let yesterday = `${start}--${end}`;
 
   try {
