@@ -2,11 +2,18 @@ const { getFinances } = require("./getFinances.js");
 const { updateArrayDataToSheets } = require("../../../lib/updateArrayDataToSheets.js");
 const { checkIfUpdateNeeded } = require("../../../lib/checkIfUpdateNeeded.js");
 const { readSpreadsheetValue } = require("../../../lib/readSpreadsheetValue.js");
+const { getStartOfYesterday, getEndOfYesterday } = require("../../../lib/getYesterday");
 
 const writeRefundsFromFinances = async (spreadsheetId, sheetName) => {
   console.log("writeRefundsGetFinancesStarted");
+  const start = `${getStartOfYesterday()}-07:00`; // `${getStartOfYesterday()}-07:00`
+  const end = `${getEndOfYesterday()}-07:00`; //`${getEndOfYesterday()}-07:00`
+
+  // const start = `2024-09-11T00:00:00-07:00`; // `${getStartOfYesterday()}-07:00`
+  // const end = `2024-09-13T23:59:59-07:00`; //`${getEndOfYesterday()}-07:00`
+
   const range = `${sheetName}!A1:L`;
-  const amazonData = await getFinances();
+  const amazonData = await getFinances(start, end);
   console.log(range);
   const sheetData = await readSpreadsheetValue(spreadsheetId, range);
   const updateStartRow = sheetData.length + 1;
@@ -47,7 +54,7 @@ const writeRefundsFromFinances = async (spreadsheetId, sheetName) => {
     console.log("REFUND / data had been updated before");
   }
 };
-// writeRefundsFromFinances(process.env.SPREADSHEET_ID,"refunds");
+// writeRefundsFromFinances(process.env.SPREADSHEET_ID, "refunds");
 
 module.exports = {
   writeRefundsFromFinances,
