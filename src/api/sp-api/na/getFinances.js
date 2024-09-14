@@ -2,11 +2,8 @@ const SellingPartnerAPI = require("amazon-sp-api");
 const { getStartOfYesterday, getEndOfYesterday } = require("../../../lib/getYesterday");
 require("dotenv").config();
 
-const getFinances = async () => {
+const getFinances = async (start, end) => {
   let res;
-  const start = `${getStartOfYesterday()}-07:00`; // `${getStartOfYesterday()}-07:00`
-  const end = `${getEndOfYesterday()}-07:00`; //`${getEndOfYesterday()}-07:00`
-
   try {
     let sellingPartner = new SellingPartnerAPI({
       region: "na",

@@ -1,9 +1,19 @@
 const { getFinances } = require("./getFinances");
 const { appendArrayDataToSheets } = require("../../../lib/appendArrayDataToSheets.js");
 const { checkIfUpdateNeeded } = require("../../../lib/checkIfUpdateNeeded.js");
+const { getStartOfYesterday, getEndOfYesterday } = require("../../../lib/getYesterday");
 
 const writeFinances = async (spreadsheetId, range) => {
-  const amazonData = await getFinances();
+  const start = `${getStartOfYesterday()}-07:00`; // `${getStartOfYesterday()}-07:00`
+  const end = `${getEndOfYesterday()}-07:00`; //`${getEndOfYesterday()}-07:00`
+
+  // 2024-01-23T00:00:00-07:00
+  //  2024-01-23T23:59:59-07:00
+
+  // const start = `2024-09-11T00:00:00-07:00`; // `${getStartOfYesterday()}-07:00`
+  // const end = `2024-09-11T23:59:59-07:00`; //`${getEndOfYesterday()}-07:00`
+
+  const amazonData = await getFinances(start, end);
 
   const values = amazonData.FinancialEvents.ShipmentEventList.map((item) => [
     item.AmazonOrderId,
