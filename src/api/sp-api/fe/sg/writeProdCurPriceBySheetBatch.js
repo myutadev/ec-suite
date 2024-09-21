@@ -41,6 +41,7 @@ const writeProdCurPriceBySheetBatch = async (
           console.log("obj is", obj);
           return getAvailablePriceArr(obj, Object.keys(obj)[0]);
         } catch (e) {
+          console.log("error from the first", e);
           notifySlack(e);
           return;
         }
@@ -60,6 +61,8 @@ const writeProdCurPriceBySheetBatch = async (
       try {
         await updateArrayDataToSheets(spreadsheetId, updateRange, priceInfoArr);
       } catch (error) {
+        console.log("error from the middle", error);
+
         notifySlack(error);
         continue;
       }
@@ -70,6 +73,7 @@ const writeProdCurPriceBySheetBatch = async (
       updateStartRow += batchSize;
       console.log(`batch ${i} end`);
     } catch (error) {
+      console.log("error from the end", error);
       notifySlack(error);
       continue;
     }

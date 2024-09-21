@@ -29,8 +29,6 @@ const getItemOffersBatch = async (asinArr) => {
       method: "POST",
     });
 
-    // console.log("response is", response.responses);
-
     const resultObjArr = response.responses.map((responseObj) => {
       //error handling
 
@@ -82,8 +80,8 @@ const getItemOffersBatch = async (asinArr) => {
 
     console.log("resultObjArr", resultObjArr);
     return resultObjArr;
-  } catch {
-    console.log("unknown error");
+  } catch (e) {
+    console.log("unknown error", e);
     // return {
     //   [asin]: {
     //     update: moment().tz("Asia/Tokyo").format(),

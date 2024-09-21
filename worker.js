@@ -163,39 +163,39 @@ cron.schedule("0 11 * * *", async () => {
   }
 });
 
-// 毎週木曜日日本時間夜11時に実行
+// 毎週木曜日日本時間夜11時に実行  無在庫用の価格自動更新→一旦ストップさせる
 //cron.schedule("0 23 * * 4", async () => {
 
-cron.schedule("30 10 * * 6", async () => {
-  console.log("start update prices");
-  try {
-    await copyAndPasteFromSheetToSheet(
-      process.env.SPREADSHEET_ID3,
-      "Prod_DB!A2:D",
-      process.env.SPREADSHEET_ID3,
-      "Fetch_manual!A2:D"
-    );
+// cron.schedule("30 10 * * 6", async () => {
+//   console.log("start update prices");
+//   try {
+//     await copyAndPasteFromSheetToSheet(
+//       process.env.SPREADSHEET_ID3,
+//       "Prod_DB!A2:D",
+//       process.env.SPREADSHEET_ID3,
+//       "Fetch_manual!A2:D"
+//     );
 
-    await deleteSheetRange(process.env.SPREADSHEET_ID3, "Fetch_manual!C2:C");
+//     await deleteSheetRange(process.env.SPREADSHEET_ID3, "Fetch_manual!C2:C");
 
-    try {
-      writeProdCurPriceBySheetBatch(
-        process.env.SPREADSHEET_ID3,
-        "Fetch_manual",
-        "D", // asinのある列
-        "C", // update check
-        "B", // update start
-        "E", // update end
-        20
-      );
-    } catch (error) {
-      console.error(error);
-      throw error;
-    }
-  } catch (error) {
-    notifySlack(error);
-  }
-});
+//     try {
+//       writeProdCurPriceBySheetBatch(
+//         process.env.SPREADSHEET_ID3,
+//         "Fetch_manual",
+//         "D", // asinのある列
+//         "C", // update check
+//         "B", // update start
+//         "E", // update end
+//         20
+//       );
+//     } catch (error) {
+//       console.error(error);
+//       throw error;
+//     }
+//   } catch (error) {
+//     notifySlack(error);
+//   }
+// });
 
 //テスト用 1分ごとに実行
 // cron.schedule('*/1 * * * *', () => {
