@@ -77,18 +77,18 @@ cron.schedule("0 18 * * *", async () => {
     notifySlack(error);
   }
 
-  try {
-    await writeReportData(
-      process.env.SPREADSHEET_ID,
-      "InvReport_US!A2:AB",
-      "GET_FBA_INVENTORY_PLANNING_DATA",
-      `${start}-07:00`,
-      `${end}-07:00`,
-      "US"
-    );
-  } catch (error) {
-    notifySlack(error);
-  }
+  // try {
+  //   await writeReportData(
+  //     process.env.SPREADSHEET_ID,
+  //     "InvReport_US!A2:AB",
+  //     "GET_FBA_INVENTORY_PLANNING_DATA",
+  //     `${start}-07:00`,
+  //     `${end}-07:00`,
+  //     "US"
+  //   );
+  // } catch (error) {
+  //   notifySlack(error);
+  // }
 
   try {
     await writeReportData(
