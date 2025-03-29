@@ -98,12 +98,12 @@ module.exports = {
   writeProdCurPriceBySheetBatch,
 };
 
-writeProdCurPriceBySheetBatch(
-  process.env.SPREADSHEET_ID3,
-  "Fetch_manual",
-  "D", // asinのある列
-  "C", // update check
-  "B", // update start
-  "E", // update end
-  20
-);
+// writeProdCurPriceBySheetBatch(
+//   process.env.SPREADSHEET_ID3,
+//   "Fetch_manual",
+//   "D", // asinのある列
+//   "C", // update check
+//   "B", // update start
+//   "E", // update end
+//   20
+// );
