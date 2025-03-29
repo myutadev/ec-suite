@@ -2,6 +2,7 @@ const { getSearchCatalogItems } = require("./getSearchCatalogItems.js");
 const { readSpreadsheetValue } = require("../../../../lib/readSpreadsheetValue.js");
 const { appendArrayDataToSheets } = require("../../../../lib/appendArrayDataToSheets.js");
 const { getChildAsins } = require("./getChildAsins.js");
+const { updateArrayDataToSheets } = require("../../../../lib/updateArrayDataToSheets.js");
 
 require("dotenv").config();
 
@@ -9,11 +10,14 @@ const writeSearchCatalogItemsAll = async () => {
   const spreadsheetId = process.env.SPREADSHEET_ID2;
   const rangeForRead = "inputSearchKeywords!A2:A";
   const rangeForWrite = "inputSearchKeywords!C2:C";
+  const sheetName = "inputSearchKeywords";
 
   const keywordArr2d = await readSpreadsheetValue(spreadsheetId, rangeForRead);
   const keywordArr = keywordArr2d.map((item) => item[0]);
   const resultArr = [];
   // resultArrにはタイトル等他の情報も入れる
+
+  await updateArrayDataToSheets(spreadsheetId, `${sheetName}!B1`, [["Working"]]);
 
   keywordArr.forEach(async (element) => {
     console.log(element);
@@ -65,8 +69,10 @@ const writeSearchCatalogItemsAll = async () => {
       appendArrayDataToSheets(spreadsheetId, rangeForWrite, resultArr);
     } catch (error) {
       console.error("Error writing to sheet: ", error);
+      await updateArrayDataToSheets(spreadsheetId, `${sheetName}!B1`, [["Error"]]);
       throw error;
     }
+    await updateArrayDataToSheets(spreadsheetId, `${sheetName}!B1`, [["Finished"]]);
   });
 };
 
