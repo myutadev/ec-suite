@@ -72,8 +72,8 @@ const writeSearchCatalogItemsAll = async () => {
       await updateArrayDataToSheets(spreadsheetId, `${sheetName}!B1`, [["Error"]]);
       throw error;
     }
-    await updateArrayDataToSheets(spreadsheetId, `${sheetName}!B1`, [["Finished"]]);
   });
+  await updateArrayDataToSheets(spreadsheetId, `${sheetName}!B1`, [["Finished"]]);
 };
 
 module.exports = {
