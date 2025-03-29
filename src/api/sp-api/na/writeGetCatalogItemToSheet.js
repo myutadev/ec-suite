@@ -1,6 +1,7 @@
 const { google } = require("googleapis");
 const { getCatalogItemFromSheet } = require("./fetchGetCatalogItem");
 const { readSpreadsheetValue } = require("../../../lib/readSpreadsheetValue.js");
+const { updateArrayDataToSheets } = require("../../../lib/updateArrayDataToSheets.js");
 
 require("dotenv").config();
 
@@ -27,33 +28,43 @@ const sheets = google.sheets({
 });
 
 const writeGetCatalogItemToSheet = async (spreadsheetId, sheetName) => {
-  // マーケットプレイスの読み込み
-  const readRangeForMarketplace = `${sheetName}!A1:A1`;
-
-  const marketPlaceArray2d = await readSpreadsheetValue(spreadsheetId, readRangeForMarketplace);
-  const marketPlace = marketPlaceArray2d[0][0];
-
-  const readRange = `${sheetName}!A3:A`; // データ取得の範囲を設定
-
-  //書き込み先
-  const range = `${sheetName}!B3:AH`;
-
-  let values = [];
-  values = await getCatalogItemFromSheet(spreadsheetId, readRange, marketPlace);
-  console.log("Fetched values: ", values);
-
-  const request = {
-    spreadsheetId,
-    range,
-    valueInputOption: "RAW",
-    resource: {
-      values,
-    },
-  };
+  const statusRange = "F1";
 
   try {
+    // ステータスを"Working"に設定
+    await updateArrayDataToSheets(spreadsheetId, `${sheetName}!F1`, [["Working"]]);
+
+    // マーケットプレイスの読み込み
+    const readRangeForMarketplace = `${sheetName}!A1:A1`;
+
+    const marketPlaceArray2d = await readSpreadsheetValue(spreadsheetId, readRangeForMarketplace);
+    const marketPlace = marketPlaceArray2d[0][0];
+
+    const readRange = `${sheetName}!A3:A`; // データ取得の範囲を設定
+
+    // 書き込み先
+    const range = `${sheetName}!B3:AH`;
+
+    let values = [];
+    values = await getCatalogItemFromSheet(spreadsheetId, readRange, marketPlace);
+    console.log("Fetched values: ", values);
+
+    const request = {
+      spreadsheetId,
+      range,
+      valueInputOption: "RAW",
+      resource: {
+        values,
+      },
+    };
+
     await sheets.spreadsheets.values.update(request);
+
+    // ステータスを"Finished"に設定
+    await updateArrayDataToSheets(spreadsheetId, `${sheetName}!F1`, [["Finished"]]);
   } catch (error) {
+    // ステータスを"Error"に設定
+    await updateArrayDataToSheets(spreadsheetId, `${sheetName}!F1`, [["Error"]]);
     console.error("Error writing to sheet: ", error);
     throw error;
   }
@@ -64,4 +75,4 @@ module.exports = {
 };
 
 // writeValue();
-// writeGetCatalogItemToSheet(process.env.SPREADSHEET_ID,"NAfetchProdInfo")
+// writeGetCatalogItemToSheet(process.env.SPREADSHEET_ID, "NAfetchProdInfo");
