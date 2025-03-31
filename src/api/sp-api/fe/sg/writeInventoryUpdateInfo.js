@@ -67,12 +67,9 @@ const writeInventoryUpdateInfo = async (spreadsheetId, configSheet, curSellingSh
   //   B000S7NB2Y: { price: "6920", method: "EMS", weight: "9200" },
   // };
   curSellingArr.forEach((item) => {
-    let asin2 = item[0]
+    let asin2 = item[0];
     try {
       const asin = item[0];
-      // console.log(asin);
-      // console.log(dbDataAsinObj[asin]);
-      // console.log(dbDataAsinObj[asin].price);
 
       if (!dbDataAsinObj[asin]) {
         newPriceInventoryArr.push([asin, item[2], item[1], item[3], , , 0]);
@@ -87,11 +84,9 @@ const writeInventoryUpdateInfo = async (spreadsheetId, configSheet, curSellingSh
       }
 
       // 条件1.priceがnullならInventory 0 で配列作成
-      if (
-        dbDataAsinObj[asin].price == "-" ||
-        dbDataAsinObj[asin].price == "" ||
-        dbDataAsinObj[asin].price == "InvalidInput"
-      ) {
+      const price = dbDataAsinObj[asin].price;
+
+      if (price === null || price === undefined || price === "" || isNaN(Number(price)) || Number(price) === 0) {
         newPriceInventoryArr.push([asin, item[2], item[1], item[3], , , 0]);
         return;
       }
@@ -125,7 +120,7 @@ const writeInventoryUpdateInfo = async (spreadsheetId, configSheet, curSellingSh
       //   "shippingFeeObj[ceiledShippingWeight]",
       //   shippingFeeObj[ceiledShippingWeight]
       // );
-      
+
       const shippingFee = parseFloat(shippingFeeObj[ceiledShippingWeight][shippingMethod]);
 
       const totalCost = shippingFee + otherFees + newPrice;
@@ -136,6 +131,12 @@ const writeInventoryUpdateInfo = async (spreadsheetId, configSheet, curSellingSh
 
       if (item[4] == "0") {
         newPriceInventoryArr.push([asin, item[2], item[1], newListingPrice, , , 50]);
+        return;
+      }
+
+      // 売価が440SG以上のものは在庫を0にする - SGの免税範囲400高額商品のトラブルを避けるため
+      if (newListingPrice >= 440) {
+        newPriceInventoryArr.push([asin, item[2], item[1], newListingPrice, , , 0]);
         return;
       }
 
@@ -156,7 +157,7 @@ const writeInventoryUpdateInfo = async (spreadsheetId, configSheet, curSellingSh
       // console.log("sgdTotalCost is", sgdTotalCost);
       // console.log("newListingPrice is", newListingPrice);
     } catch (e) {
-      console.log('asin is', asin2)
+      console.log("asin is", asin2);
       console.error(e);
     }
   });
