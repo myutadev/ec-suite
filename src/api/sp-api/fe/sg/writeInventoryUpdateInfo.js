@@ -103,6 +103,7 @@ const writeInventoryUpdateInfo = async (spreadsheetId, configSheet, curSellingSh
       const newPrice = parseFloat(dbDataAsinObj[asin].price);
       let ceiledShippingWeight;
 
+
       // 30000を超えたときの処理追加
       if (shippingWeight <= 2000) {
         ceiledShippingWeight = Math.ceil(shippingWeight / 100) * 100;
@@ -127,16 +128,16 @@ const writeInventoryUpdateInfo = async (spreadsheetId, configSheet, curSellingSh
       const sgdTotalCost = Math.ceil(totalCost / sgdToJpy);
       const newListingPrice = Math.ceil((sgdTotalCost / (1 - profitRate - amazonFeeRate)) * 100) / 100;
 
+      // 売価が440SG以上のものは在庫を0にする - SGの免税範囲400高額商品のトラブルを避けるため
+      if (newListingPrice >= 440) {
+        newPriceInventoryArr.push([asin, item[2], item[1], newListingPrice, , , 0]);
+        return;
+      }
+
       // 復活出品分は在庫50にもどす
 
       if (item[4] == "0") {
         newPriceInventoryArr.push([asin, item[2], item[1], newListingPrice, , , 50]);
-        return;
-      }
-
-      // 売価が440SG以上のものは在庫を0にする - SGの免税範囲400高額商品のトラブルを避けるため
-      if (newListingPrice >= 440) {
-        newPriceInventoryArr.push([asin, item[2], item[1], newListingPrice, , , 0]);
         return;
       }
 
