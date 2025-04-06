@@ -87,11 +87,10 @@ const writeInventoryUpdateInfoAu = async (spreadsheetId, configSheet, curSelling
       }
 
       // 条件1.priceがnullならInventory 0 で配列作成
-      if (
-        dbDataAsinObj[asin].price == "-" ||
-        dbDataAsinObj[asin].price == "" ||
-        dbDataAsinObj[asin].price == "InvalidInput"
-      ) {
+
+      const price = dbDataAsinObj[asin].price;
+
+      if (price === null || price === undefined || price === "" || isNaN(Number(price)) || Number(price) === 0) {
         newPriceInventoryArr.push([asin, item[2], item[1], item[3], , , 0]);
         return;
       }
@@ -127,12 +126,19 @@ const writeInventoryUpdateInfoAu = async (spreadsheetId, configSheet, curSelling
       const sgdTotalCost = Math.ceil(totalCost / sgdToJpy);
       const newListingPrice = Math.ceil((sgdTotalCost / (1 - profitRate - amazonFeeRate)) * 100) / 100;
 
+      // 売価が600AUD以上のものは在庫を0にする - 高額商品のトラブルを避けるため
+      if (newListingPrice >= 600) {
+        newPriceInventoryArr.push([asin, item[2], item[1], newListingPrice, , , 0]);
+        return;
+      }
+
       // 復活出品分は在庫50にもどす
 
       if (item[4] == "0") {
         newPriceInventoryArr.push([asin, item[2], item[1], newListingPrice, , , 50]);
         return;
       }
+
 
       newPriceInventoryArr.push([
         asin,
