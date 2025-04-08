@@ -57,7 +57,7 @@ const writeProdCurPriceBySheetBatch = async (
               console.log("result.value", result.value);
               priceInfoArr.push(result.value);
             } else {
-              priceInfoArr.push([], [result.reason.message]);
+              priceInfoArr.push([result?.reason?.message]);
             }
           })
         );
