@@ -47,13 +47,13 @@ const writeProdCurPriceBySheetBatch = async (
           } catch (e) {
             console.log("error from the first", e);
             notifySlack(e);
-            return;
+            return [`https://www.amazon.co.jp/dp/${Object.keys(obj)[0]}`, obj[asin]?.update, asin, obj[asin].error];
           }
         });
 
         await Promise.allSettled(promises).then((results) =>
           results.forEach((result) => {
-            if (result.status === "fulfilled") {
+            if (result.status === "fulfilled" && Array.isArray(result.value)) {
               console.log("result.value", result.value);
               priceInfoArr.push(result.value);
             } else {
@@ -66,7 +66,6 @@ const writeProdCurPriceBySheetBatch = async (
           await updateArrayDataToSheets(spreadsheetId, updateRange, priceInfoArr);
         } catch (error) {
           console.log("error from the middle", error);
-
           notifySlack(error);
           continue;
         }
