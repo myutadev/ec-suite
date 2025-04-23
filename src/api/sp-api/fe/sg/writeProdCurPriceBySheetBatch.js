@@ -66,6 +66,7 @@ const writeProdCurPriceBySheetBatch = async (
           await updateArrayDataToSheets(spreadsheetId, updateRange, priceInfoArr);
         } catch (error) {
           console.log("error from the middle", error);
+          await updateArrayDataToSheets(spreadsheetId, updateRange, priceInfoArr);
           notifySlack(error);
           continue;
         }
