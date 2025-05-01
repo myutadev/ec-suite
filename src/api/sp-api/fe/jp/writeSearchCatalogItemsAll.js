@@ -9,31 +9,32 @@ require("dotenv").config();
 const writeSearchCatalogItemsAll = async () => {
   const spreadsheetId = process.env.SPREADSHEET_ID2;
   const rangeForRead = "inputSearchKeywords!A2:A";
-  const rangeForWrite = "inputSearchKeywords!C2:C";
+  const baseRangeForWrite = "inputSearchKeywords!C";
   const sheetName = "inputSearchKeywords";
 
   const keywordArr2d = await readSpreadsheetValue(spreadsheetId, rangeForRead);
   const keywordArr = keywordArr2d.map((item) => item[0]);
-  const resultArr = [];
-  // resultArrにはタイトル等他の情報も入れる
 
   await updateArrayDataToSheets(spreadsheetId, `${sheetName}!B1`, [["Working"]]);
 
-  keywordArr.forEach(async (element) => {
+  // 最初に書き込む行を追跡
+  let currentRow = 2;
+
+  for (const element of keywordArr) {
     console.log(element);
     const parentAsinArr = [];
+    // 各キーワードごとに結果配列をリセット
+    const currentResultArr = [];
     const apiResponse = await getSearchCatalogItems([element]);
 
-    apiResponse.items.forEach(async (item) => {
+    for (const item of apiResponse.items) {
       const parentAsin = item.relationships[0]?.relationships[0]?.parentAsins ?? "";
       if (parentAsin !== "") {
-        // for variation asin -  ここで重複しないようにする必要あり
-        console.log(!parentAsinArr.includes(parentAsin[0]));
+        // for variation asin
         if (!parentAsinArr.includes(parentAsin[0])) parentAsinArr.push(parentAsin[0]);
       } else {
         // for no variation asin
-        console.log("asin doesnt have variation", item.asin);
-        resultArr.push([
+        currentResultArr.push([
           item.asin,
           item.summaries[0].brand,
           item.summaries[0].itemName,
@@ -41,41 +42,43 @@ const writeSearchCatalogItemsAll = async () => {
           item.summaries[0]?.modelNumber ?? "",
           item.salesRanks[0]?.classificationRanks?.[0]?.title ?? "no rank data",
           item.salesRanks[0]?.classificationRanks?.[0]?.rank ?? "no rank data",
-          item.salesRanks[0]?.displayGroupRanks?.[0]?.title ?? "no rank data",
-          item.salesRanks[0]?.displayGroupRanks?.[0]?.rank ?? "no rank data",
         ]);
       }
-    });
+    }
 
     //ここでparentAsinから子ASINを取得
-    console.log("parentAsin now", parentAsinArr);
     const childAsinsArr = [];
 
-    for (asin of parentAsinArr) {
+    for (const asin of parentAsinArr) {
       const childAsins = await getChildAsins(asin);
-      console.log("childAsins", childAsins);
       childAsinsArr.push(childAsins);
     }
+    
     const flattenedChildAsinsArr = childAsinsArr.flat();
-    flattenedChildAsinsArr.forEach((arr) => resultArr.push(arr));
-    // resultArr.push(childAsinsArr.flat());
-    console.log("resultArr", resultArr);
-    // try {
-    //   appendArrayDataToSheets(spreadsheetId, rangeForWrite, values);
-    // } catch (error) {
-    //   console.error("Error writing to sheet: ", error);
-    // }
-    try {
-      appendArrayDataToSheets(spreadsheetId, rangeForWrite, resultArr);
-    } catch (error) {
-      console.error("Error writing to sheet: ", error);
-      await updateArrayDataToSheets(spreadsheetId, `${sheetName}!B1`, [["Error"]]);
-      throw error;
+    // 重要: currentResultArrに追加
+    for (const arr of flattenedChildAsinsArr) {
+      currentResultArr.push(arr);
     }
-  });
+
+    // 現在のキーワードの結果だけを書き込む
+    if (currentResultArr.length > 0) {
+      const rangeForWrite = `${baseRangeForWrite}${currentRow}`;
+      console.log(`Writing to range: ${rangeForWrite}`);
+      
+      try {
+        await appendArrayDataToSheets(spreadsheetId, rangeForWrite, currentResultArr);
+        // 次の書き込み位置を更新（現在の行 + 書き込んだ行数）
+        currentRow += currentResultArr.length;
+      } catch (error) {
+        console.error("Error writing to sheet: ", error);
+        await updateArrayDataToSheets(spreadsheetId, `${sheetName}!B1`, [["Error"]]);
+        throw error;
+      }
+    }
+  }
+  
   await updateArrayDataToSheets(spreadsheetId, `${sheetName}!B1`, [["Finished"]]);
 };
-
 module.exports = {
   writeSearchCatalogItemsAll,
 };
