@@ -75,13 +75,13 @@ const writeNewListingAu = async (
   // console.log(newListingSheet);
   // console.log(resultArr);
   try {
-    await batchUpdateArrayDataToSheets(spreadsheetId, updateRanges, updateData);
   } catch (error) {
     console.log("error occurred at batchUpdateArrayDataToSheets");
     throw error;
   }
   try {
     await appendArrayDataToSheets(spreadsheetId, `${newListingSheet}!A2:V`, resultArr);
+    await batchUpdateArrayDataToSheets(spreadsheetId, updateRanges, updateData);
   } catch (error) {
     console.log("error occurred at appendArrayDataToSheets");
     throw error;

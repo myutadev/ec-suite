@@ -22,6 +22,7 @@ const writeNewListing = async (
 
   const notUploadedArr = [];
   dbDataArr.forEach((item) => {
+    //Q列のSGUploadがFALSEのものを抽出
     if (item[16] == "FALSE") {
       notUploadedArr.push(item);
     }
@@ -58,7 +59,7 @@ const writeNewListing = async (
       sku = `SG-${today}-${asin}-${price}-jpy-${listingPrice}`;
       // console.log(listingPrice);
       // console.log(sku);
-      const curArr = [sku, listingPrice, 50, asin, "ASIN", "New", , , , , , , , 4];
+      const curArr = [sku, listingPrice, 50, asin, "ASIN", "New", , , , , , , , 7];
       // console.log(curArr);
       resultArr.push(curArr);
     }
@@ -66,28 +67,25 @@ const writeNewListing = async (
     const updateRange = `${dbSheet}!Q${num + 1}:Q${num + 1}`;
     updateRanges.push(updateRange);
     updateData.push([["TRUE"]]);
-    console.log("range", updateRanges);
-    console.log("data", updateData);
+    // console.log("range", updateRanges);
+    // console.log("data", updateData);
 
     // process.exit();
   }
 
   // console.log(newListingSheet);
-  console.log(resultArr);
+  // console.log(resultArr);
+  console.log("updateRanges", updateRanges);
   try {
+    console.log("check if the data writed in Sg_Listing");
+    await appendArrayDataToSheets(spreadsheetId, `${newListingSheet}!A2:V`, resultArr);
     await batchUpdateArrayDataToSheets(spreadsheetId, updateRanges, updateData);
-  } catch (error) {
-    throw error;
-  }
-
-  try {
-    appendArrayDataToSheets(spreadsheetId, `${newListingSheet}!A2:V`, resultArr);
   } catch (error) {
     throw error;
   }
 };
 
-// writeNewListing(process.env.SPREADSHEET_ID3, "Config", "Sg_Listing", "Prod_DB");
+writeNewListing(process.env.SPREADSHEET_ID3, "Config", "Sg_Listing", "Prod_DB");
 
 module.exports = {
   writeNewListing,
