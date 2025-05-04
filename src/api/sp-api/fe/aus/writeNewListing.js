@@ -17,7 +17,6 @@ const writeNewListingAu = async (
   // Prod_DBからデータ取得 A:R
   const dbDataArr = await readSpreadsheetValue(spreadsheetId, `${dbSheet}!A2:R`);
 
-  // console.log("dbDataArr is", dbDataArr);
 
   const notUploadedArr = [];
   dbDataArr.forEach((item) => {
