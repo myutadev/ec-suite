@@ -66,9 +66,10 @@ const writeProdCurPriceBySheetBatch = async (
           await updateArrayDataToSheets(spreadsheetId, updateRange, priceInfoArr);
         } catch (error) {
           console.log("error from the middle", error);
-          await updateArrayDataToSheets(spreadsheetId, updateRange, priceInfoArr);
+          //ここでエラーがでたら処理を止める
           notifySlack(error);
-          continue;
+
+          throw new Error(`致命的なエラー: ${retryError.message}`);
         }
 
         // 10秒に1回のペースに制御 : だいたい7000にすると10秒に1回くらいになった
