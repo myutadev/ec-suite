@@ -165,15 +165,31 @@ const writeInventoryUpdateInfoAu = async (spreadsheetId, configSheet, curSelling
 
   // process.exit();
 
-  const writeRange = `${curSellingSheet}!H3:O`;
-  try {
-    await updateArrayDataToSheets(spreadsheetId, writeRange, newPriceInventoryArr);
-  } catch (error) {
-    throw error;
+  // 大きな配列をバッチに分割して処理
+  const batchSize = 1000; // 1回あたりの処理数を制限
+  for (let i = 0; i < newPriceInventoryArr.length; i += batchSize) {
+    const batch = newPriceInventoryArr.slice(i, i + batchSize);
+    const writeRange = `${curSellingSheet}!H${3 + i}:O${2 + i + batch.length}`;
+    try {
+      await updateArrayDataToSheets(spreadsheetId, writeRange, batch);
+      // APIレート制限を避けるための遅延
+      await new Promise(resolve => setTimeout(resolve, 1000));
+    } catch (error) {
+      console.error(`Error updating batch ${i}-${i+batch.length}: ${error.message}`);
+      throw error;
+    }
   }
+
+  // 元のコードを削除
+  // const writeRange = `${curSellingSheet}!H3:O`;
+  // try {
+  //   await updateArrayDataToSheets(spreadsheetId, writeRange, newPriceInventoryArr);
+  // } catch (error) {
+  //   throw error;
+  // }
 };
 
-// writeInventoryUpdateInfoAu(process.env.SPREADSHEET_ID3, "Config", "Au_Selling", "Prod_DB");
+writeInventoryUpdateInfoAu(process.env.SPREADSHEET_ID3, "Config", "Au_Selling", "Prod_DB");
 
 module.exports = {
   writeInventoryUpdateInfoAu,

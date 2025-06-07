@@ -39,10 +39,18 @@ const writeProdCurPriceBySheetBatch = async (
 
         const curItemOffersObjArr = await getItemOffersBatch(batch);
 
+        if (curItemOffersObjArr === null || curItemOffersObjArr === undefined) {
+          // curItemOffersObjArrがnullの場合、バッチ内の各ASINに対してエラーメッセージを作成
+          console.log("データ取得に失敗: curItemOffersObjArr is null or undefined");
+          batch.forEach((asin) => {
+            priceInfoArr.push([`https://www.amazon.co.jp/dp/${asin}`, "", asin, "データ取得に失敗しました"]);
+          });
+          await updateArrayDataToSheets(spreadsheetId, updateRange, priceInfoArr);
+          continue;
+        }
+
         const promises = curItemOffersObjArr.map(async (obj) => {
-          console.log("cur obj is", obj);
           try {
-            console.log("obj is", obj);
             return getAvailablePriceArr(obj, Object.keys(obj)[0]);
           } catch (e) {
             console.log("error from the first", e);
@@ -68,8 +76,7 @@ const writeProdCurPriceBySheetBatch = async (
           console.log("error from the middle", error);
           //ここでエラーがでたら処理を止める
           notifySlack(error);
-
-          throw new Error(`致命的なエラー: ${retryError.message}`);
+          throw new Error(`致命的なエラー: ${error.message}`);
         }
 
         // 10秒に1回のペースに制御 : だいたい7000にすると10秒に1回くらいになった

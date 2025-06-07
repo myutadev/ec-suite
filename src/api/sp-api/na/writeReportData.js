@@ -109,14 +109,14 @@ module.exports = {
 //   `2024-01-23T23:59:59-07:00`,
 //   "US"
 // );
-// writeReportData(
-//   process.env.SPREADSHEET_ID,
-//   "InvReport_CA!A2:AB",
-//   "GET_FBA_INVENTORY_PLANNING_DATA",
-//   `2025-02-19T00:00:00-07:00`,
-//   `2025-02-19T23:59:59-07:00`,
-//   "CA"
-// );
+writeReportData(
+  process.env.SPREADSHEET_ID,
+  "InvReport_CA!A2:AB",
+  "GET_FBA_INVENTORY_PLANNING_DATA",
+  `2025-03-22T00:00:00-07:00`,
+  `2025-03-22T23:59:59-07:00`,
+  "CA"
+);
 
 // const test = async () => {
 //   const start = await getStartOfYesterday();

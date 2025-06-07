@@ -5,10 +5,10 @@ const { getStartOfYesterday, getEndOfYesterday } = require("../../../lib/getYest
 
 const writeOrderMetrics = async (spreadsheetId, marketPlace, range) => {
   // getOrderMetricsCA
-  const start = `${getStartOfYesterday()}-07:00`; // `${getStartOfYesterday()}-07:00`
-  const end = `${getEndOfYesterday()}-07:00`; //`${getEndOfYesterday()}-07:00`
-  // const start = `2024-09-12T00:00:00-07:00`// `${getStartOfYesterday()}-07:00`
-  // const end = `2024-09-13T00:00:00-07:00` //`${getEndOfYesterday()}-07:00`
+  // const start = `${getStartOfYesterday()}-07:00`; // `${getStartOfYesterday()}-07:00`
+  // const end = `${getEndOfYesterday()}-07:00`; //`${getEndOfYesterday()}-07:00`
+  const start = `2025-02-21T00:00:00-07:00`// `${getStartOfYesterday()}-07:00`
+  const end = `2025-03-22T00:00:00-07:00` //`${getEndOfYesterday()}-07:00`
 
   const amazonData = await getOrderMetrics(marketPlace, start, end); // 更新する範囲を指定 要変更
 
@@ -35,7 +35,7 @@ const writeOrderMetrics = async (spreadsheetId, marketPlace, range) => {
   }
 };
 
-// writeOrderMetrics(process.env.SPREADSHEET_ID, "CA", "getOrderMetricsCA!A2:X");
+writeOrderMetrics(process.env.SPREADSHEET_ID, "CA", "getOrderMetricsCA!A2:X");
 // writeOrderMetrics(process.env.SPREADSHEET_ID,"US","getOrderMetricsUS!A2:X")
 // writeOrderMetrics(process.env.SPREADSHEET_ID,"MX","getOrderMetricsMX!A2:X")
 module.exports = {

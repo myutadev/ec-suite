@@ -28,7 +28,7 @@ const getSearchCatalogItems = async (keywordArray) => {
         version: "2022-04-01",
       },
     });
-    // console.log(resSearch.items);
+    console.log(resSearch.items[0]); // タイトル
     // console.log(resSearch.items[0].relationships[0].relationships);  // [] -> バリエーションなし、
 
     return resSearch;
@@ -42,4 +42,4 @@ module.exports = {
   getSearchCatalogItems,
 };
 
-// getSearchCatalogItems(["遊戯王公式カードゲーム デュエルモンスターズ デュエリストカードプロテクター KC"]);
+getSearchCatalogItems(["キーケース"]);

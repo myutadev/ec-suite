@@ -73,20 +73,20 @@ const writeBusinessReportDaily = async (spreadsheetId, range, marketPlace, start
   }
 };
 
-// writeBusinessReportDaily(
-//   process.env.SPREADSHEET_ID,
-//   "BizReport_CA!A2:AH",
-//   "CA",
-//   "2024-01-09T00:00:00-07:00",
-//   "2024-01-10T23:59:59-07:00"
-// );
+writeBusinessReportDaily(
+  process.env.SPREADSHEET_ID,
+  "BizReport_CA!A2:AH",
+  "CA",
+  "2025-01-24T00:00:00-07:00",
+  "2025-03-22T23:59:59-07:00"
+);
 
 // writeBusinessReportDaily(
 //   process.env.SPREADSHEET_ID,
 //   "BizReport_US!A2:AH",
 //   "US",
-//   "2024-01-09T00:00:00-07:00",
-//   "2024-01-10T23:59:59-07:00"
+//   "2025-01-24T00:00:00-07:00",
+//   "2025-03-22T23:59:59-07:00"
 // );
 
 module.exports = {
