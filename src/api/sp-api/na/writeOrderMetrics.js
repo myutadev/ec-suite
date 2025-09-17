@@ -35,7 +35,7 @@ const writeOrderMetrics = async (spreadsheetId, marketPlace, range) => {
   }
 };
 
-writeOrderMetrics(process.env.SPREADSHEET_ID, "CA", "getOrderMetricsCA!A2:X");
+// writeOrderMetrics(process.env.SPREADSHEET_ID, "CA", "getOrderMetricsCA!A2:X");
 // writeOrderMetrics(process.env.SPREADSHEET_ID,"US","getOrderMetricsUS!A2:X")
 // writeOrderMetrics(process.env.SPREADSHEET_ID,"MX","getOrderMetricsMX!A2:X")
 module.exports = {

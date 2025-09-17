@@ -75,4 +75,4 @@ module.exports = {
 };
 
 // writeValue();
-writeGetCatalogItemToSheet(process.env.SPREADSHEET_ID, "NAfetchProdInfo");
+// writeGetCatalogItemToSheet(process.env.SPREADSHEET_ID, "NAfetchProdInfo");
