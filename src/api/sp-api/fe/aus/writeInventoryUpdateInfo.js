@@ -189,7 +189,7 @@ const writeInventoryUpdateInfoAu = async (spreadsheetId, configSheet, curSelling
   // }
 };
 
-writeInventoryUpdateInfoAu(process.env.SPREADSHEET_ID3, "Config", "Au_Selling", "Prod_DB");
+// writeInventoryUpdateInfoAu(process.env.SPREADSHEET_ID3, "Config", "Au_Selling", "Prod_DB");
 
 module.exports = {
   writeInventoryUpdateInfoAu,

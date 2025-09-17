@@ -151,16 +151,16 @@ app.get("/write/activesg", async (req, res, next) => {
     // res.status(500).send("An error occurred in writeactivesg.");
   }
 });
-app.get("/write/activeau", async (req, res, next) => {
-  try {
-    writeActiveInventoryReportAu(process.env.SPREADSHEET_ID3, "Au_Selling!A3:F");
-    console.log(`activeau started`);
-    res.send("activeau completed.");
-  } catch (error) {
-    console.log(error);
-    res.status(500).send("An error occurred in activeau.");
-  }
-});
+// app.get("/write/activeau", async (req, res, next) => {
+//   try {
+//     writeActiveInventoryReportAu(process.env.SPREADSHEET_ID3, "Au_Selling!A3:F");
+//     console.log(`activeau started`);
+//     res.send("activeau completed.");
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send("An error occurred in activeau.");
+//   }
+// });
 
 //Amazon JP end
 
@@ -229,17 +229,17 @@ app.get("/write/inventoryupdateinfo", async (req, res, next) => {
   }
 });
 
-app.get("/write/inventoryupdateinfoau", async (req, res, next) => {
-  try {
-    writeInventoryUpdateInfoAu(process.env.SPREADSHEET_ID3, "Config", "Au_Selling", "Prod_DB");
-    console.log(`inventoryupdateinfoau started`);
-    res.send("inventoryupdateinfoau completed.");
-  } catch (error) {
-    console.log(error);
-    // res.status(500).send("An error occurred in inventoryupdateinfoau.");
-    next(error);
-  }
-});
+// app.get("/write/inventoryupdateinfoau", async (req, res, next) => {
+//   try {
+//     writeInventoryUpdateInfoAu(process.env.SPREADSHEET_ID3, "Config", "Au_Selling", "Prod_DB");
+//     console.log(`inventoryupdateinfoau started`);
+//     res.send("inventoryupdateinfoau completed.");
+//   } catch (error) {
+//     console.log(error);
+//     // res.status(500).send("An error occurred in inventoryupdateinfoau.");
+//     next(error);
+//   }
+// });
 
 app.get("/write/listingrestrictions/all", async (req, res, next) => {
   try {
@@ -271,34 +271,34 @@ app.get("/write/listingrestrictions/manual", async (req, res, next) => {
 });
 
 // australia
-app.get("/write/listingrestrictions/au/all", async (req, res, next) => {
-  try {
-    writeListingsRestrictionsAu(process.env.SPREADSHEET_ID3, "Au_Listing", 2, "");
-    console.log(`writeListingsRestrictionsAu started`);
-    res.send("writeListingsRestrictionsAu completed.");
-  } catch (error) {
-    console.log(error);
-    // res.status(500).send("An error occurred in writeListingsRestrictionsAu.");
-    next(error);
-  }
-});
+// app.get("/write/listingrestrictions/au/all", async (req, res, next) => {
+//   try {
+//     writeListingsRestrictionsAu(process.env.SPREADSHEET_ID3, "Au_Listing", 2, "");
+//     console.log(`writeListingsRestrictionsAu started`);
+//     res.send("writeListingsRestrictionsAu completed.");
+//   } catch (error) {
+//     console.log(error);
+//     // res.status(500).send("An error occurred in writeListingsRestrictionsAu.");
+//     next(error);
+//   }
+// });
 
-app.get("/write/listingrestrictions/au/manual", async (req, res, next) => {
-  try {
-    const rangeData = await readSpreadsheetValue(process.env.SPREADSHEET_ID3, "Au_Listing!Y1:Z1");
+// app.get("/write/listingrestrictions/au/manual", async (req, res, next) => {
+//   try {
+//     const rangeData = await readSpreadsheetValue(process.env.SPREADSHEET_ID3, "Au_Listing!Y1:Z1");
 
-    const readDataFlattened = rangeData.flat();
-    const start = readDataFlattened[0];
-    const end = readDataFlattened[1];
-    writeListingsRestrictionsAu(process.env.SPREADSHEET_ID3, "Au_Listing", start, end);
-    console.log(`writeListingsRestrictionsAu/manual`);
-    res.send("writeListingsRestrictionsAu/manual completed.");
-  } catch (error) {
-    console.log(error);
-    next(error);
-    // res.status(500).send("An error occurred in writeListingsRestrictionsAu/manual.");
-  }
-});
+//     const readDataFlattened = rangeData.flat();
+//     const start = readDataFlattened[0];
+//     const end = readDataFlattened[1];
+//     writeListingsRestrictionsAu(process.env.SPREADSHEET_ID3, "Au_Listing", start, end);
+//     console.log(`writeListingsRestrictionsAu/manual`);
+//     res.send("writeListingsRestrictionsAu/manual completed.");
+//   } catch (error) {
+//     console.log(error);
+//     next(error);
+//     // res.status(500).send("An error occurred in writeListingsRestrictionsAu/manual.");
+//   }
+// });
 
 app.get("/write/newlisting", async (req, res, next) => {
   try {

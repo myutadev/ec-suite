@@ -31,8 +31,6 @@ console.log("worker.js is running");
 //     .catch(() => console.log("Error occurred while notifying Slack."));
 // }
 
-
-
 cron.schedule("0 18 * * *", async () => {
   console.log("cron job at 18");
 
@@ -150,17 +148,17 @@ cron.schedule("0 11 * * *", async () => {
     notifySlack(error);
   }
 
-  try {
-    await writeSalesAndTrafficReportByDateAu(
-      process.env.SPREADSHEET_ID4,
-      "AmaAUS!A2:J",
-      `${start}-07:00`,
-      `${end}-07:00`,
-      "AU"
-    );
-  } catch (error) {
-    notifySlack(error);
-  }
+  // try {
+  //   await writeSalesAndTrafficReportByDateAu(
+  //     process.env.SPREADSHEET_ID4,
+  //     "AmaAUS!A2:J",
+  //     `${start}-07:00`,
+  //     `${end}-07:00`,
+  //     "AU"
+  //   );
+  // } catch (error) {
+  //   notifySlack(error);
+  // }
 });
 
 // 毎週木曜日日本時間夜11時に実行  無在庫用の価格自動更新→一旦ストップさせる

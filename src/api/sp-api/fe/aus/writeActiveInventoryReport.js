@@ -40,7 +40,7 @@ const writeActiveInventoryReportAu = async (spreadsheetId, range) => {
   }
   console.log("writeInventoryhLedgerReport ends");
 };
-writeActiveInventoryReportAu(process.env.SPREADSHEET_ID3, "Au_Selling!A3:F");
+// writeActiveInventoryReportAu(process.env.SPREADSHEET_ID3, "Au_Selling!A3:F");
 
 // writeActiveInventoryReport()
 
