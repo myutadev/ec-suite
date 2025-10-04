@@ -133,15 +133,15 @@ const getCatalogItemFromSheet = async (spreadsheetId, range, marketPlace) => {
     console.log(`sheetvalue is`, sheetValues);
     const asins = sheetValues.flat();
     console.log(`asins is `, asins);
+    for (const asin of asins) {
+      let fetchedData = await getCatalogItem(asin, marketPlace);
+      apiDataArray.push(fetchedData);
+    }
   } catch (e) {
     console.log("Error reading spreadsheet values:", e);
     // エラー時は空配列のまま進める
   }
 
-  for (const asin of asins) {
-    let fetchedData = await getCatalogItem(asin, marketPlace);
-    apiDataArray.push(fetchedData);
-  }
   // console.log(`apiDataArray is`,apiDataArray);
 
   return apiDataArray;
